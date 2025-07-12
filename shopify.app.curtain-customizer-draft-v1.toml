@@ -3,7 +3,7 @@
 client_id = "ff901fdb3a92ae7baacfaf33ece2c2f7"
 name = "Curtain customizer draft v1"
 handle = "curtain-customizer-draft-v1"
-application_url = "https://omaha-forbes-reporting-pairs.trycloudflare.com"
+application_url = "https://makers-stunning-answer-subscriber.trycloudflare.com"
 embedded = true
 
 [build]
@@ -32,7 +32,10 @@ redirect_urls = [
   "https://royal-outstanding-mag-prime.trycloudflare.com/api/auth/callback",
   "https://omaha-forbes-reporting-pairs.trycloudflare.com/auth/callback",
   "https://omaha-forbes-reporting-pairs.trycloudflare.com/auth/shopify/callback",
-  "https://omaha-forbes-reporting-pairs.trycloudflare.com/api/auth/callback"
+  "https://omaha-forbes-reporting-pairs.trycloudflare.com/api/auth/callback",
+  "https://makers-stunning-answer-subscriber.trycloudflare.com/auth/callback",
+  "https://makers-stunning-answer-subscriber.trycloudflare.com/auth/shopify/callback",
+  "https://makers-stunning-answer-subscriber.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -47,7 +50,7 @@ api_version = "2025-04"
   uri = "/webhooks/app/uninstalled"
 
 [app_proxy]
-url = "https://omaha-forbes-reporting-pairs.trycloudflare.com/app/curtain"
+url = "https://makers-stunning-answer-subscriber.trycloudflare.com/app/curtain"
 subpath = "curtain"
 prefix = "apps"
 

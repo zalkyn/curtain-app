@@ -490,7 +490,7 @@
       line-height: 1.4;
     }
   }
-  .ccapp-lt-wrapper {
+  .ccapp-lining-type-wrapper {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-column-gap: 15px;
@@ -499,31 +499,31 @@
     box-sizing: border-box;
     padding: 10px 10px 25px 10px;
   }
-  .ccapp-lt-item {
+  .ccapp-lining-type-item {
     display: flex;
     flex-direction: column;
     gap: 10px;
     position: relative;
     cursor: pointer;
   }
-  .ccapp-lti-image {
+  .ccapp-lining-type-image {
     width: 100%;
     height: auto;
     aspect-ratio: 1;
     object-fit: cover;
   }
-  .ccapp-lt-item.active .ccapp-lti-image{
+  .ccapp-lining-type-item.active .ccapp-lining-type-image{
     box-sizing: border-box;
     box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
   }
-  .ccapp-lti-title {
+  .ccapp-lining-type-title {
     margin: 0;
     font-size: 12px;
     text-align: center;
     line-height: 1;
     color: black;
   }
-  .ccapp-lti-sr {
+  .ccapp-lining-type-sr {
     position: absolute;
     right: 10px;
     top: 8px;
@@ -676,8 +676,8 @@
           </div>
           <div class="ccapp-msc-tab-content">
             <div class="ccapp-lining-type-container">
-              <div class="ccapp-lt-wrapper">
-                <div class="ccapp-lt-item">Loading...</div>
+              <div class="ccapp-lining-type-wrapper">
+                <div class="ccapp-lining-type-item">Loading...</div>
               </div>
             </div>
           </div>
@@ -857,9 +857,9 @@
           this.handleMITabs(ccapp_miTabHeading);
         }
 
-        const ccapp_linigTypeItems = e.target.classList.contains('ccapp-lt-item')
+        const ccapp_linigTypeItems = e.target.classList.contains('ccapp-lining-type-item')
           ? e.target
-          : e.target.closest('.ccapp-lt-item');
+          : e.target.closest('.ccapp-lining-type-item');
         if (ccapp_linigTypeItems) {
           this.handleLinignTypeItemSelector(ccapp_linigTypeItems);
         }
@@ -867,7 +867,14 @@
     }
 
     handleLinignTypeItemSelector(btn) {
-      console.log("e.target", btn)
+      const activeIndex = parseInt(btn.dataset?.index) || 0;
+      this.querySelectorAll(".ccapp-lining-type-item").forEach((item, index) => {
+        if(index === activeIndex) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
     }
 
     handleMITabs(btn) {
@@ -1246,15 +1253,15 @@
 
       let liningTypeEl = '';
       this.liningType?.items?.map((item, index) => {
-        liningTypeEl += `<div class="ccapp-lt-item ${index===0 ? 'active':''}" data-index="${index}">
-          <img class="ccapp-lti-image" src="${item?.image64}" width="100">
-          <p class="ccapp-lti-title">${item?.title}</p>
-          <div class="ccapp-lti-sr">SR: ${item?.sr}</div>
+        liningTypeEl += `<div class="ccapp-lining-type-item ${index===0 ? 'active':''}" data-index="${index}">
+          <img class="ccapp-lining-type-image" src="${item?.image64}" width="100">
+          <p class="ccapp-lining-type-title">${item?.title}</p>
+          <div class="ccapp-lining-type-sr">SR: ${item?.sr}</div>
         </div>`;
       })
 
-      if (this.querySelector('.ccapp-lt-wrapper')) {
-        this.querySelector('.ccapp-lt-wrapper').innerHTML = liningTypeEl;
+      if (this.querySelector('.ccapp-lining-type-wrapper')) {
+        this.querySelector('.ccapp-lining-type-wrapper').innerHTML = liningTypeEl;
       }
     }
 
@@ -1264,14 +1271,14 @@
 
       let uiEL = '';
 
-      uiEL += `<div class="ccapp-lt-item ${tieback?.isTie && 'active'}">
-          <img class="ccapp-lti-image" src="${tieback?.primaryImage}" width="100">
-          <p class="ccapp-lti-title">${tieback?.primaryTitle}</p>
+      uiEL += `<div class="ccapp-tieback-item ${tieback?.isTie ? 'active': ''}">
+          <img class="ccapp-tieback-image" src="${tieback?.primaryImage}" width="100">
+          <p class="ccapp-tieback-title">${tieback?.primaryTitle}</p>
         </div>`;
 
-      uiEL += `<div class="ccapp-lt-item ${!tieback?.isTie && 'active'}">
-          <img class="ccapp-lti-image" src="${tieback?.secondaryImage}" width="100">
-          <p class="ccapp-lti-title">${tieback?.secondaryTitle}</p>
+      uiEL += `<div class="ccapp-tieback-item ${tieback?.isTie ? '': 'active'}">
+          <img class="ccapp-tieback-image" src="${tieback?.secondaryImage}" width="100">
+          <p class="ccapp-tieback-title">${tieback?.secondaryTitle}</p>
         </div>`;
       
 
@@ -1286,14 +1293,14 @@
 
       let uiEL = '';
 
-      uiEL += `<div class="ccapp-lt-item ${memoryShaped?.isTie && 'active'}">
-          <img class="ccapp-lti-image" src="${memoryShaped?.primaryImage}" width="100">
-          <p class="ccapp-lti-title">${memoryShaped?.primaryTitle}</p>
+      uiEL += `<div class="ccapp-memory-shaped-item ${memoryShaped?.isTie ? 'active': ''}">
+          <img class="ccapp-memory-shaped-image" src="${memoryShaped?.primaryImage}" width="100">
+          <p class="ccapp-memory-shaped-title">${memoryShaped?.primaryTitle}</p>
         </div>`;
 
-      uiEL += `<div class="ccapp-lt-item ${!memoryShaped?.isTie && 'active'}">
-          <img class="ccapp-lti-image" src="${memoryShaped?.secondaryImage}" width="100">
-          <p class="ccapp-lti-title">${memoryShaped?.secondaryTitle}</p>
+      uiEL += `<div class="ccapp-memory-shaped-item ${memoryShaped?.isTie ? '': 'active'}">
+          <img class="ccapp-memory-shaped-image" src="${memoryShaped?.secondaryImage}" width="100">
+          <p class="ccapp-memory-shaped-title">${memoryShaped?.secondaryTitle}</p>
         </div>`;
       
 
