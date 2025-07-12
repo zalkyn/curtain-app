@@ -1,0 +1,55 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "ff901fdb3a92ae7baacfaf33ece2c2f7"
+name = "Curtain customizer draft v1"
+handle = "curtain-customizer-draft-v1"
+application_url = "https://omaha-forbes-reporting-pairs.trycloudflare.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "ostad-app-dev.myshopify.com"
+include_config_on_deploy = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_files,read_inventory,read_orders,read_products,read_publications,read_themes,unauthenticated_read_product_listings,write_app_proxy,write_files,write_inventory,write_products,write_publications,write_themes"
+
+[auth]
+redirect_urls = [
+  "https://fr-sisters-adsl-external.trycloudflare.com/api/auth/callback",
+  "https://literacy-normal-comfortable-mother.trycloudflare.com/auth/callback",
+  "https://literacy-normal-comfortable-mother.trycloudflare.com/auth/shopify/callback",
+  "https://literacy-normal-comfortable-mother.trycloudflare.com/api/auth/callback",
+  "https://audience-toner-mitchell-freeze.trycloudflare.com/auth/callback",
+  "https://audience-toner-mitchell-freeze.trycloudflare.com/auth/shopify/callback",
+  "https://audience-toner-mitchell-freeze.trycloudflare.com/api/auth/callback",
+  "https://cigarettes-dns-summaries-instruments.trycloudflare.com/auth/callback",
+  "https://cigarettes-dns-summaries-instruments.trycloudflare.com/auth/shopify/callback",
+  "https://cigarettes-dns-summaries-instruments.trycloudflare.com/api/auth/callback",
+  "https://royal-outstanding-mag-prime.trycloudflare.com/auth/callback",
+  "https://royal-outstanding-mag-prime.trycloudflare.com/auth/shopify/callback",
+  "https://royal-outstanding-mag-prime.trycloudflare.com/api/auth/callback",
+  "https://omaha-forbes-reporting-pairs.trycloudflare.com/auth/callback",
+  "https://omaha-forbes-reporting-pairs.trycloudflare.com/auth/shopify/callback",
+  "https://omaha-forbes-reporting-pairs.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2025-04"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+[app_proxy]
+url = "https://omaha-forbes-reporting-pairs.trycloudflare.com/app/curtain"
+subpath = "curtain"
+prefix = "apps"
+
+[pos]
+embedded = false

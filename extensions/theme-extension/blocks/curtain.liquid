@@ -1,0 +1,1392 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+  .ccapp-wrapper {
+    max-width: 1200px;
+    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-gap: 20px;
+    margin-block: 48px;
+  }
+
+  .ccapp-media {
+    height: max-content;
+    position: sticky;
+    top: 100px;
+  }
+
+  .thumb-container {
+    font-size: 0;
+    line-height: 0;
+    display: flex;
+    background-repeat: repeat;
+    background-size: 120px;
+    max-height: 540px;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+  .ccapp-collections-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .ccapp-collection {
+    background: #f5f3f3;
+    box-sizing: border-box;
+    padding: 10px 10px;
+  }
+  .ccapp-collection-list {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .ccapp-collection-list label {
+    cursor: pointer;
+  }
+  .ccapp-collection-list-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 14px;
+    row-gap: 5px;
+    height: 0;
+    transition: 0.5s;
+    overflow: hidden;
+  }
+  .ccapp-collection-title {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+
+    .ccapp-ctth-svg {
+      transform-origin: center;
+      transition: 0.4s;
+    }
+  }
+  .ccapp-ct-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  p.ccapp-ct-p {
+    margin: 0;
+    font-size: 17px;
+  }
+  .ccapp-cti-btn {
+    background: transparent;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    svg{
+      width: 16px;
+    }
+  }
+  .ccapp-collection.active {
+    .ccapp-collection-title {
+      .ccapp-ctth-svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  .ccapp-swatch-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    box-sizing: border-box;
+    padding: 15px 10px 15px 10px;
+    min-height: 100px;
+  }
+  .ccapp-swatch-wrapper h4{
+    margin: 0;
+    font-size: 13px;
+    min-width: max-content;
+    margin-left: 3px;
+    line-height: 1;
+  }
+  .ccapp-swatch img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    cursor: pointer;
+  }
+  .ccapp-swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .ccapp-swatch-infos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ccapp-swatch-title {
+    margin: 0;
+    line-height: 1;
+    font-size: 10px;
+  }
+  .ccapp-swatch-btn {
+    border: none;
+    background: transparent;
+    width: 15px;
+    height: max-content;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    svg {
+      width: 16px;
+    }
+  }
+  .ccapp-sps-wrapper {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    grid-gap: 10px;
+  }
+  .ccapp-sps-size-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .ccapp-sps-diagram img {
+    width: 100%;
+    height: auto;
+  }
+  .ccapp-sps-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  {% comment %} ccapp modal  {% endcomment %}
+
+  .ccapp-modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 50%);
+    z-index: -999900;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .ccapp-modal-container.active{
+    z-index: 999900;
+    opacity: 1;
+    visibility: visible;
+  }
+  .ccapp-modal-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  .ccapp-modal-content {
+    width: 600px;
+    background: white;
+    box-sizing: border-box;
+    padding: 10px 10px;
+    position: relative;
+  }
+  .ccapp-smc {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-gap: 10px;
+  }
+  .ccapp-smc-media {
+    display: flex;
+    img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
+      object-fit: cover;
+    }
+  }
+  .ccapp-smc-info {
+    font-size: 12px;
+  }
+  .ccapp-smc-title{
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 5px 0 8px 0;
+    border-bottom: .5px solid #cdc4c4;
+    padding-bottom: 8px;
+  }
+  .ccapp-smc-description{
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    *{
+      margin: 0;
+      line-height: 1.4;
+    }
+    br{
+      display: block;
+      height: 5px;
+      padding: 0;
+      margin: 0;
+    }
+    h1{
+      font-size: 22px;
+    }
+    h2{
+      font-size: 20px;
+    }
+    p{
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+  }
+  .ccapp-modal-close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: transparent;
+    border: none;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .ccapp-cmc {
+    box-sizing: border-box;
+    padding: 5px 20px 20px 20px;
+  }
+  .ccapp-cmc-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    line-height: 1.5;
+    border-bottom: .5px solid #aba2a2;
+    padding-bottom: 10px;
+  }
+
+  .ccapp-cmc-description{
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    *{
+      margin: 0;
+      line-height: 1.4;
+    }
+    br{
+      display: block;
+      height: 5px;
+      padding: 0;
+      margin: 0;
+    }
+    h1{
+      font-size: 22px;
+    }
+    h2{
+      font-size: 20px;
+    }
+    p{
+      font-size: 16px;
+    }
+  }
+
+  .ccapp-spswgi-label,
+  .ccapp-spslgi-label {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+  }
+  .ccapp-spsgi-btn {
+    background: transparent;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    svg {
+      width: 16px;
+    }
+  }
+  .ccapp-spswgi-ltitle,
+  .ccapp-spslgi-ltitle {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0;
+    line-height: 1.1;
+    font-size: 16px;
+  }
+  .ccapp-ospswg-select,
+  .ccapp-ospslg-select {
+    box-sizing: border-box;
+    padding: 7px 6px;
+    margin: 0;
+    border-radius: 0px;
+    font-size: 15px;
+    color: black;
+    width: 130px;
+  }
+
+  .ccapp-osps-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ccapp-osps-htitle {
+    margin: 0 0 0 0;
+  }
+  .ccapp-ospshti-btn {
+    background: transparent;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+  }
+  .ccapp-drawer-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 50%);
+    z-index: -999900;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .ccapp-drawer-container.active {
+    z-index: 999900;
+    opacity: 1;
+    visibility: visible;
+  }
+  .ccapp-drawer-wrapper {
+    position: absolute;
+    width: 450px;
+    height: 100%;
+    background: white;
+    right: 0;
+    top: 0;
+    transform: translateX(100%);
+    transition: .4s;
+    overflow: auto;
+    height: calc(100vh - 0px);
+  }
+  .ccapp-drawer-container.active .ccapp-drawer-wrapper {
+    transform: translateX(0);
+  }
+  .ccapp-drawer-content {
+    position: relative;
+    img{
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  .ccapp-drawer-close-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: transparent;
+    padding: 0px;
+    margin: 0;
+    display: flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+  }
+  .ccapp-msc-tab-heading {
+    display: grid;
+    grid-template-columns: 1fr 30px;
+    grid-gap: 15px;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 10px 0px 10px 10px;
+  }
+  .mcct-icon-svg{
+    transform-origin: center;
+    transition: .5s;
+  }
+  .ccapp-collection-heading{
+    margin: 0;
+  }
+
+  .ccapp-msc-tab-content{
+    height: 0px;
+    overflow: hidden;
+    visibility: hidden;
+    transition: all .5s;
+    box-sizing: border-box;
+    border-top: 1px solid #ede7e7;
+  }
+
+  .ccapp-msc-tab {
+    box-sizing: border-box;
+    border: 1px solid #ede7e7;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+
+  .ccapp-msc-tab.active .ccapp-msc-tab-content{
+    visibility: visible;
+  }
+  .ccapp-msc-tab.active .mcct-icon-svg{
+    transform: rotate(180deg);
+  }
+  .ccapp-collection-container {
+    box-sizing: border-box;
+    padding: 10px 10px 10px 10px;
+  }
+  .ccapp-swatch-container {
+    {% comment %} box-sizing: border-box;
+    padding: 10px 10px 25px 10px; {% endcomment %}
+  }
+  .ccapp-single-panel-size-container {
+    box-sizing: border-box;
+    padding: 10px 10px 25px 10px;
+  }
+  .ccapp-swatch-image.active {
+    box-sizing: border-box;
+    box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
+  }
+  .ccapp-sc-heading{
+    box-sizing: border-box;
+    padding: 10px 10px 10px 10px;
+    border-block: 1px solid #ede7e7;
+
+    h3{
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+  }
+  .ccapp-lt-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+    box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px 10px 25px 10px;
+  }
+  .ccapp-lt-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    cursor: pointer;
+  }
+  .ccapp-lti-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  .ccapp-lt-item.active .ccapp-lti-image{
+    box-sizing: border-box;
+    box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
+  }
+  .ccapp-lti-title {
+    margin: 0;
+    font-size: 12px;
+    text-align: center;
+    line-height: 1;
+    color: black;
+  }
+  .ccapp-lti-sr {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    color: white;
+  }
+
+  .ccapp-tieback-wrapper,
+  .ccapp-bms-wrapper{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+    box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px 10px 25px 10px;
+  }
+  .ccapp-rl-wrapper{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+    box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px 10px 25px 10px;
+
+    select, input{
+      width: 100%;
+      height: 33px;
+      box-sizing: border-box;
+      padding: 7px 2px;
+    }
+  }
+</style>
+
+<curtain-customizer-app>
+  <div class="ccapp-container">
+    <div class="ccapp-wrapper">
+      <div class="ccapp-media">
+        <div class="thumb-container">
+          <div class="ccapp-moc">
+            {% if block.settings.moc_image == blank %}
+              <img src="https://cdn.shopify.com/s/files/1/0717/7958/2207/files/cartaidasdm.png?v=1746704642" alt="">
+            {% else %}
+              {{ block.settings.moc_image | image_url: width: block.settings.moc_image.width | image_tag }}
+            {% endif %}
+          </div>
+          <div class="ccapp-premade"></div>
+        </div>
+      </div>
+      <div class="ccapp-info">
+        {% comment %} collection and swatch tab  {% endcomment %}
+        <div class="ccapp-msc-tab" data-index="1">
+          <div class="ccapp-msc-tab-heading">
+            <h3 class="ccapp-collection-heading">Choose Collection</h3>
+            <svg
+              class="mcct-icon-svg"
+              width="20px"
+              height="20px"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10 14a.997.997 0 01-.707-.293l-5-5a.999.999 0 111.414-1.414L10 11.586l4.293-4.293a.999.999 0 111.414 1.414l-5 5A.997.997 0 0110 14z" fill="#5C5F62"></path>
+            </svg>
+          </div>
+          <div class="ccapp-msc-tab-content">
+            <div class="ccapp-collection-container">
+              <div class="ccapp-collections-wrapper">Loading...</div>
+            </div>
+            <div class="ccapp-swatch-container">
+              <div class="ccapp-sc-heading">
+                <h3>Choose Color</h3>
+              </div>
+              <div class="ccapp-swatch-wrapper"></div>
+            </div>
+          </div>
+        </div>
+
+        {% comment %} size panel tab  {% endcomment %}
+        <div class="ccapp-msc-tab" data-index="2">
+          <div class="ccapp-msc-tab-heading">
+            <div class="ccapp-osps-header">
+              <h3 class="ccapp-osps-htitle">Order Single Panel Size</h3>
+              <button class="ccapp-ospshti-btn ccapp-osps-modal-opener" data-type="length">
+                <svg
+                  fill="#000000"
+                  width="20px"
+                  height="20px"
+                  viewBox="-1 0 19 19"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="cf-icon-svg"
+                >
+                  <path d="M16.417 9.583A7.917 7.917 0 1 1 8.5 1.666a7.917 7.917 0 0 1 7.917 7.917zM5.85 3.309a6.833 6.833 0 1 0 2.65-.534 6.787 6.787 0 0 0-2.65.534zm2.654 1.336A1.136 1.136 0 1 1 7.37 5.78a1.136 1.136 0 0 1 1.135-1.136zm.792 9.223V8.665a.792.792 0 1 0-1.583 0v5.203a.792.792 0 0 0 1.583 0z"/>
+                </svg>
+              </button>
+            </div>
+            <svg
+              class="mcct-icon-svg"
+              width="20px"
+              height="20px"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10 14a.997.997 0 01-.707-.293l-5-5a.999.999 0 111.414-1.414L10 11.586l4.293-4.293a.999.999 0 111.414 1.414l-5 5A.997.997 0 0110 14z" fill="#5C5F62"></path>
+            </svg>
+          </div>
+          <div class="ccapp-msc-tab-content">
+            <div class="ccapp-single-panel-size-container">
+              <div class="ccapp-sps-wrapper">
+                <div class="ccapp-sps-diagram">
+                  <div>Loading...</div>
+                </div>
+                <div class="ccapp-sps-sizes-wrapper"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% comment %} lining type tab {% endcomment %}
+        <div class="ccapp-msc-tab" data-index="3">
+          <div class="ccapp-msc-tab-heading">
+            <div class="ccapp-osps-header">
+              <h3 class="ccapp-osps-htitle">Select Lining Type</h3>
+
+              <button class="ccapp-lthti-btn ccapp-lt-modal-opener" data-type="lining-type">
+                <svg
+                  fill="#000000"
+                  width="20px"
+                  height="20px"
+                  viewBox="-1 0 19 19"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="cf-icon-svg"
+                >
+                  <path d="M16.417 9.583A7.917 7.917 0 1 1 8.5 1.666a7.917 7.917 0 0 1 7.917 7.917zM5.85 3.309a6.833 6.833 0 1 0 2.65-.534 6.787 6.787 0 0 0-2.65.534zm2.654 1.336A1.136 1.136 0 1 1 7.37 5.78a1.136 1.136 0 0 1 1.135-1.136zm.792 9.223V8.665a.792.792 0 1 0-1.583 0v5.203a.792.792 0 0 0 1.583 0z"/>
+                </svg>
+              </button>
+            </div>
+            <svg
+              class="mcct-icon-svg"
+              width="20px"
+              height="20px"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10 14a.997.997 0 01-.707-.293l-5-5a.999.999 0 111.414-1.414L10 11.586l4.293-4.293a.999.999 0 111.414 1.414l-5 5A.997.997 0 0110 14z" fill="#5C5F62"></path>
+            </svg>
+          </div>
+          <div class="ccapp-msc-tab-content">
+            <div class="ccapp-lining-type-container">
+              <div class="ccapp-lt-wrapper">
+                <div class="ccapp-lt-item">Loading...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% comment %} tieback tab {% endcomment %}
+        <div class="ccapp-msc-tab" data-index="4">
+          <div class="ccapp-msc-tab-heading">
+            <div class="ccapp-osps-header">
+              <h3 class="ccapp-osps-htitle">Select Tieback</h3>
+            </div>
+            <svg
+              class="mcct-icon-svg"
+              width="20px"
+              height="20px"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10 14a.997.997 0 01-.707-.293l-5-5a.999.999 0 111.414-1.414L10 11.586l4.293-4.293a.999.999 0 111.414 1.414l-5 5A.997.997 0 0110 14z" fill="#5C5F62"></path>
+            </svg>
+          </div>
+          <div class="ccapp-msc-tab-content">
+            <div class="ccapp-tieback-container">
+              <div class="ccapp-tieback-wrapper">
+                <div class="ccapp-tiebacl-item">Loading...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% comment %} body memory shaped tab {% endcomment %}
+        <div class="ccapp-msc-tab" data-index="5">
+          <div class="ccapp-msc-tab-heading">
+            <div class="ccapp-osps-header">
+              <h3 class="ccapp-osps-htitle">Body Memory Shaped</h3>
+            </div>
+            <svg
+              class="mcct-icon-svg"
+              width="20px"
+              height="20px"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10 14a.997.997 0 01-.707-.293l-5-5a.999.999 0 111.414-1.414L10 11.586l4.293-4.293a.999.999 0 111.414 1.414l-5 5A.997.997 0 0110 14z" fill="#5C5F62"></path>
+            </svg>
+          </div>
+          <div class="ccapp-msc-tab-content">
+            <div class="ccapp-bms-container">
+              <div class="ccapp-bms-wrapper">
+                <div class="ccapp-bms-item">Loading...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% comment %} body memory shaped tab {% endcomment %}
+        <div class="ccapp-msc-tab" data-index="6">
+          <div class="ccapp-msc-tab-heading">
+            <div class="ccapp-osps-header">
+              <h3 class="ccapp-osps-htitle">Room Label</h3>
+            </div>
+            <svg
+              class="mcct-icon-svg"
+              width="20px"
+              height="20px"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10 14a.997.997 0 01-.707-.293l-5-5a.999.999 0 111.414-1.414L10 11.586l4.293-4.293a.999.999 0 111.414 1.414l-5 5A.997.997 0 0110 14z" fill="#5C5F62"></path>
+            </svg>
+          </div>
+          <div class="ccapp-msc-tab-content">
+            <div class="ccapp-rl-container">
+              <div class="ccapp-rl-wrapper">
+                <div class="ccapp-rl-item">Loading...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</curtain-customizer-app>
+
+<script>
+  class CurtainCustomizer extends HTMLElement {
+    constructor() {
+      super();
+
+      this.appUrl = 'https://curtain-app-private-deae1f46dd84.herokuapp.com';
+      //this.appUrl = "https://royal-outstanding-mag-prime.trycloudflare.com";
+
+      this.otherModuleLoaded = false;
+      this.data = this.data || {};
+      this.collections = [];
+      this.panelSize = this.panelSize || null;
+      this.liningType = this.liningType || null;
+      this.tieback = this.tieback || null;
+      this.memoryShaped = this.memoryShaped || null;
+      this.config = this.config || {};
+      this.currentSwatches = this.currentSwatches || {};
+      this.initCurtain();
+    }
+
+    connectedCallback() {
+      this.handleEvents();
+      setTimeout(() => {
+        console.log('Curtain Customizer App Loaded==========');
+        this.loadOthersModules();
+      }, 10);
+    }
+
+    async initCurtain() {
+      let response = await this.getData();
+      if (response) {
+        this.collectionUI();
+      }
+    }
+
+    handleEvents() {
+      this.addEventListener('input', function (e) {
+        if (e.target.closest('.ccapp-collection')) {
+          this.handleCollectionInputEvents(e);
+          //const tab = e.target.closest(".ccapp-msc-tab");
+          //this.handleResizeHeightCollectionTab(tab);
+        }
+        if (e.target.closest('.ccapp-sps-sizes-wrapper')) {
+          console.log('event', JSON.parse(e.target.value));
+        }
+      });
+
+      this.addEventListener('click', function (e) {
+        if (e.target.closest('.ccapp-swatch')) {
+          this.handleSwatchClickEvent(e);
+        }
+        const collectionTabTile = e.target.classList.contains('ccapp-ctth-svg')
+          ? e.target
+          : e.target.closest('.ccapp-ctth-svg');
+        if (collectionTabTile) {
+          const collectionTitleIndex = collectionTabTile.dataset?.index;
+          console.log("collectionTitleIndex=====>", collectionTitleIndex);
+          this.handleCollectionUiTab(collectionTitleIndex);
+        }
+
+        const ccapp_collectionInfoBtn = e.target.classList.contains('ccapp-cti-btn')
+          ? e.target
+          : e.target.closest('.ccapp-cti-btn');
+        if (ccapp_collectionInfoBtn) {
+          this.handleCollectionModal(ccapp_collectionInfoBtn);
+        }
+
+        const ccapp_swatchInfoBtn = e.target.classList.contains('ccapp-swatch-btn')
+          ? e.target
+          : e.target.closest('.ccapp-swatch-btn');
+        if (ccapp_swatchInfoBtn) {
+          this.handleSwatchModal(ccapp_swatchInfoBtn);
+        }
+
+        const ccapp_panelSizeGroupInfoBtn = e.target.classList.contains('ccapp-spsgi-btn')
+          ? e.target
+          : e.target.closest('.ccapp-spsgi-btn');
+        if (ccapp_panelSizeGroupInfoBtn) {
+          this.handlePanelSizeGroupModal(ccapp_panelSizeGroupInfoBtn);
+        }
+
+        const ccapp_panelSizeInfoBtn = e.target.classList.contains('ccapp-osps-modal-opener')
+          ? e.target
+          : e.target.closest('.ccapp-osps-modal-opener');
+        if (ccapp_panelSizeInfoBtn) {
+          this.handlePanelSizeModal(ccapp_panelSizeInfoBtn);
+        }
+
+        const ccapp_miTabHeading = e.target.classList.contains('mcct-icon-svg')
+          ? e.target
+          : e.target.closest('.mcct-icon-svg');
+        if (ccapp_miTabHeading) {
+          this.handleMITabs(ccapp_miTabHeading);
+        }
+
+        const ccapp_linigTypeItems = e.target.classList.contains('ccapp-lt-item')
+          ? e.target
+          : e.target.closest('.ccapp-lt-item');
+        if (ccapp_linigTypeItems) {
+          this.handleLinignTypeItemSelector(ccapp_linigTypeItems);
+        }
+      });
+    }
+
+    handleLinignTypeItemSelector(btn) {
+      console.log("e.target", btn)
+    }
+
+    handleMITabs(btn) {
+      const wrapper = btn.closest('.ccapp-msc-tab');
+      const tabIndex = wrapper.dataset?.index || 1;
+      this.handleMITabsOpener(tabIndex);
+    }
+
+    handleMITabsOpener(tabIndex) {
+      const allTabls = this.querySelectorAll('.ccapp-msc-tab');
+      if (allTabls) {
+        allTabls.forEach((tab, index) => {
+          const tabContent = tab.querySelector('.ccapp-msc-tab-content');
+          if (tab.dataset?.index === tabIndex) {
+            tab.classList.toggle('active');
+            if (tab.classList.contains('active')) {
+              if (tabContent) tabContent.style.height = `${tabContent.scrollHeight}px`;
+            } else {
+              if (tabContent) tabContent.style.height = `0px`;
+            }
+          } else {
+            tab.classList.remove('active');
+            if (tabContent) tabContent.style.height = `0px`;
+          }
+        });
+      }
+    }
+
+    handleCollectionModal(btn) {
+      const { collectionId } = btn.dataset;
+      const collection = this.collections?.find((c) => c.id?.toString() === collectionId?.toString());
+      if (collection) {
+        this.generateCollectionModalData(collection);
+      }
+    }
+
+    generateCollectionModalData(collection) {
+      {% comment %} let contentUl = `<div class="ccapp-cmc">
+          <div class="ccapp-cmc-info">
+            <h3 class="ccapp-cmc-title">${collection?.title}</h3>
+            <div class="ccapp-cmc-description">${collection?.info}</div>
+          </div>
+        </div>`;
+
+      this.loadModalData(contentUl); {% endcomment %}
+
+      let contentUl = `<div class="ccapp-cmc">
+        <div class="ccapp-cmc-info">
+          <h3 class="ccapp-cmc-title">${collection?.title}</h3>
+          <div class="ccapp-cmc-description">
+            ${collection?.info || 'Loading...'}
+          </div>
+        </div>
+      </div>`;
+
+      this.loadDrawerData(contentUl);
+    }
+
+    handleSwatchModal(btn) {
+      const { swatchId, listId, collectionId } = btn.dataset;
+      const { collection, list } = this.getSelectedSwatch(collectionId, listId);
+
+      let swatch_ = this.currentSwatches?.swatches?.find((sw) => sw.id === parseInt(swatchId));
+
+      if (swatch_) {
+        this.generateSwatchModalData(swatch_, list, collection);
+      }
+    }
+
+    handlePanelSizeModal(btn) {
+      this.generatePanelSizeModalData();
+    }
+
+    generatePanelSizeModalData() {
+      let contentUl = `<div class="ccapp-cmc">
+        <div class="ccapp-cmc-info">
+          <h3 class="ccapp-cmc-title">Order panel size info</h3>
+          <div class="ccapp-cmc-description">
+            ${this.panelSize?.info || 'Loading...'}
+          </div>
+        </div>
+      </div>`;
+
+      this.loadDrawerData(contentUl);
+    }
+
+    handlePanelSizeGroupModal(btn) {
+      const { type } = btn.dataset;
+      const info = type === 'width' ? this.panelSize?.widthInfo : this.panelSize?.lengthInfo;
+      if (info) {
+        this.generatePanelSizeGroupModalData(info, type);
+      }
+    }
+
+    generatePanelSizeGroupModalData(info, type) {
+      {% comment %} let contentUl = `<div class="ccapp-cmc">
+        <div class="ccapp-cmc-info">
+          <h3 class="ccapp-cmc-title">Order panel size ${type} info</h3>
+          <div class="ccapp-cmc-description">${info}</div>
+        </div>
+      </div>`;
+      this.loadModalData(contentUl); {% endcomment %}
+
+      let contentUl = `<div class="ccapp-cmc">
+        <div class="ccapp-cmc-info">
+          <h3 class="ccapp-cmc-title">Order panel size ${type} info</h3>
+          <div class="ccapp-cmc-description">
+            ${info || 'Loading...'}
+          </div>
+        </div>
+      </div>`;
+
+      this.loadDrawerData(contentUl);
+    }
+
+    generateSwatchModalData(swatch, list, collection) {
+      let contentUl = `<div class="ccapp-smc">
+          <div class="ccapp-smc-media">
+            <img
+              src="${swatch?.image64}"
+              width="300"
+            >
+          </div>
+          <div class="ccapp-smc-info">
+            <h3 class="ccapp-smc-title">${list?.title} / ${swatch?.title}</h3>
+            <div class="ccapp-smc-description">${swatch?.info}</div>
+          </div>
+        </div>`;
+
+      this.loadModalData(contentUl);
+    }
+
+    loadModalData(dataUI) {
+      if (document.querySelector('.ccapp-modal-data')) {
+        document.querySelector('.ccapp-modal-data').innerHTML = dataUI;
+      }
+
+      this.handleModalOpener();
+    }
+
+    loadDrawerData(dataUI) {
+      if (document.querySelector('.ccapp-drawer-data')) {
+        document.querySelector('.ccapp-drawer-data').innerHTML = dataUI;
+      }
+
+      this.handleDrawerOpener();
+    }
+
+    handleDrawerOpener() {
+      if (document.querySelector('.ccapp-drawer-container')) {
+        document.querySelector('.ccapp-drawer-container').classList.toggle('active');
+      }
+    }
+
+    handleModalOpener() {
+      if (document.querySelector('.ccapp-modal-container')) {
+        document.querySelector('.ccapp-modal-container').classList.toggle('active');
+      }
+    }
+
+    collectionUI() {
+      let element = '';
+      this.collections?.map((collection, index) => {
+        let listsEl = this.collectionListUI(collection, index);
+        element += `<div class="ccapp-collection">
+                <div class="ccapp-collection-title" data-index="${index}">
+                <div class="ccapp-ct-wrapper">
+                  <p class="ccapp-ct-p">${collection?.title}</p>
+                  <button class="ccapp-cti-btn" data-collection-id="${collection.id}">
+                    <svg fill="#000000" width="20px" height="20px" viewBox="-1 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><path d="M16.417 9.583A7.917 7.917 0 1 1 8.5 1.666a7.917 7.917 0 0 1 7.917 7.917zM5.85 3.309a6.833 6.833 0 1 0 2.65-.534 6.787 6.787 0 0 0-2.65.534zm2.654 1.336A1.136 1.136 0 1 1 7.37 5.78a1.136 1.136 0 0 1 1.135-1.136zm.792 9.223V8.665a.792.792 0 1 0-1.583 0v5.203a.792.792 0 0 0 1.583 0z"/></svg>
+                  </button>
+                </div>
+                
+                <svg class="ccapp-ctth-svg" data-index="${index}" width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 14a.997.997 0 01-.707-.293l-5-5a.999.999 0 111.414-1.414L10 11.586l4.293-4.293a.999.999 0 111.414 1.414l-5 5A.997.997 0 0110 14z" fill="#5C5F62"/></svg>
+                </div>
+                <div class="ccapp-collection-list-wrapper">${listsEl}</div>
+            </div>`;
+      });
+
+      this.querySelector('.ccapp-collections-wrapper').innerHTML = element;
+      this.ccappCollectionsUls = this.querySelectorAll('.ccapp-collection');
+      this.handleMITabsOpener('1');
+      this.handleCollectionUiTab();
+    }
+
+    handleCollectionUiTab(_index = 0) {
+      if (this.ccappCollectionsUls) {
+        this.ccappCollectionsUls.forEach((cui, index) => {
+          let listWrapper = cui.querySelector('.ccapp-collection-list-wrapper');
+          if (index === parseInt(_index)) {
+            cui.classList.toggle('active');
+            if (cui.classList.contains('active')) {
+              if (listWrapper) listWrapper.style.height = `${listWrapper.scrollHeight}px`;
+            } else {
+              if (listWrapper) listWrapper.style.height = '0';
+            }
+          } else {
+            cui.classList.remove('active');
+            if (listWrapper) listWrapper.style.height = '0';
+          }
+        });
+      }
+    }
+
+    collectionListUI(collection, _index) {
+      let el = '';
+      collection?.collectionList?.map((list, index) => {
+        if (index === 0 && _index === 0) {
+          this.handleSwatches(collection.id, list.id);
+        }
+        el += `<div class="ccapp-collection-list">
+                <input ${
+                  index === 0 && _index === 0 && 'checked'
+                } id="list--${_index}--${index}" type="radio" name="collection" data-collection-id="${
+          collection.id
+        }" data-list-id="${list.id}" value="${list.id}">
+                <label for="list--${_index}--${index}">${list.title}</label>
+            </div>`;
+      });
+
+      return el;
+    }
+
+    handleSwatchClickEvent(e) {
+      let src = e.target.src || null;
+      if (src != null) {
+        const imageUrl = encodeURI(src);
+        this.uploadSwatchToMoc(imageUrl);
+        this.activeSwatchBorder(e)
+      }
+    }
+
+    activeSwatchBorder(e) {
+      const swatchImages = this.querySelectorAll('.ccapp-swatch-image');
+      if (swatchImages) {
+        swatchImages.forEach((img) => {
+          img.classList.remove('active');
+        });
+      }
+      const activeSwatch = e.target.closest('.ccapp-swatch-image');
+      if (activeSwatch) {
+        activeSwatch.classList.add('active');
+      }
+    }
+
+    uploadSwatchToMoc(imageUrl) {
+      this.querySelector('.thumb-container').style.backgroundImage = `url("${imageUrl}")`;
+    }
+
+    handleCollectionInputEvents(e) {
+      const { value, name } = e.target;
+      const { collectionId, listId } = e.target.dataset;
+      this.handleSwatches(collectionId, listId);
+    }
+
+    async handleSwatches(collectionId, listId) {
+      if (this.querySelector('.ccapp-swatch-wrapper')) {
+        this.querySelector('.ccapp-swatch-wrapper').innerHTML = 'Loading';
+      }
+
+      const response = await fetch(`${this.appUrl}/api/swatches/${listId}`);
+      const data = await response.json();
+      const swatches = data?.swatches || [];
+
+      const { collection, list } = this.getSelectedSwatch(collectionId, listId);
+
+      if (swatches?.length > 0) {
+        if (swatches[0]?.image64) {
+          this.uploadSwatchToMoc(swatches[0]?.image64);
+        }
+      }
+
+      this.currentSwatches = {
+        collectionId: collection.id,
+        listId: list.id,
+        swatches: swatches,
+      };
+
+      this.swatchUI(collection, list, swatches);
+      const tab = this.querySelector('.ccapp-msc-tab.active');
+      this.handleResizeHeightCollectionTab(tab);
+    }
+
+    getSelectedSwatch(collectionId, listId) {
+      let collection = this.collections?.find((c) => c.id?.toString() === collectionId?.toString());
+      let list = collection?.collectionList?.find((l) => l.id?.toString() === listId?.toString());
+      return { collection, list };
+    }
+
+    swatchUI(collection, list, swatches) {
+      let swatchEl = '';
+      swatches?.map((swatch, index) => {
+        if (swatch.image64) {
+          swatchEl += `<div class="ccapp-swatch" data-image="${swatch?.image64}">
+                <img src="${swatch?.image64}" class="ccapp-swatch-image ${index===0? 'active':''}" width="100">
+                <div class="ccapp-swatch-infos">
+                  <p class="ccapp-swatch-title">${swatch?.title}</p>
+                  <button class="ccapp-swatch-btn" data-swatch-id="${swatch.id}" data-list-id="${list.id}" data-collection-id="${collection.id}">
+                    <svg fill="#000000" width="16px" height="16px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <title>zoomin</title>
+                      <path d="M16.906 20.188l5.5 5.5-2.25 2.281-5.75-5.781c-1.406 0.781-3.031 1.219-4.719 1.219-5.344 0-9.688-4.344-9.688-9.688s4.344-9.688 9.688-9.688 9.719 4.344 9.719 9.688c0 2.5-0.969 4.781-2.5 6.469zM2.688 13.719c0 3.875 3.125 6.969 7 6.969 3.844 0 7-3.094 7-6.969s-3.156-6.969-7-6.969c-3.875 0-7 3.094-7 6.969zM10.813 12.625h3.875v2.219h-3.875v3.844h-2.219v-3.844h-3.844v-2.219h3.844v-3.875h2.219v3.875z"></path>
+                    </svg>
+                  </button>
+                </div>
+            </div>`;
+        }
+      });
+
+      if (this.querySelector('.ccapp-swatch-wrapper')) {
+        this.querySelector('.ccapp-swatch-wrapper').innerHTML =
+          swatchEl?.length < 10 ? `<h4>No Swatches!</h4>` : swatchEl;
+      }
+    }
+
+    singlePanelSizeUI() {
+      if (this.panelSize) {
+        if (this.querySelector('.ccapp-sps-diagram')) {
+          this.querySelector('.ccapp-sps-diagram').innerHTML = `<img src="${this.panelSize?.image64}">`;
+        }
+
+        let widthGroupEl = '';
+        let widthOptionEl = '';
+
+        this.config.spsOrderWidth =
+          this.panelSize?.widthGroup?.length > 0 ? this.panelSize?.widthGroup[0]?.group[0] : null;
+        this.config.spsOrderLength =
+          this.panelSize?.lengthGroup?.length > 0 ? this.panelSize?.lengthGroup[0]?.group[0] : null;
+
+        this.panelSize?.widthGroup?.map((group, index) => {
+          group?.group?.map((g, i) => {
+            widthOptionEl += `<option value='${JSON.stringify(g).replace("'", '"')}'>${g.width}</option>`;
+          });
+        });
+
+        let lengthOptionEl = '';
+        this.panelSize?.lengthGroup?.map((group, index) => {
+          group?.group?.map((g, i) => {
+            lengthOptionEl += `<option value='${JSON.stringify(g).replace("'", '"')}'>${g.Length}</option>`;
+          });
+        });
+
+        const widthGroupSelect = `<div class="ccapp-sps-input-wrapper">
+          <label class="ccapp-spswgi-label">
+            <div class="ccapp-spswgi-ltitle">
+              <strong>Order Width:</strong>
+              <span>${this.config?.spsOrderWidth?.width} Inches</span>
+            </div>
+             <button class="ccapp-spsgi-btn" data-type="width">
+              <svg fill="#000000" width="20px" height="20px" viewBox="-1 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><path d="M16.417 9.583A7.917 7.917 0 1 1 8.5 1.666a7.917 7.917 0 0 1 7.917 7.917zM5.85 3.309a6.833 6.833 0 1 0 2.65-.534 6.787 6.787 0 0 0-2.65.534zm2.654 1.336A1.136 1.136 0 1 1 7.37 5.78a1.136 1.136 0 0 1 1.135-1.136zm.792 9.223V8.665a.792.792 0 1 0-1.583 0v5.203a.792.792 0 0 0 1.583 0z"/></svg>
+            </button>
+          </label>
+          <select class="ccapp-ospswg-select" name="ccapp-width-group">${widthOptionEl}</select>
+        </div>`;
+        const lengthGroupSelect = `<div class="ccapp-sps-input-wrapper">
+           <label class="ccapp-spslgi-label">
+            <div class="ccapp-spslgi-ltitle">
+              <strong>Order Length:</strong>
+              <span>${this.config?.spsOrderLength?.Length} Inches</span>
+            </div>
+             <button class="ccapp-spsgi-btn" data-type="length">
+              <svg fill="#000000" width="20px" height="20px" viewBox="-1 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><path d="M16.417 9.583A7.917 7.917 0 1 1 8.5 1.666a7.917 7.917 0 0 1 7.917 7.917zM5.85 3.309a6.833 6.833 0 1 0 2.65-.534 6.787 6.787 0 0 0-2.65.534zm2.654 1.336A1.136 1.136 0 1 1 7.37 5.78a1.136 1.136 0 0 1 1.135-1.136zm.792 9.223V8.665a.792.792 0 1 0-1.583 0v5.203a.792.792 0 0 0 1.583 0z"/></svg>
+            </button>
+          </label>
+          <select class="ccapp-ospslg-select" name="ccapp-length-group">${lengthOptionEl}</select>
+        </div>`;
+
+        this.querySelector('.ccapp-sps-sizes-wrapper').innerHTML = `<div class="ccapp-sps-size-wrapper">
+        ${widthGroupSelect}
+        ${lengthGroupSelect}
+        </div>`;
+      }
+    }
+
+    liningTypeUI() {
+      console.log("liningType===", this.liningType);
+
+      let liningTypeEl = '';
+      this.liningType?.items?.map((item, index) => {
+        liningTypeEl += `<div class="ccapp-lt-item ${index===0 ? 'active':''}" data-index="${index}">
+          <img class="ccapp-lti-image" src="${item?.image64}" width="100">
+          <p class="ccapp-lti-title">${item?.title}</p>
+          <div class="ccapp-lti-sr">SR: ${item?.sr}</div>
+        </div>`;
+      })
+
+      if (this.querySelector('.ccapp-lt-wrapper')) {
+        this.querySelector('.ccapp-lt-wrapper').innerHTML = liningTypeEl;
+      }
+    }
+
+    tiebackUI() {
+      console.log("tieback===", this.tieback);
+      const tieback = this.tieback || null;
+
+      let uiEL = '';
+
+      uiEL += `<div class="ccapp-lt-item ${tieback?.isTie && 'active'}">
+          <img class="ccapp-lti-image" src="${tieback?.primaryImage}" width="100">
+          <p class="ccapp-lti-title">${tieback?.primaryTitle}</p>
+        </div>`;
+
+      uiEL += `<div class="ccapp-lt-item ${!tieback?.isTie && 'active'}">
+          <img class="ccapp-lti-image" src="${tieback?.secondaryImage}" width="100">
+          <p class="ccapp-lti-title">${tieback?.secondaryTitle}</p>
+        </div>`;
+      
+
+      if (this.querySelector('.ccapp-tieback-wrapper')) {
+        this.querySelector('.ccapp-tieback-wrapper').innerHTML = uiEL;
+      }
+    }
+
+    memoryShapedUI() {
+      console.log("memoryShaped===", this.memoryShaped);
+      const memoryShaped = this.memoryShaped || null;
+
+      let uiEL = '';
+
+      uiEL += `<div class="ccapp-lt-item ${memoryShaped?.isTie && 'active'}">
+          <img class="ccapp-lti-image" src="${memoryShaped?.primaryImage}" width="100">
+          <p class="ccapp-lti-title">${memoryShaped?.primaryTitle}</p>
+        </div>`;
+
+      uiEL += `<div class="ccapp-lt-item ${!memoryShaped?.isTie && 'active'}">
+          <img class="ccapp-lti-image" src="${memoryShaped?.secondaryImage}" width="100">
+          <p class="ccapp-lti-title">${memoryShaped?.secondaryTitle}</p>
+        </div>`;
+      
+
+      if (this.querySelector('.ccapp-bms-wrapper')) {
+        this.querySelector('.ccapp-bms-wrapper').innerHTML = uiEL;
+      }
+    }
+
+    roomLabelUI() {
+      const roomLabel = this.roomLabel || null;
+
+      const roomLabelOptions = roomLabel?.options || [];
+      let optionsEl = '';
+      roomLabelOptions?.map((option) => {
+        optionsEl += `<option value="${option?.title}">${option?.title}</option>`;
+      });
+
+      // input field for room label description, limit to roomLabel?.descriptionMaxLength
+
+      let uiEL = `
+        <div>
+          <label for="room-label-select">Select Room</label>
+          <select>${optionsEl}</select>  
+        </div>  
+        <div>
+          <label for="room-label-description">Window Description</label>
+          <input type="text" placeholder="Window description" maxlength="${roomLabel?.descriptionMaxLength}" />
+        </div>  
+      `;
+
+      if (this.querySelector('.ccapp-rl-wrapper')) {
+        this.querySelector('.ccapp-rl-wrapper').innerHTML = uiEL;
+      }
+    }
+
+    handleResizeHeightCollectionTab(tab = null) {
+      if (tab && tab.classList.contains('active')) {
+        const content = tab.querySelector('.ccapp-msc-tab-content');
+        if (content) {
+          content.style.height = `auto`;
+          content.style.height = `${content.scrollHeight}px`;
+          console.log('height scroll', content.scrollHeight);
+        }
+      }
+    }
+
+    async getData(customizerId = 1) {
+      const response = await fetch(`${this.appUrl}/api/curtain/${customizerId}`);
+      const data = await response.json();
+      this.data.collections = data?.collections || [];
+      this.data.appUrl = data?.appUrl || '';
+      this.collections = data?.collections || [];
+
+      {% comment %} console.log('fetch dat===', data); {% endcomment %}
+
+      return true;
+    }
+
+    async loadOthersModules(customizerId = 1) {
+      console.log("this.url========", `${this.appUrl}/api/others-module/${customizerId}`);
+      const response = await fetch(`${this.appUrl}/api/others-module/${customizerId}`);
+      const data = await response.json();
+      console.log('others module data==', data);
+
+      this.otherModuleLoaded = true;
+
+      this.panelSize = data?.panelSize || null;
+      this.liningType = data?.liningType || null;
+      this.tieback = data?.tieback || null;
+      this.memoryShaped = data?.memoryShaped || null;
+      this.roomLabel = data?.roomLabel || null;
+
+      this.singlePanelSizeUI();
+      this.liningTypeUI();
+      this.tiebackUI()
+      this.memoryShapedUI()
+      this.roomLabelUI();
+    }
+  }
+
+  customElements.define('curtain-customizer-app', CurtainCustomizer);
+</script>
+
+{% schema %}
+{
+  "name": "Curtain Customizer",
+  "target": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "moc_image",
+      "label": "Select Moc Image"
+    }
+  ]
+}
+{% endschema %}

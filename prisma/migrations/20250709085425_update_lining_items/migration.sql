@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `LiningItems` ADD COLUMN `price` DOUBLE NOT NULL DEFAULT 0.0;

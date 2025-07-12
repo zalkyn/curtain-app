@@ -1,0 +1,313 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
+// enough when changing adapters.
+// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
+// datasource db {
+//   provider = "sqlite"
+//   url      = "file:dev.sqlite"
+// }
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Session {
+  id            String    @id
+  shop          String
+  state         String
+  isOnline      Boolean   @default(false)
+  scope         String?
+  expires       DateTime?
+  accessToken   String
+  userId        BigInt?
+  firstName     String?
+  lastName      String?
+  email         String?
+  accountOwner  Boolean   @default(false)
+  locale        String?
+  collaborator  Boolean?  @default(false)
+  emailVerified Boolean?  @default(false)
+}
+
+model Customizer {
+  id           Int               @id @default(autoincrement())
+  title        String?
+  handle       String?
+  info         String?           @db.LongText
+  shortInfo    String?           @db.MediumText
+  activeStatus Boolean           @default(false)
+  collections  Collection[]
+  trims        Trim[]
+  palenSize    SinglePanelSize[]
+  panelType    PanelType[]
+  liningType   LiningType[]
+  tieback      Tieback[]
+  memoryShaped MemoryShaped[]
+  roomLabel    RoomLabel[]
+  createdAt    DateTime?         @default(now())
+  updatedAt    DateTime?         @updatedAt
+}
+
+model Mock {
+  id               Int      @id @default(autoincrement())
+  shop             String?
+  title            String?
+  handle           String?
+  image            String?
+  image64          String?  @db.LongText
+  showPremadeImage Boolean  @default(false)
+  position         Int?
+  info             String?  @db.LongText
+  activeStatus     Boolean  @default(true)
+  metadata         Json?
+  createdAt        DateTime @default(now()) // Track creation time
+  updatedAt        DateTime @updatedAt
+}
+
+model Collection {
+  id             Int              @id @default(autoincrement())
+  shop           String?
+  title          String?
+  handle         String?
+  price          Float            @default(0.0)
+  comparePrice   Float            @default(0.0)
+  position       Int?
+  info           String?          @db.LongText
+  shortInfo      String?          @db.MediumText
+  image          String?
+  image64        String?          @db.LongText
+  activeStatus   Boolean          @default(true)
+  metadata       Json?
+  createdAt      DateTime         @default(now()) // Track creation time
+  updatedAt      DateTime         @updatedAt
+  collectionList CollectionList[]
+  customizer     Customizer?      @relation(fields: [customizerId], references: [id])
+  customizerId   Int?
+}
+
+model CollectionList {
+  id           Int         @id @default(autoincrement())
+  collectionId Int?
+  shop         String?
+  title        String?
+  handle       String?
+  minPrice     Float       @default(0.0)
+  maxPrice     Float       @default(0.0)
+  price        Float       @default(0.0)
+  comparePrice Float       @default(0.0)
+  position     Int?
+  info         String?     @db.LongText
+  shortInfo    String?     @db.MediumText
+  image        String?
+  image64      String?     @db.LongText
+  activeStatus Boolean     @default(true)
+  metadata     Json?
+  createdAt    DateTime    @default(now()) // Track creation time
+  updatedAt    DateTime    @updatedAt
+  Collection   Collection? @relation(fields: [collectionId], references: [id])
+  swatches     Swatch[]    @relation("CollectionListToSwatch")
+}
+
+model Swatch {
+  id               Int             @id @default(autoincrement())
+  collectionListId Int?
+  shop             String?
+  title            String?
+  handle           String?
+  price            Float           @default(0.0)
+  comparePrice     Float           @default(0.0)
+  image            String?
+  image64          String?         @db.LongText
+  premadeImage     String?
+  showPremadeImage Boolean         @default(false)
+  color            String?
+  position         Int?
+  info             String?         @db.LongText
+  shortInfo        String?         @db.MediumText
+  activeStatus     Boolean         @default(true)
+  metadata         Json?
+  createdAt        DateTime        @default(now()) // Track creation time
+  updatedAt        DateTime        @updatedAt
+  CollectionList   CollectionList? @relation("CollectionListToSwatch", fields: [collectionListId], references: [id])
+}
+
+model Trim {
+  id           Int         @id @default(autoincrement())
+  shop         String?
+  title        String?
+  handle       String?
+  price        Float       @default(0.0)
+  comparePrice Float       @default(0.0)
+  image        String?
+  image64      String?     @db.LongText
+  position     Int?
+  info         String?     @db.LongText
+  shortInfo    String?     @db.MediumText
+  activeStatus Boolean     @default(true)
+  metadata     Json?
+  createdAt    DateTime    @default(now()) // Track creation time
+  updatedAt    DateTime    @updatedAt
+  customizer   Customizer? @relation(fields: [customizerId], references: [id])
+  customizerId Int?
+}
+
+model Image {
+  id           Int      @id @default(autoincrement())
+  shop         String?
+  name         String?
+  handle       String?
+  url          String?
+  category     String?
+  alt          String?
+  activeStatus Boolean  @default(true)
+  metadata     Json?
+  info         String?  @db.LongText
+  shortInfo    String?  @db.MediumText
+  createdAt    DateTime @default(now()) // Track creation time
+  updatedAt    DateTime @updatedAt
+}
+
+model SinglePanelSize {
+  id           Int         @id @default(autoincrement())
+  shop         String?
+  title        String?
+  handle       String?
+  price        Float       @default(0.0)
+  comparePrice Float       @default(0.0)
+  group        Json?
+  widthGroup   Json?
+  lengthGroup  Json?
+  image        String?
+  image64      String?     @db.LongText
+  position     Int?
+  info         String?     @db.LongText
+  widthInfo    String?     @db.LongText
+  lengthInfo   String?     @db.LongText
+  shortInfo    String?     @db.MediumText
+  activeStatus Boolean     @default(false)
+  metadata     Json?
+  customizer   Customizer? @relation(fields: [customizerId], references: [id])
+  customizerId Int?
+  createdAt    DateTime    @default(now()) // Track creation time
+  updatedAt    DateTime    @updatedAt
+}
+
+model PanelType {
+  id               Int         @id @default(autoincrement())
+  shop             String?
+  singleImage      String?     @db.LongText
+  pairImage        String?     @db.LongText
+  panelPosition    Json?
+  isSingle         Boolean?    @default(true)
+  activeStatus     Boolean     @default(false)
+  singlePanelTitle String?     @default("Single Panel")
+  pairPanelTitle   String?     @default("Pair Panel")
+  metadata         Json?
+  info             String?     @db.LongText
+  shortInfo        String?     @db.MediumText
+  customizer       Customizer? @relation(fields: [customizerId], references: [id])
+  customizerId     Int?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+}
+
+model LiningType {
+  id           Int           @id @default(autoincrement())
+  shop         String?
+  title        String?
+  handle       String?
+  activeStatus Boolean       @default(false)
+  metadata     Json?
+  info         String?       @db.LongText
+  shortInfo    String?       @db.MediumText
+  customizer   Customizer?   @relation(fields: [customizerId], references: [id])
+  customizerId Int?
+  items        LiningItems[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model LiningItems {
+  id           Int         @id @default(autoincrement())
+  shop         String?
+  image        String?
+  image64      String?     @db.LongText
+  price        Float       @default(0.0)
+  title        String?
+  sr           String?
+  type         String?
+  text         String?     @db.LongText
+  activeStatus Boolean?    @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  liningTypeId Int?
+  LiningType   LiningType? @relation(fields: [liningTypeId], references: [id])
+}
+
+model Tieback {
+  id             Int         @id @default(autoincrement())
+  shop           String?
+  title          String?
+  handle         String?
+  primaryImage   String?     @db.LongText
+  secondaryImage String?     @db.LongText
+  primaryPrice   Float       @default(0.0)
+  secondaryPrice Float       @default(0.0)
+  primaryTitle   String?
+  secondaryTitle String?
+  isTie          Boolean?    @default(true)
+  activeStatus   Boolean     @default(true)
+  metadata       Json?
+  info           String?     @db.LongText
+  shortInfo      String?     @db.MediumText
+  customizer     Customizer? @relation(fields: [customizerId], references: [id])
+  customizerId   Int?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model MemoryShaped {
+  id             Int         @id @default(autoincrement())
+  shop           String?
+  title          String?
+  handle         String?
+  primaryImage   String?     @db.LongText
+  secondaryImage String?     @db.LongText
+  primaryPrice   Float       @default(0.0)
+  secondaryPrice Float       @default(0.0)
+  primaryTitle   String?
+  secondaryTitle String?
+  isTie          Boolean?    @default(true)
+  activeStatus   Boolean     @default(true)
+  metadata       Json?
+  info           String?     @db.LongText
+  shortInfo      String?     @db.MediumText
+  customizer     Customizer? @relation(fields: [customizerId], references: [id])
+  customizerId   Int?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model RoomLabel {
+  id                   Int         @id @default(autoincrement())
+  shop                 String?
+  options              Json?
+  title                String?
+  descriptionMaxLength Int?        @default(100)
+  activeStatus         Boolean     @default(true)
+  metadata             Json?
+  info                 String?     @db.LongText
+  shortInfo            String?     @db.MediumText
+  customizer           Customizer? @relation(fields: [customizerId], references: [id])
+  customizerId         Int?
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+}
