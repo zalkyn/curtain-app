@@ -1,10 +1,13 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "ed92623a46eb49cd535b2caba0f9509e"
-name = "curtain-customizer-v1"
-handle = "curtain-customizer-v1"
+client_id = "014af73ec6e028280b0d3aeda9fb45ad"
+name = "Curtain-customizer-client-v1"
+handle = "curtain-customizer-client-v1"
 application_url = "https://curtain-app-private-deae1f46dd84.herokuapp.com"
 embedded = true
+
+[build]
+include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
