@@ -3,7 +3,7 @@
 client_id = "ff901fdb3a92ae7baacfaf33ece2c2f7"
 name = "Curtain customizer draft v1"
 handle = "curtain-customizer-draft-v1"
-application_url = "https://makers-stunning-answer-subscriber.trycloudflare.com"
+application_url = "https://call-westminster-disease-weights.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,25 +17,9 @@ scopes = "read_files,read_inventory,read_orders,read_products,read_publications,
 
 [auth]
 redirect_urls = [
-  "https://fr-sisters-adsl-external.trycloudflare.com/api/auth/callback",
-  "https://literacy-normal-comfortable-mother.trycloudflare.com/auth/callback",
-  "https://literacy-normal-comfortable-mother.trycloudflare.com/auth/shopify/callback",
-  "https://literacy-normal-comfortable-mother.trycloudflare.com/api/auth/callback",
-  "https://audience-toner-mitchell-freeze.trycloudflare.com/auth/callback",
-  "https://audience-toner-mitchell-freeze.trycloudflare.com/auth/shopify/callback",
-  "https://audience-toner-mitchell-freeze.trycloudflare.com/api/auth/callback",
-  "https://cigarettes-dns-summaries-instruments.trycloudflare.com/auth/callback",
-  "https://cigarettes-dns-summaries-instruments.trycloudflare.com/auth/shopify/callback",
-  "https://cigarettes-dns-summaries-instruments.trycloudflare.com/api/auth/callback",
-  "https://royal-outstanding-mag-prime.trycloudflare.com/auth/callback",
-  "https://royal-outstanding-mag-prime.trycloudflare.com/auth/shopify/callback",
-  "https://royal-outstanding-mag-prime.trycloudflare.com/api/auth/callback",
-  "https://omaha-forbes-reporting-pairs.trycloudflare.com/auth/callback",
-  "https://omaha-forbes-reporting-pairs.trycloudflare.com/auth/shopify/callback",
-  "https://omaha-forbes-reporting-pairs.trycloudflare.com/api/auth/callback",
-  "https://makers-stunning-answer-subscriber.trycloudflare.com/auth/callback",
-  "https://makers-stunning-answer-subscriber.trycloudflare.com/auth/shopify/callback",
-  "https://makers-stunning-answer-subscriber.trycloudflare.com/api/auth/callback"
+  "https://call-westminster-disease-weights.trycloudflare.com/auth/callback",
+  "https://call-westminster-disease-weights.trycloudflare.com/auth/shopify/callback",
+  "https://call-westminster-disease-weights.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -50,7 +34,7 @@ api_version = "2025-04"
   uri = "/webhooks/app/uninstalled"
 
 [app_proxy]
-url = "https://makers-stunning-answer-subscriber.trycloudflare.com/app/curtain"
+url = "https://call-westminster-disease-weights.trycloudflare.com/app/curtain"
 subpath = "curtain"
 prefix = "apps"
 

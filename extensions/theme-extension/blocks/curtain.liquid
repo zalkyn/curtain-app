@@ -348,6 +348,12 @@
     color: black;
     width: 130px;
   }
+  .ccapp-ospswg-select:focus-visible,
+  .ccapp-ospslg-select:focus-visible {
+    outline: none;
+    box-shadow: unset;
+    outline-offset: unset;
+  }
 
   .ccapp-osps-header {
     display: flex;
@@ -573,6 +579,9 @@
       height: 33px;
       box-sizing: border-box;
       padding: 7px 2px;
+      outline: none;
+      box-shadow: unset;
+      outline-offset: unset;
     }
   }
 </style>
@@ -783,8 +792,6 @@
       super();
 
       this.appUrl = 'https://curtain-app-private-deae1f46dd84.herokuapp.com';
-      //this.appUrl = "https://royal-outstanding-mag-prime.trycloudflare.com";
-
       this.otherModuleLoaded = false;
       this.data = this.data || {};
       this.collections = [];
@@ -816,13 +823,17 @@
       this.addEventListener('input', function (e) {
         if (e.target.closest('.ccapp-collection')) {
           this.handleCollectionInputEvents(e);
-          //const tab = e.target.closest(".ccapp-msc-tab");
-          //this.handleResizeHeightCollectionTab(tab);
         }
         if (e.target.closest('.ccapp-sps-sizes-wrapper')) {
           console.log('event', JSON.parse(e.target.value));
         }
       });
+
+      this.addEventListener('change', function (e) {
+        if (e.target.closest('.ccapp-sps-sizes-wrapper')) {
+          this.handleSizeChange(e);
+        }
+      }.bind(this));
 
       this.addEventListener('click', function (e) {
         if (e.target.closest('.ccapp-swatch')) {
@@ -833,7 +844,6 @@
           : e.target.closest('.ccapp-ctth-svg');
         if (collectionTabTile) {
           const collectionTitleIndex = collectionTabTile.dataset?.index;
-          console.log("collectionTitleIndex=====>", collectionTitleIndex);
           this.handleCollectionUiTab(collectionTitleIndex);
         }
 
@@ -899,8 +909,7 @@
         if (ccapp_memoryShapedItems) {
           this.handleMemoryShapedItemSelector(ccapp_memoryShapedItems);
         }
-
-      });
+      }.bind(this));
     }
 
     handleLinignTypeItemSelector(btn) {
@@ -924,6 +933,7 @@
         }
       });
     }
+
     handleMemoryShapedItemSelector(btn) {
       const activeIndex = parseInt(btn.dataset?.index) || 0;
       this.querySelectorAll(".ccapp-memory-shaped-item").forEach((item, index) => {
@@ -970,15 +980,6 @@
     }
 
     generateCollectionModalData(collection) {
-      {% comment %} let contentUl = `<div class="ccapp-cmc">
-          <div class="ccapp-cmc-info">
-            <h3 class="ccapp-cmc-title">${collection?.title}</h3>
-            <div class="ccapp-cmc-description">${collection?.info}</div>
-          </div>
-        </div>`;
-
-      this.loadModalData(contentUl); {% endcomment %}
-
       let contentUl = `<div class="ccapp-cmc">
         <div class="ccapp-cmc-info">
           <h3 class="ccapp-cmc-title">${collection?.title}</h3>
@@ -1045,14 +1046,6 @@
     }
 
     generatePanelSizeGroupModalData(info, type) {
-      {% comment %} let contentUl = `<div class="ccapp-cmc">
-        <div class="ccapp-cmc-info">
-          <h3 class="ccapp-cmc-title">Order panel size ${type} info</h3>
-          <div class="ccapp-cmc-description">${info}</div>
-        </div>
-      </div>`;
-      this.loadModalData(contentUl); {% endcomment %}
-
       let contentUl = `<div class="ccapp-cmc">
         <div class="ccapp-cmc-info">
           <h3 class="ccapp-cmc-title">Order panel size ${type} info</h3>
@@ -1295,7 +1288,7 @@
           <label class="ccapp-spswgi-label">
             <div class="ccapp-spswgi-ltitle">
               <strong>Order Width:</strong>
-              <span>${this.config?.spsOrderWidth?.width} Inches</span>
+              <span class="ccapp-width-display">${this.config?.spsOrderWidth?.width || 'N/A'} Inches</span>
             </div>
              <button class="ccapp-spsgi-btn" data-type="width">
               <svg fill="#000000" width="20px" height="20px" viewBox="-1 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><path d="M16.417 9.583A7.917 7.917 0 1 1 8.5 1.666a7.917 7.917 0 0 1 7.917 7.917zM5.85 3.309a6.833 6.833 0 1 0 2.65-.534 6.787 6.787 0 0 0-2.65.534zm2.654 1.336A1.136 1.136 0 1 1 7.37 5.78a1.136 1.136 0 0 1 1.135-1.136zm.792 9.223V8.665a.792.792 0 1 0-1.583 0v5.203a.792.792 0 0 0 1.583 0z"/></svg>
@@ -1307,7 +1300,7 @@
            <label class="ccapp-spslgi-label">
             <div class="ccapp-spslgi-ltitle">
               <strong>Order Length:</strong>
-              <span>${this.config?.spsOrderLength?.Length} Inches</span>
+              <span class="ccapp-length-display">${this.config?.spsOrderLength?.Length || 'N/A'} Inches</span>
             </div>
              <button class="ccapp-spsgi-btn" data-type="length">
               <svg fill="#000000" width="20px" height="20px" viewBox="-1 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><path d="M16.417 9.583A7.917 7.917 0 1 1 8.5 1.666a7.917 7.917 0 0 1 7.917 7.917zM5.85 3.309a6.833 6.833 0 1 0 2.65-.534 6.787 6.787 0 0 0-2.65.534zm2.654 1.336A1.136 1.136 0 1 1 7.37 5.78a1.136 1.136 0 0 1 1.135-1.136zm.792 9.223V8.665a.792.792 0 1 0-1.583 0v5.203a.792.792 0 0 0 1.583 0z"/></svg>
@@ -1320,6 +1313,20 @@
         ${widthGroupSelect}
         ${lengthGroupSelect}
         </div>`;
+      }
+    }
+
+    handleSizeChange(e) {
+      const select = e.target.closest('select');
+      if (select) {
+        const value = JSON.parse(select.value);
+        if (select.classList.contains('ccapp-ospswg-select')) {
+          this.config.spsOrderWidth = value;
+          this.querySelector('.ccapp-width-display').textContent = `${value.width || 'N/A'} Inches`;
+        } else if (select.classList.contains('ccapp-ospslg-select')) {
+          this.config.spsOrderLength = value;
+          this.querySelector('.ccapp-length-display').textContent = `${value.Length || 'N/A'} Inches`;
+        }
       }
     }
 
@@ -1411,8 +1418,6 @@
         optionsEl += `<option value="${option?.title}">${option?.title}</option>`;
       });
 
-      // input field for room label description, limit to roomLabel?.descriptionMaxLength
-
       let uiEL = `
         <div>
           <label for="room-label-select">Select Room</label>
@@ -1435,7 +1440,6 @@
         if (content) {
           content.style.height = `auto`;
           content.style.height = `${content.scrollHeight}px`;
-          console.log('height scroll', content.scrollHeight);
         }
       }
     }
@@ -1447,13 +1451,10 @@
       this.data.appUrl = data?.appUrl || '';
       this.collections = data?.collections || [];
 
-      {% comment %} console.log('fetch dat===', data); {% endcomment %}
-
       return true;
     }
 
     async loadOthersModules(customizerId = 1) {
-      console.log("this.url========", `${this.appUrl}/api/others-module/${customizerId}`);
       const response = await fetch(`${this.appUrl}/api/others-module/${customizerId}`);
       const data = await response.json();
       console.log('others module data==', data);
