@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-{% comment %} hello {% endcomment %}
+
 <style>
   .ccapp-wrapper {
     max-width: 1200px;
@@ -357,7 +357,8 @@
   .ccapp-osps-htitle {
     margin: 0 0 0 0;
   }
-  .ccapp-ospshti-btn {
+  .ccapp-ospshti-btn,
+  .ccapp-lthti-btn {
     background: transparent;
     width: 20px;
     height: 20px;
@@ -499,14 +500,18 @@
     box-sizing: border-box;
     padding: 10px 10px 25px 10px;
   }
-  .ccapp-lining-type-item {
+  .ccapp-lining-type-item,
+  .ccapp-tieback-item,
+  .ccapp-memory-shaped-item{
     display: flex;
     flex-direction: column;
     gap: 10px;
     position: relative;
     cursor: pointer;
   }
-  .ccapp-lining-type-image {
+  .ccapp-lining-type-image,
+  .ccapp-tieback-image,
+  .ccapp-memory-shaped-image{
     width: 100%;
     height: auto;
     aspect-ratio: 1;
@@ -516,7 +521,17 @@
     box-sizing: border-box;
     box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
   }
-  .ccapp-lining-type-title {
+  .ccapp-tieback-item.active .ccapp-tieback-image{
+    box-sizing: border-box;
+    box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
+  }
+  .ccapp-memory-shaped-item.active .ccapp-memory-shaped-image{
+    box-sizing: border-box;
+    box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
+  }
+  .ccapp-lining-type-title,
+  .ccapp-tieback-title,
+  .ccapp-memory-shaped-title {
     margin: 0;
     font-size: 12px;
     text-align: center;
@@ -702,7 +717,7 @@
           <div class="ccapp-msc-tab-content">
             <div class="ccapp-tieback-container">
               <div class="ccapp-tieback-wrapper">
-                <div class="ccapp-tiebacl-item">Loading...</div>
+                <div class="ccapp-tieback-item">Loading...</div>
               </div>
             </div>
           </div>
@@ -850,6 +865,13 @@
           this.handlePanelSizeModal(ccapp_panelSizeInfoBtn);
         }
 
+        const ccapp_liningTypeModalBtn = e.target.classList.contains('ccapp-lt-modal-opener')
+          ? e.target
+          : e.target.closest('.ccapp-lt-modal-opener');
+        if (ccapp_liningTypeModalBtn) {
+          this.handleLiningTypeModal(ccapp_liningTypeModalBtn);
+        }
+
         const ccapp_miTabHeading = e.target.classList.contains('mcct-icon-svg')
           ? e.target
           : e.target.closest('.mcct-icon-svg');
@@ -863,12 +885,48 @@
         if (ccapp_linigTypeItems) {
           this.handleLinignTypeItemSelector(ccapp_linigTypeItems);
         }
+
+        const ccapp_tieBackItems = e.target.classList.contains('ccapp-tieback-item')
+          ? e.target
+          : e.target.closest('.ccapp-tieback-item');
+        if (ccapp_tieBackItems) {
+          this.handleTieBackItemSelector(ccapp_tieBackItems);
+        }
+
+        const ccapp_memoryShapedItems = e.target.classList.contains('ccapp-memory-shaped-item')
+          ? e.target
+          : e.target.closest('.ccapp-memory-shaped-item');
+        if (ccapp_memoryShapedItems) {
+          this.handleMemoryShapedItemSelector(ccapp_memoryShapedItems);
+        }
+
       });
     }
 
     handleLinignTypeItemSelector(btn) {
       const activeIndex = parseInt(btn.dataset?.index) || 0;
       this.querySelectorAll(".ccapp-lining-type-item").forEach((item, index) => {
+        if(index === activeIndex) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+
+    handleTieBackItemSelector(btn) {
+      const activeIndex = parseInt(btn.dataset?.index) || 0;
+      this.querySelectorAll(".ccapp-tieback-item").forEach((item, index) => {
+        if(index === activeIndex) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+    handleMemoryShapedItemSelector(btn) {
+      const activeIndex = parseInt(btn.dataset?.index) || 0;
+      this.querySelectorAll(".ccapp-memory-shaped-item").forEach((item, index) => {
         if(index === activeIndex) {
           item.classList.add('active');
         } else {
@@ -948,6 +1006,10 @@
       this.generatePanelSizeModalData();
     }
 
+    handleLiningTypeModal(btn) {
+      this.generateLiningTypeModalData();
+    }
+
     generatePanelSizeModalData() {
       let contentUl = `<div class="ccapp-cmc">
         <div class="ccapp-cmc-info">
@@ -958,6 +1020,19 @@
         </div>
       </div>`;
 
+      this.loadDrawerData(contentUl);
+    }
+
+    generateLiningTypeModalData() {
+      let contentUl = `<div class="ccapp-cmc">
+        <div class="ccapp-cmc-info">
+          <h3 class="ccapp-cmc-title">Lining Type Information</h3>
+          <div class="ccapp-cmc-description">
+            ${this.liningType?.info || 'Loading...'}
+          </div>
+        </div>
+      </div>`;
+    
       this.loadDrawerData(contentUl);
     }
 
@@ -1267,45 +1342,63 @@
 
     tiebackUI() {
       console.log("tieback===", this.tieback);
-      const tieback = this.tieback || null;
-
+      const tieback = this.tieback || {};
+    
+      const tiebackItems = [
+        {
+          image: tieback?.primaryImage,
+          title: tieback?.primaryTitle,
+          isActive: tieback?.isTie ?? true, 
+        },
+        {
+          image: tieback?.secondaryImage,
+          title: tieback?.secondaryTitle,
+          isActive: tieback?.isTie === false, 
+        },
+      ];
+    
       let uiEL = '';
-
-      uiEL += `<div class="ccapp-tieback-item ${tieback?.isTie ? 'active': ''}">
-          <img class="ccapp-tieback-image" src="${tieback?.primaryImage}" width="100">
-          <p class="ccapp-tieback-title">${tieback?.primaryTitle}</p>
+      tiebackItems.forEach((item, index) => {
+        uiEL += `<div class="ccapp-tieback-item ${item.isActive ? 'active' : ''}" data-index="${index}">
+          <img class="ccapp-tieback-image" src="${item.image || ''}" width="100">
+          <p class="ccapp-tieback-title">${item.title || ''}</p>
         </div>`;
-
-      uiEL += `<div class="ccapp-tieback-item ${tieback?.isTie ? '': 'active'}">
-          <img class="ccapp-tieback-image" src="${tieback?.secondaryImage}" width="100">
-          <p class="ccapp-tieback-title">${tieback?.secondaryTitle}</p>
-        </div>`;
-      
-
-      if (this.querySelector('.ccapp-tieback-wrapper')) {
-        this.querySelector('.ccapp-tieback-wrapper').innerHTML = uiEL;
+      });
+    
+      const wrapper = this.querySelector('.ccapp-tieback-wrapper');
+      if (wrapper) {
+        wrapper.innerHTML = uiEL;
       }
     }
 
     memoryShapedUI() {
       console.log("memoryShaped===", this.memoryShaped);
-      const memoryShaped = this.memoryShaped || null;
-
+      const memoryShaped = this.memoryShaped || {};
+    
+      const memoryShapedItems = [
+        {
+          image: memoryShaped?.primaryImage,
+          title: memoryShaped?.primaryTitle,
+          isActive: memoryShaped?.isTie ?? true, 
+        },
+        {
+          image: memoryShaped?.secondaryImage,
+          title: memoryShaped?.secondaryTitle,
+          isActive: memoryShaped?.isTie === false, 
+        },
+      ];
+    
       let uiEL = '';
-
-      uiEL += `<div class="ccapp-memory-shaped-item ${memoryShaped?.isTie ? 'active': ''}">
-          <img class="ccapp-memory-shaped-image" src="${memoryShaped?.primaryImage}" width="100">
-          <p class="ccapp-memory-shaped-title">${memoryShaped?.primaryTitle}</p>
+      memoryShapedItems.forEach((item, index) => {
+        uiEL += `<div class="ccapp-memory-shaped-item ${item.isActive ? 'active' : ''}" data-index="${index}">
+          <img class="ccapp-memory-shaped-image" src="${item.image || ''}" width="100">
+          <p class="ccapp-memory-shaped-title">${item.title || ''}</p>
         </div>`;
-
-      uiEL += `<div class="ccapp-memory-shaped-item ${memoryShaped?.isTie ? '': 'active'}">
-          <img class="ccapp-memory-shaped-image" src="${memoryShaped?.secondaryImage}" width="100">
-          <p class="ccapp-memory-shaped-title">${memoryShaped?.secondaryTitle}</p>
-        </div>`;
-      
-
-      if (this.querySelector('.ccapp-bms-wrapper')) {
-        this.querySelector('.ccapp-bms-wrapper').innerHTML = uiEL;
+      });
+    
+      const wrapper = this.querySelector('.ccapp-bms-wrapper');
+      if (wrapper) {
+        wrapper.innerHTML = uiEL;
       }
     }
 
