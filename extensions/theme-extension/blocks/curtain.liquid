@@ -20,32 +20,35 @@
     font-size: 0;
     line-height: 0;
     display: flex;
+    flex-direction: column;
     background-repeat: repeat;
     background-size: 120px;
     max-height: 540px;
-    img {
-      width: 100%;
-      height: auto;
-    }
   }
+
+  .thumb-container img {
+    width: 100%;
+    height: auto;
+  }
+
   .ccapp-collections-wrapper {
     display: flex;
     flex-direction: column;
     gap: 9px;
   }
+
   .ccapp-collection {
     background: #f5f3f3;
     box-sizing: border-box;
     padding: 10px 10px;
   }
+
   .ccapp-collection-list {
     display: flex;
     align-items: center;
     gap: 2px;
   }
-  .ccapp-collection-list label {
-    cursor: pointer;
-  }
+
   .ccapp-collection-list-wrapper {
     display: flex;
     flex-direction: row;
@@ -56,6 +59,7 @@
     transition: 0.5s;
     overflow: hidden;
   }
+
   .ccapp-collection-title {
     display: grid;
     grid-template-columns: 1fr auto;
@@ -68,15 +72,18 @@
       transition: 0.4s;
     }
   }
+
   .ccapp-ct-wrapper {
     display: flex;
     align-items: center;
     gap: 5px;
   }
+
   p.ccapp-ct-p {
     margin: 0;
     font-size: 17px;
   }
+
   .ccapp-cti-btn {
     background: transparent;
     width: 20px;
@@ -89,10 +96,11 @@
     justify-content: center;
     border: none;
     cursor: pointer;
-    svg{
+    svg {
       width: 16px;
     }
   }
+
   .ccapp-collection.active {
     .ccapp-collection-title {
       .ccapp-ctth-svg {
@@ -100,6 +108,7 @@
       }
     }
   }
+
   .ccapp-swatch-wrapper {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -109,13 +118,15 @@
     padding: 15px 10px 15px 10px;
     min-height: 100px;
   }
-  .ccapp-swatch-wrapper h4{
+
+  .ccapp-swatch-wrapper h4 {
     margin: 0;
     font-size: 13px;
     min-width: max-content;
     margin-left: 3px;
     line-height: 1;
   }
+
   .ccapp-swatch img {
     width: 100%;
     height: auto;
@@ -123,21 +134,25 @@
     object-fit: cover;
     cursor: pointer;
   }
+
   .ccapp-swatch {
     display: flex;
     flex-direction: column;
     gap: 5px;
   }
+
   .ccapp-swatch-infos {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
+
   .ccapp-swatch-title {
     margin: 0;
     line-height: 1;
     font-size: 10px;
   }
+
   .ccapp-swatch-btn {
     border: none;
     background: transparent;
@@ -152,27 +167,29 @@
       width: 16px;
     }
   }
+
   .ccapp-sps-wrapper {
     display: grid;
     grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
     grid-gap: 10px;
   }
+
   .ccapp-sps-size-wrapper {
     display: flex;
     flex-direction: column;
     gap: 30px;
   }
+
   .ccapp-sps-diagram img {
     width: 100%;
     height: auto;
   }
+
   .ccapp-sps-input-wrapper {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
-
-  {% comment %} ccapp modal  {% endcomment %}
 
   .ccapp-modal-container {
     position: fixed;
@@ -185,11 +202,13 @@
     opacity: 0;
     visibility: hidden;
   }
-  .ccapp-modal-container.active{
+
+  .ccapp-modal-container.active {
     z-index: 999900;
     opacity: 1;
     visibility: visible;
   }
+
   .ccapp-modal-wrapper {
     display: flex;
     align-items: center;
@@ -197,6 +216,7 @@
     width: 100%;
     height: 100%;
   }
+
   .ccapp-modal-content {
     width: 600px;
     background: white;
@@ -204,11 +224,13 @@
     padding: 10px 10px;
     position: relative;
   }
+
   .ccapp-smc {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-gap: 10px;
   }
+
   .ccapp-smc-media {
     display: flex;
     img {
@@ -218,10 +240,12 @@
       object-fit: cover;
     }
   }
+
   .ccapp-smc-info {
     font-size: 12px;
   }
-  .ccapp-smc-title{
+
+  .ccapp-smc-title {
     font-size: 20px;
     font-weight: 600;
     line-height: 1.4;
@@ -229,31 +253,33 @@
     border-bottom: .5px solid #cdc4c4;
     padding-bottom: 8px;
   }
-  .ccapp-smc-description{
+
+  .ccapp-smc-description {
     display: flex;
     flex-direction: column;
     gap: 0px;
-    *{
+    * {
       margin: 0;
       line-height: 1.4;
     }
-    br{
+    br {
       display: block;
       height: 5px;
       padding: 0;
       margin: 0;
     }
-    h1{
+    h1 {
       font-size: 22px;
     }
-    h2{
+    h2 {
       font-size: 20px;
     }
-    p{
+    p {
       font-size: 16px;
       margin-bottom: 5px;
     }
   }
+
   .ccapp-modal-close {
     position: absolute;
     right: 10px;
@@ -271,6 +297,7 @@
     box-sizing: border-box;
     padding: 5px 20px 20px 20px;
   }
+
   .ccapp-cmc-title {
     font-size: 24px;
     font-weight: 600;
@@ -280,27 +307,27 @@
     padding-bottom: 10px;
   }
 
-  .ccapp-cmc-description{
+  .ccapp-cmc-description {
     display: flex;
     flex-direction: column;
     gap: 0px;
-    *{
+    * {
       margin: 0;
       line-height: 1.4;
     }
-    br{
+    br {
       display: block;
       height: 5px;
       padding: 0;
       margin: 0;
     }
-    h1{
+    h1 {
       font-size: 22px;
     }
-    h2{
+    h2 {
       font-size: 20px;
     }
-    p{
+    p {
       font-size: 16px;
     }
   }
@@ -312,6 +339,7 @@
     justify-content: space-between;
     gap: 15px;
   }
+
   .ccapp-spsgi-btn {
     background: transparent;
     width: 20px;
@@ -328,16 +356,7 @@
       width: 16px;
     }
   }
-  .ccapp-spswgi-ltitle,
-  .ccapp-spslgi-ltitle {
-    display: flex;
-    gap: 9px;
-    align-items: flex-start;
-    margin: 0;
-    padding: 0;
-    line-height: 1.1;
-    font-size: 16px;
-  }
+
   .ccapp-ospswg-select,
   .ccapp-ospslg-select {
     box-sizing: border-box;
@@ -348,6 +367,7 @@
     color: black;
     width: 130px;
   }
+
   .ccapp-ospswg-select:focus-visible,
   .ccapp-ospslg-select:focus-visible {
     outline: none;
@@ -360,9 +380,11 @@
     align-items: center;
     gap: 10px;
   }
+
   .ccapp-osps-htitle {
     margin: 0 0 0 0;
   }
+
   .ccapp-ospshti-btn,
   .ccapp-lthti-btn {
     background: transparent;
@@ -377,6 +399,7 @@
     border: none;
     cursor: pointer;
   }
+
   .ccapp-drawer-container {
     position: fixed;
     top: 0;
@@ -388,11 +411,13 @@
     opacity: 0;
     visibility: hidden;
   }
+
   .ccapp-drawer-container.active {
     z-index: 999900;
     opacity: 1;
     visibility: visible;
   }
+
   .ccapp-drawer-wrapper {
     position: absolute;
     width: 450px;
@@ -405,16 +430,19 @@
     overflow: auto;
     height: calc(100vh - 0px);
   }
+
   .ccapp-drawer-container.active .ccapp-drawer-wrapper {
     transform: translateX(0);
   }
+
   .ccapp-drawer-content {
     position: relative;
-    img{
+    img {
       max-width: 100%;
       height: auto;
     }
   }
+
   .ccapp-drawer-close-btn {
     position: absolute;
     right: 10px;
@@ -430,6 +458,7 @@
     border: none;
     cursor: pointer;
   }
+
   .ccapp-msc-tab-heading {
     display: grid;
     grid-template-columns: 1fr 30px;
@@ -439,15 +468,17 @@
     box-sizing: border-box;
     padding: 10px 0px 10px 10px;
   }
-  .mcct-icon-svg{
+
+  .mcct-icon-svg {
     transform-origin: center;
     transition: .5s;
   }
-  .ccapp-collection-heading{
+
+  .ccapp-collection-heading {
     margin: 0;
   }
 
-  .ccapp-msc-tab-content{
+  .ccapp-msc-tab-content {
     height: 0px;
     overflow: hidden;
     visibility: hidden;
@@ -463,78 +494,90 @@
     margin-bottom: 20px;
   }
 
-  .ccapp-msc-tab.active .ccapp-msc-tab-content{
+  .ccapp-msc-tab.active .ccapp-msc-tab-content {
     visibility: visible;
   }
-  .ccapp-msc-tab.active .mcct-icon-svg{
+
+  .ccapp-msc-tab.active .mcct-icon-svg {
     transform: rotate(180deg);
   }
+
   .ccapp-collection-container {
     box-sizing: border-box;
-    padding: 10px 10px 10px 10px;
+    padding: 10px 10px 25px 10px;
   }
+
   .ccapp-swatch-container {
     {% comment %} box-sizing: border-box;
     padding: 10px 10px 25px 10px; {% endcomment %}
   }
+
   .ccapp-single-panel-size-container {
     box-sizing: border-box;
     padding: 10px 10px 25px 10px;
   }
+
   .ccapp-swatch-image.active {
     box-sizing: border-box;
     box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
   }
-  .ccapp-sc-heading{
+
+  .ccapp-sc-heading {
     box-sizing: border-box;
     padding: 10px 10px 10px 10px;
     border-block: 1px solid #ede7e7;
 
-    h3{
+    h3 {
       margin: 0;
       font-size: 16px;
       font-weight: 600;
       line-height: 1.4;
     }
   }
+
   .ccapp-lining-type-wrapper {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-column-gap: 15px;
     grid-row-gap: 15px;
     box-sizing: border-box;
-    box-sizing: border-box;
     padding: 10px 10px 25px 10px;
   }
+
   .ccapp-lining-type-item,
   .ccapp-tieback-item,
-  .ccapp-memory-shaped-item{
+  .ccapp-memory-shaped-item {
     display: flex;
     flex-direction: column;
     gap: 10px;
     position: relative;
     cursor: pointer;
   }
+
   .ccapp-lining-type-image,
   .ccapp-tieback-image,
-  .ccapp-memory-shaped-image{
+  .ccapp-memory-shaped-image {
     width: 100%;
     height: auto;
     aspect-ratio: 1;
     object-fit: cover;
   }
-  .ccapp-lining-type-item.active .ccapp-lining-type-image{
+
+  .ccapp-lining-type-item.active .ccapp-lining-type-image {
     box-sizing: border-box;
     box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
   }
-  .ccapp-tieback-item.active .ccapp-tieback-image{
+
+  .ccapp-tieback-item.active .ccapp-tieback-image {
     box-sizing: border-box;
     box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
   }
-  .ccapp-memory-shaped-item.active .ccapp-memory-shaped-image{
+
+  .ccapp-memory-shaped-item.active .ccapp-memory-shaped-image {
     box-sizing: border-box;
     box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
   }
+
   .ccapp-lining-type-title,
   .ccapp-tieback-title,
   .ccapp-memory-shaped-title {
@@ -544,6 +587,7 @@
     line-height: 1;
     color: black;
   }
+
   .ccapp-lining-type-sr {
     position: absolute;
     right: 10px;
@@ -556,25 +600,24 @@
   }
 
   .ccapp-tieback-wrapper,
-  .ccapp-bms-wrapper{
+  .ccapp-bms-wrapper {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-column-gap: 15px;
     grid-row-gap: 15px;
     box-sizing: border-box;
-    box-sizing: border-box;
     padding: 10px 10px 25px 10px;
   }
-  .ccapp-rl-wrapper{
+
+  .ccapp-rl-wrapper {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-column-gap: 15px;
     grid-row-gap: 15px;
     box-sizing: border-box;
-    box-sizing: border-box;
     padding: 10px 10px 25px 10px;
 
-    select, input{
+    select, input {
       width: 100%;
       height: 33px;
       box-sizing: border-box;
@@ -583,6 +626,55 @@
       box-shadow: unset;
       outline-offset: unset;
     }
+  }
+
+  .ccapp-order-track-size-container {
+    box-sizing: border-box;
+    padding: 10px 10px 25px 10px;
+  }
+
+  .ccapp-order-track-size-header {
+    font-size: 18px;
+    font-weight: bold;
+    {% comment %} text-align: center; {% endcomment %}
+    margin-bottom: 10px;
+    {% comment %} padding: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd; {% endcomment %}
+  }
+
+  .ccapp-order-track-size-buttons {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .ccapp-ots-button {
+    padding: 5px 10px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ccapp-ots-button.active {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+    &:hover {
+      background: #000;
+      color: #fff;
+      border-color: #000;
+    }
+  }
+
+  .ccapp-ots-button:hover {
+    background: #f0f0f0;
   }
 </style>
 
@@ -781,6 +873,30 @@
             </div>
           </div>
         </div>
+
+        {% comment %} order track size tab {% endcomment %}
+        <div class="ccapp-msc-tab" data-index="7">
+          <div class="ccapp-msc-tab-heading">
+            <div class="ccapp-osps-header">
+              <h3 class="ccapp-osps-htitle">Order Track Size</h3>
+            </div>
+            <svg
+              class="mcct-icon-svg"
+              width="20px"
+              height="20px"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10 14a.997.997 0 01-.707-.293l-5-5a.999.999 0 111.414-1.414L10 11.586l4.293-4.293a.999.999 0 111.414 1.414l-5 5A.997.997 0 0110 14z" fill="#5C5F62"></path>
+            </svg>
+          </div>
+          <div class="ccapp-msc-tab-content">
+            <div class="ccapp-order-track-size-container">
+              <div class="ccapp-order-track-size-header">Selected: N/A (N/A)</div>
+              <div class="ccapp-order-track-size-buttons">Loading...</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -790,7 +906,6 @@
   class CurtainCustomizer extends HTMLElement {
     constructor() {
       super();
-
       this.appUrl = 'https://curtain-app-private-deae1f46dd84.herokuapp.com';
       this.otherModuleLoaded = false;
       this.data = this.data || {};
@@ -801,6 +916,8 @@
       this.memoryShaped = this.memoryShaped || null;
       this.config = this.config || {};
       this.currentSwatches = this.currentSwatches || {};
+      this.selectedTrackSize = null;
+      this.selectedTrackPrice = null;
       this.initCurtain();
     }
 
@@ -809,6 +926,7 @@
       setTimeout(() => {
         console.log('Curtain Customizer App Loaded==========');
         this.loadOthersModules();
+        this.orderTrackSizeUI();
       }, 10);
     }
 
@@ -909,13 +1027,20 @@
         if (ccapp_memoryShapedItems) {
           this.handleMemoryShapedItemSelector(ccapp_memoryShapedItems);
         }
+
+        const ccapp_otsButton = e.target.classList.contains('ccapp-ots-button')
+          ? e.target
+          : e.target.closest('.ccapp-ots-button');
+        if (ccapp_otsButton) {
+          this.handleOrderTrackSizeClick(ccapp_otsButton);
+        }
       }.bind(this));
     }
 
     handleLinignTypeItemSelector(btn) {
       const activeIndex = parseInt(btn.dataset?.index) || 0;
       this.querySelectorAll(".ccapp-lining-type-item").forEach((item, index) => {
-        if(index === activeIndex) {
+        if (index === activeIndex) {
           item.classList.add('active');
         } else {
           item.classList.remove('active');
@@ -926,7 +1051,7 @@
     handleTieBackItemSelector(btn) {
       const activeIndex = parseInt(btn.dataset?.index) || 0;
       this.querySelectorAll(".ccapp-tieback-item").forEach((item, index) => {
-        if(index === activeIndex) {
+        if (index === activeIndex) {
           item.classList.add('active');
         } else {
           item.classList.remove('active');
@@ -937,7 +1062,7 @@
     handleMemoryShapedItemSelector(btn) {
       const activeIndex = parseInt(btn.dataset?.index) || 0;
       this.querySelectorAll(".ccapp-memory-shaped-item").forEach((item, index) => {
-        if(index === activeIndex) {
+        if (index === activeIndex) {
           item.classList.add('active');
         } else {
           item.classList.remove('active');
@@ -1171,7 +1296,7 @@
       if (src != null) {
         const imageUrl = encodeURI(src);
         this.uploadSwatchToMoc(imageUrl);
-        this.activeSwatchBorder(e)
+        this.activeSwatchBorder(e);
       }
     }
 
@@ -1469,9 +1594,57 @@
 
       this.singlePanelSizeUI();
       this.liningTypeUI();
-      this.tiebackUI()
-      this.memoryShapedUI()
+      this.tiebackUI();
+      this.memoryShapedUI();
       this.roomLabelUI();
+      this.orderTrackSizeUI();
+    }
+
+    handleOrderTrackSizeClick(btn) {
+      const size = btn.dataset.size;
+      const price = btn.dataset.price;
+      this.selectedTrackSize = size;
+      this.selectedTrackPrice = price;
+      this.querySelectorAll('.ccapp-ots-button').forEach(button => {
+        button.classList.remove('active');
+        if (button.dataset.size === size) {
+          button.classList.add('active');
+        }
+      });
+      console.log('Selected Size:', size, 'Selected Price:', price)
+      this.updateSelectedTrackSizeDisplay();
+    }
+
+    updateSelectedTrackSizeDisplay() {
+      const header = this.querySelector('.ccapp-order-track-size-header');
+      if (header && this.selectedTrackSize && this.selectedTrackPrice) {
+        header.textContent = `Track Size: ${this.selectedTrackSize} (+$${this.selectedTrackPrice})`;
+      } else {
+        header.textContent = `Track Size: N/A (N/A)`;
+      }
+    }
+
+    orderTrackSizeUI() {
+      const dummyTrackSizes = [
+        { size: 'Small 3ft-6ft', price: '50' },
+        { size: 'Medium 6ft-9ft', price: '65' },
+        { size: 'Large 9ft-12ft', price: '80' }
+      ];
+
+      let buttonsHtml = '';
+      dummyTrackSizes.forEach((sizeData, index) => {
+        buttonsHtml += `<button class="ccapp-ots-button ${index === 0 ? 'active' : ''}" data-size="${sizeData.size}" data-price="${sizeData.price}">
+          ${sizeData.size}
+        </button>`;
+      });
+
+      const buttonsContainer = this.querySelector('.ccapp-order-track-size-buttons');
+      if (buttonsContainer) {
+        buttonsContainer.innerHTML = buttonsHtml;
+        this.selectedTrackSize = dummyTrackSizes[0].size;
+        this.selectedTrackPrice = dummyTrackSizes[0].price;
+        this.updateSelectedTrackSizeDisplay();
+      }
     }
   }
 
