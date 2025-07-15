@@ -387,7 +387,8 @@
 
   .ccapp-ospshti-btn,
   .ccapp-lthti-btn,
-  .ccapp-ots-btn {
+  .ccapp-ots-btn,
+  .ccapp-pt-btn {
     background: transparent;
     width: 20px;
     height: 20px;
@@ -614,7 +615,7 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-column-gap: 15px;
-    grid-row-gap: 15px;
+    row-gap: 15px;
     box-sizing: border-box;
     padding: 10px 10px 25px 10px;
 
@@ -676,6 +677,36 @@
 
   .ccapp-ots-button:hover {
     background: #f0f0f0;
+  }
+
+  .ccapp-spp-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .ccapp-single-panel-pair-container {
+    box-sizing: border-box;
+    padding: 10px 10px 25px 10px;
+  }
+
+  .ccapp-spp-options {
+    display: flex;
+    gap: 20px;
+  }
+
+  .ccapp-spp-radio {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .ccapp-spp-position {
+    display: block; /* Changed to block by default */
+  }
+
+  .ccapp-spp-position.hide {
+    display: none; /* Hidden when Pair is selected */
   }
 </style>
 
@@ -910,6 +941,49 @@
             </div>
           </div>
         </div>
+
+        {% comment %} single panel or pair tab {% endcomment %}
+        <div class="ccapp-msc-tab" data-index="8">
+          <div class="ccapp-msc-tab-heading">
+            <div class="ccapp-osps-header">
+              <h3 class="ccapp-osps-htitle">Single Panel or Pair</h3>
+              <button class="ccapp-pt-btn ccapp-pt-modal-opener" data-type="panel-type">
+                <svg
+                  fill="#000000"
+                  width="20px"
+                  height="20px"
+                  viewBox="-1 0 19 19"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="cf-icon-svg"
+                >
+                  <path d="M16.417 9.583A7.917 7.917 0 1 1 8.5 1.666a7.917 7.917 0 0 1 7.917 7.917zM5.85 3.309a6.833 6.833 0 1 0 2.65-.534 6.787 6.787 0 0 0-2.65.534zm2.654 1.336A1.136 1.136 0 1 1 7.37 5.78a1.136 1.136 0 0 1 1.135-1.136zm.792 9.223V8.665a.792.792 0 1 0-1.583 0v5.203a.792.792 0 0 0 1.583 0z"/>
+                </svg>
+              </button>
+            </div>
+            <svg
+              class="mcct-icon-svg"
+              width="20px"
+              height="20px"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10 14a.997.997 0 01-.707-.293l-5-5a.999.999 0 111.414-1.414L10 11.586l4.293-4.293a.999.999 0 111.414 1.414l-5 5A.997.997 0 0110 14z" fill="#5C5F62"></path>
+            </svg>
+          </div>
+          <div class="ccapp-msc-tab-content">
+            <div class="ccapp-single-panel-pair-container">
+              <div class="ccapp-spp-options">
+                 Loading...
+              </div>
+              <div class="ccapp-spp-position">
+                <div class="ccapp-spp-input-wrapper">
+                  <label>Position:</label>
+                  <select class="ccapp-ospswg-select" name="panel-position"></select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -931,6 +1005,10 @@
       this.currentSwatches = this.currentSwatches || {};
       this.selectedTrackSize = null;
       this.selectedTrackPrice = null;
+      this.panelType = null; // Default panel type will be set dynamically
+      this.panelTypes = []; // Dynamic panel types array
+      this.panelPositions = []; // Dynamic positions array
+      this.panelPosition = null; // Default panel position
       this.initCurtain();
     }
 
@@ -940,6 +1018,7 @@
         console.log('Curtain Customizer App Loaded==========');
         this.loadOthersModules();
         this.orderTrackSizeUI();
+        this.singlePanelOrPairUI();
       }, 10);
     }
 
@@ -963,6 +1042,13 @@
       this.addEventListener('change', function (e) {
         if (e.target.closest('.ccapp-sps-sizes-wrapper')) {
           this.handleSizeChange(e);
+        }
+        if (e.target.name === 'panel-type') {
+          this.handlePanelTypeChange(e);
+        }
+        if (e.target.name === 'panel-position') {
+          this.panelPosition = e.target.value;
+          {% comment %} console.log(this.panelPosition) {% endcomment %}
         }
       }.bind(this));
 
@@ -1018,6 +1104,13 @@
           : e.target.closest('.ccapp-ots-modal-opener');
         if (ccapp_trackSizeModalBtn) {
           this.handleTrackSizeModal(ccapp_trackSizeModalBtn);
+        }
+
+        const ccapp_panelTypeModalBtn = e.target.classList.contains('ccapp-pt-modal-opener')
+          ? e.target
+          : e.target.closest('.ccapp-pt-modal-opener');
+        if (ccapp_panelTypeModalBtn) {
+          this.handlePanelTypeModal(ccapp_panelTypeModalBtn);
         }
 
         const ccapp_miTabHeading = e.target.classList.contains('mcct-icon-svg')
@@ -1160,6 +1253,10 @@
       this.generateTrackSizeModalData();
     }
 
+    handlePanelTypeModal(btn) {
+      this.generatePanelTypeModalData();
+    }
+
     generatePanelSizeModalData() {
       let contentUl = `<div class="ccapp-cmc">
         <div class="ccapp-cmc-info">
@@ -1192,6 +1289,19 @@
           <h3 class="ccapp-cmc-title">Order Track Size Information</h3>
           <div class="ccapp-cmc-description">
             ${this.trackSize?.info || 'Loading...'}
+          </div>
+        </div>
+      </div>`;
+    
+      this.loadDrawerData(contentUl);
+    }
+
+    generatePanelTypeModalData() {
+      let contentUl = `<div class="ccapp-cmc">
+        <div class="ccapp-cmc-info">
+          <h3 class="ccapp-cmc-title">Panel Type Information</h3>
+          <div class="ccapp-cmc-description">
+            ${this.panelType?.info || 'Loading...'}
           </div>
         </div>
       </div>`;
@@ -1621,25 +1731,94 @@
     }
 
     orderTrackSizeUI() {
-      const dummyTrackSizes = [
+      const trackSize = this.trackSize || null;
+
+      const trackSizeOptions = trackSize?.options || [];
+
+      {% comment %} const dummyTrackSizes = [
         { size: 'Small 3ft-6ft', price: '50' },
         { size: 'Medium 6ft-9ft', price: '65' },
         { size: 'Large 9ft-12ft', price: '80' }
-      ];
+      ]; {% endcomment %}
 
       let buttonsHtml = '';
-      dummyTrackSizes.forEach((sizeData, index) => {
-        buttonsHtml += `<button class="ccapp-ots-button ${index === 0 ? 'active' : ''}" data-size="${sizeData.size}" data-price="${sizeData.price}">
-          ${sizeData.size}
+      trackSizeOptions.forEach((sizeData, index) => {
+        buttonsHtml += `<button class="ccapp-ots-button ${index === 0 ? 'active' : ''}" data-size="${sizeData.title}" data-price="${sizeData.price}">
+          ${sizeData.title}
         </button>`;
       });
 
       const buttonsContainer = this.querySelector('.ccapp-order-track-size-buttons');
       if (buttonsContainer) {
         buttonsContainer.innerHTML = buttonsHtml;
-        this.selectedTrackSize = dummyTrackSizes[0].size;
-        this.selectedTrackPrice = dummyTrackSizes[0].price;
+        this.selectedTrackSize = trackSizeOptions[0]?.title;
+        this.selectedTrackPrice = trackSizeOptions[0]?.price;
         this.updateSelectedTrackSizeDisplay();
+      }
+    }
+
+    handlePanelTypeChange(e) {
+      this.panelType = e.target.value;
+      const positionSelect = this.querySelector('.ccapp-spp-position');
+      const showDropdown = this.panelTypes.find(t => t.value === this.panelType)?.showPositionDropdown;
+      if (positionSelect) {
+        positionSelect.classList.toggle('hide', !showDropdown);
+        const dropdownHeight = showDropdown ? 0 : positionSelect.scrollHeight; // Subtract dropdown height when hidden
+        if (showDropdown) {
+          this.updatePositionDropdown();
+        }
+        this.handleResizeHeightCollectionTab(this.querySelector('.ccapp-msc-tab.active'), dropdownHeight);
+      }
+    }
+    
+    handleResizeHeightCollectionTab(tab = null, dropdownAdjustment = 0) {
+      if (tab && tab.classList.contains('active')) {
+        const content = tab.querySelector('.ccapp-msc-tab-content');
+        if (content) {
+          content.style.height = `auto`; // Temporarily set to auto to get natural height
+          const naturalHeight = content.scrollHeight;
+          content.style.height = `${naturalHeight - dropdownAdjustment}px`; // Adjust height by dropdown height
+        }
+      }
+    }
+
+    updatePositionDropdown() {
+      const positionSelect = this.querySelector('.ccapp-spp-position select');
+      if (positionSelect && this.panelPositions.length > 0) {
+        let optionsHtml = '';
+        this.panelPositions.forEach(position => {
+          optionsHtml += `<option value="${position.toLowerCase().replace(' ', '-')}">${position}</option>`;
+        });
+        positionSelect.innerHTML = optionsHtml;
+        this.panelPosition = this.panelPositions[0].toLowerCase().replace(' ', '-');
+        positionSelect.value = this.panelPosition;
+      }
+    }
+
+    singlePanelOrPairUI() {
+      const panelTypeContainer = this.querySelector('.ccapp-spp-options');
+      const positionSelect = this.querySelector('.ccapp-spp-position select');
+      if (panelTypeContainer && positionSelect && this.panelTypes.length > 0) {
+        let radioHtml = '';
+        this.panelTypes.forEach((type, index) => {
+          radioHtml += `<label class="ccapp-spp-radio">
+            <input type="radio" name="panel-type" value="${type.value}" ${index === 0 ? 'checked' : ''}> ${type.label}
+          </label>`;
+        });
+        panelTypeContainer.innerHTML = radioHtml;
+
+        const panelTypeRadios = this.querySelectorAll('input[name="panel-type"]');
+        panelTypeRadios.forEach(radio => {
+          if (radio.checked) {
+            this.panelType = radio.value;
+            const showDropdown = this.panelTypes.find(t => t.value === this.panelType)?.showPositionDropdown;
+            this.querySelector('.ccapp-spp-position').classList.toggle('hide', !showDropdown);
+            if (showDropdown) {
+              this.updatePositionDropdown();
+            }
+          }
+        });
+        positionSelect.value = this.panelPosition || this.panelPositions[0].toLowerCase().replace(' ', '-');
       }
     }
 
@@ -1675,6 +1854,9 @@
       this.tieback = data?.tieback || null;
       this.memoryShaped = data?.memoryShaped || null;
       this.roomLabel = data?.roomLabel || null;
+      this.trackSize = data?.trackSize || null;
+      this.panelPositions = data?.panelPositions || ['Left', 'Center', 'Right']; 
+      this.panelTypes = data?.panelTypes || [{ value: 'single', label: 'Single', showPositionDropdown: true }, { value: 'pair', label: 'Pair', showPositionDropdown: false }]; 
 
       this.singlePanelSizeUI();
       this.liningTypeUI();
@@ -1682,6 +1864,7 @@
       this.memoryShapedUI();
       this.roomLabelUI();
       this.orderTrackSizeUI();
+      this.singlePanelOrPairUI();
     }
   }
 
