@@ -6,6 +6,9 @@ handle = "curtain-customizer-v1"
 application_url = "https://curtain-app-private-deae1f46dd84.herokuapp.com"
 embedded = true
 
+[build]
+include_config_on_deploy = true
+
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "read_inventory,read_orders,read_products,read_publications,read_themes,unauthenticated_read_product_listings,write_app_proxy,write_inventory,write_products,write_publications,write_themes"

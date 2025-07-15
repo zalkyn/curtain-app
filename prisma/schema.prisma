@@ -52,6 +52,7 @@ model Customizer {
   tieback      Tieback[]
   memoryShaped MemoryShaped[]
   roomLabel    RoomLabel[]
+  trackSize    TrackSize[]
   createdAt    DateTime?         @default(now())
   updatedAt    DateTime?         @updatedAt
 }
@@ -302,6 +303,21 @@ model RoomLabel {
   options              Json?
   title                String?
   descriptionMaxLength Int?        @default(100)
+  activeStatus         Boolean     @default(true)
+  metadata             Json?
+  info                 String?     @db.LongText
+  shortInfo            String?     @db.MediumText
+  customizer           Customizer? @relation(fields: [customizerId], references: [id])
+  customizerId         Int?
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+}
+
+model TrackSize {
+  id                   Int         @id @default(autoincrement())
+  shop                 String?
+  options              Json?
+  title                String?
   activeStatus         Boolean     @default(true)
   metadata             Json?
   info                 String?     @db.LongText
