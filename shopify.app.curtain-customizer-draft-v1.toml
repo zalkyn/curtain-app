@@ -3,7 +3,7 @@
 client_id = "ff901fdb3a92ae7baacfaf33ece2c2f7"
 name = "Curtain customizer draft v1"
 handle = "curtain-customizer-draft-v1"
-application_url = "https://make-combines-suddenly-via.trycloudflare.com"
+application_url = "https://switch-computer-lemon-lesson.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,15 @@ scopes = "read_files,read_inventory,read_orders,read_products,read_publications,
 
 [auth]
 redirect_urls = [
-  "https://make-combines-suddenly-via.trycloudflare.com/auth/callback",
-  "https://make-combines-suddenly-via.trycloudflare.com/auth/shopify/callback",
-  "https://make-combines-suddenly-via.trycloudflare.com/api/auth/callback"
+  "https://call-westminster-disease-weights.trycloudflare.com/auth/callback",
+  "https://call-westminster-disease-weights.trycloudflare.com/auth/shopify/callback",
+  "https://call-westminster-disease-weights.trycloudflare.com/api/auth/callback",
+  "https://coaching-virtue-generally-dj.trycloudflare.com/auth/callback",
+  "https://coaching-virtue-generally-dj.trycloudflare.com/auth/shopify/callback",
+  "https://coaching-virtue-generally-dj.trycloudflare.com/api/auth/callback",
+  "https://switch-computer-lemon-lesson.trycloudflare.com/auth/callback",
+  "https://switch-computer-lemon-lesson.trycloudflare.com/auth/shopify/callback",
+  "https://switch-computer-lemon-lesson.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -34,7 +40,7 @@ api_version = "2025-04"
   uri = "/webhooks/app/uninstalled"
 
 [app_proxy]
-url = "https://make-combines-suddenly-via.trycloudflare.com/app/curtain"
+url = "https://switch-computer-lemon-lesson.trycloudflare.com/app/curtain"
 subpath = "curtain"
 prefix = "apps"
 
