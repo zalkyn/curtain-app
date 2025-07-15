@@ -48,7 +48,9 @@ export const loader = async ({ request, params }) => {
             },
             tieback: true,
             memoryShaped: true,
-            roomLabel: true
+            roomLabel: true,
+            trackSize: true,
+            
         }
     });
 
