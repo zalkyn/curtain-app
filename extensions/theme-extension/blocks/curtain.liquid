@@ -358,7 +358,8 @@
   }
 
   .ccapp-ospswg-select,
-  .ccapp-ospslg-select {
+  .ccapp-ospslg-select,
+  .ccapp-spp-select {
     box-sizing: border-box;
     padding: 7px 6px;
     margin: 0;
@@ -369,7 +370,8 @@
   }
 
   .ccapp-ospswg-select:focus-visible,
-  .ccapp-ospslg-select:focus-visible {
+  .ccapp-ospslg-select:focus-visible, 
+  .ccapp-spp-select:focus-visible {
     outline: none;
     box-shadow: unset;
     outline-offset: unset;
@@ -697,8 +699,15 @@
 
   .ccapp-spp-radio {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+  }
+  .ccapp-spp-radio--inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
   }
 
   .ccapp-spp-position {
@@ -978,7 +987,7 @@
               <div class="ccapp-spp-position">
                 <div class="ccapp-spp-input-wrapper">
                   <label>Position:</label>
-                  <select class="ccapp-ospswg-select" name="panel-position"></select>
+                  <select class="ccapp-spp-select" name="panel-position"></select>
                 </div>
               </div>
             </div>
@@ -1005,30 +1014,30 @@
       this.currentSwatches = this.currentSwatches || {};
       this.selectedTrackSize = null;
       this.selectedTrackPrice = null;
-      this.panelType = null; // Default panel type will be set dynamically
-      this.panelTypes = []; // Dynamic panel types array
-      this.panelPositions = []; // Dynamic positions array
-      this.panelPosition = null; // Default panel position
+      this.panelTypeData = null; // Store API-provided panelType object
+      this.selectedPanelType = null; // Store selected panel type value (e.g., 'single' or 'pair')
+      this.panelPosition = null;
       this.initCurtain();
     }
-
+  
     connectedCallback() {
       this.handleEvents();
       setTimeout(() => {
         console.log('Curtain Customizer App Loaded==========');
-        this.loadOthersModules();
-        this.orderTrackSizeUI();
-        this.singlePanelOrPairUI();
+        this.loadOthersModules().then(() => {
+          this.orderTrackSizeUI();
+          this.singlePanelOrPairUI();
+        });
       }, 10);
     }
-
+  
     async initCurtain() {
       let response = await this.getData();
       if (response) {
         this.collectionUI();
       }
     }
-
+  
     handleEvents() {
       this.addEventListener('input', function (e) {
         if (e.target.closest('.ccapp-collection')) {
@@ -1038,7 +1047,7 @@
           console.log('event', JSON.parse(e.target.value));
         }
       });
-
+  
       this.addEventListener('change', function (e) {
         if (e.target.closest('.ccapp-sps-sizes-wrapper')) {
           this.handleSizeChange(e);
@@ -1048,10 +1057,9 @@
         }
         if (e.target.name === 'panel-position') {
           this.panelPosition = e.target.value;
-          {% comment %} console.log(this.panelPosition) {% endcomment %}
         }
       }.bind(this));
-
+  
       this.addEventListener('click', function (e) {
         if (e.target.closest('.ccapp-swatch')) {
           this.handleSwatchClickEvent(e);
@@ -1063,84 +1071,84 @@
           const collectionTitleIndex = collectionTabTile.dataset?.index;
           this.handleCollectionUiTab(collectionTitleIndex);
         }
-
+  
         const ccapp_collectionInfoBtn = e.target.classList.contains('ccapp-cti-btn')
           ? e.target
           : e.target.closest('.ccapp-cti-btn');
         if (ccapp_collectionInfoBtn) {
           this.handleCollectionModal(ccapp_collectionInfoBtn);
         }
-
+  
         const ccapp_swatchInfoBtn = e.target.classList.contains('ccapp-swatch-btn')
           ? e.target
           : e.target.closest('.ccapp-swatch-btn');
         if (ccapp_swatchInfoBtn) {
           this.handleSwatchModal(ccapp_swatchInfoBtn);
         }
-
+  
         const ccapp_panelSizeGroupInfoBtn = e.target.classList.contains('ccapp-spsgi-btn')
           ? e.target
           : e.target.closest('.ccapp-spsgi-btn');
         if (ccapp_panelSizeGroupInfoBtn) {
           this.handlePanelSizeGroupModal(ccapp_panelSizeGroupInfoBtn);
         }
-
+  
         const ccapp_panelSizeInfoBtn = e.target.classList.contains('ccapp-osps-modal-opener')
           ? e.target
           : e.target.closest('.ccapp-osps-modal-opener');
         if (ccapp_panelSizeInfoBtn) {
           this.handlePanelSizeModal(ccapp_panelSizeInfoBtn);
         }
-
+  
         const ccapp_liningTypeModalBtn = e.target.classList.contains('ccapp-lt-modal-opener')
           ? e.target
           : e.target.closest('.ccapp-lt-modal-opener');
         if (ccapp_liningTypeModalBtn) {
           this.handleLiningTypeModal(ccapp_liningTypeModalBtn);
         }
-
+  
         const ccapp_trackSizeModalBtn = e.target.classList.contains('ccapp-ots-modal-opener')
           ? e.target
           : e.target.closest('.ccapp-ots-modal-opener');
         if (ccapp_trackSizeModalBtn) {
           this.handleTrackSizeModal(ccapp_trackSizeModalBtn);
         }
-
+  
         const ccapp_panelTypeModalBtn = e.target.classList.contains('ccapp-pt-modal-opener')
           ? e.target
           : e.target.closest('.ccapp-pt-modal-opener');
         if (ccapp_panelTypeModalBtn) {
           this.handlePanelTypeModal(ccapp_panelTypeModalBtn);
         }
-
+  
         const ccapp_miTabHeading = e.target.classList.contains('mcct-icon-svg')
           ? e.target
           : e.target.closest('.mcct-icon-svg');
         if (ccapp_miTabHeading) {
           this.handleMITabs(ccapp_miTabHeading);
         }
-
+  
         const ccapp_linigTypeItems = e.target.classList.contains('ccapp-lining-type-item')
           ? e.target
           : e.target.closest('.ccapp-lining-type-item');
         if (ccapp_linigTypeItems) {
           this.handleLinignTypeItemSelector(ccapp_linigTypeItems);
         }
-
+  
         const ccapp_tieBackItems = e.target.classList.contains('ccapp-tieback-item')
           ? e.target
           : e.target.closest('.ccapp-tieback-item');
         if (ccapp_tieBackItems) {
           this.handleTieBackItemSelector(ccapp_tieBackItems);
         }
-
+  
         const ccapp_memoryShapedItems = e.target.classList.contains('ccapp-memory-shaped-item')
           ? e.target
           : e.target.closest('.ccapp-memory-shaped-item');
         if (ccapp_memoryShapedItems) {
           this.handleMemoryShapedItemSelector(ccapp_memoryShapedItems);
         }
-
+  
         const ccapp_otsButton = e.target.classList.contains('ccapp-ots-button')
           ? e.target
           : e.target.closest('.ccapp-ots-button');
@@ -1149,7 +1157,7 @@
         }
       }.bind(this));
     }
-
+  
     handleLinignTypeItemSelector(btn) {
       const activeIndex = parseInt(btn.dataset?.index) || 0;
       this.querySelectorAll(".ccapp-lining-type-item").forEach((item, index) => {
@@ -1160,7 +1168,7 @@
         }
       });
     }
-
+  
     handleTieBackItemSelector(btn) {
       const activeIndex = parseInt(btn.dataset?.index) || 0;
       this.querySelectorAll(".ccapp-tieback-item").forEach((item, index) => {
@@ -1171,7 +1179,7 @@
         }
       });
     }
-
+  
     handleMemoryShapedItemSelector(btn) {
       const activeIndex = parseInt(btn.dataset?.index) || 0;
       this.querySelectorAll(".ccapp-memory-shaped-item").forEach((item, index) => {
@@ -1182,13 +1190,13 @@
         }
       });
     }
-
+  
     handleMITabs(btn) {
       const wrapper = btn.closest('.ccapp-msc-tab');
       const tabIndex = wrapper.dataset?.index || 1;
       this.handleMITabsOpener(tabIndex);
     }
-
+  
     handleMITabsOpener(tabIndex) {
       const allTabls = this.querySelectorAll('.ccapp-msc-tab');
       if (allTabls) {
@@ -1208,7 +1216,7 @@
         });
       }
     }
-
+  
     handleCollectionModal(btn) {
       const { collectionId } = btn.dataset;
       const collection = this.collections?.find((c) => c.id?.toString() === collectionId?.toString());
@@ -1216,7 +1224,7 @@
         this.generateCollectionModalData(collection);
       }
     }
-
+  
     generateCollectionModalData(collection) {
       let contentUl = `<div class="ccapp-cmc">
         <div class="ccapp-cmc-info">
@@ -1226,37 +1234,37 @@
           </div>
         </div>
       </div>`;
-
+  
       this.loadDrawerData(contentUl);
     }
-
+  
     handleSwatchModal(btn) {
       const { swatchId, listId, collectionId } = btn.dataset;
       const { collection, list } = this.getSelectedSwatch(collectionId, listId);
-
+  
       let swatch_ = this.currentSwatches?.swatches?.find((sw) => sw.id === parseInt(swatchId));
-
+  
       if (swatch_) {
         this.generateSwatchModalData(swatch_, list, collection);
       }
     }
-
+  
     handlePanelSizeModal(btn) {
       this.generatePanelSizeModalData();
     }
-
+  
     handleLiningTypeModal(btn) {
       this.generateLiningTypeModalData();
     }
-
+  
     handleTrackSizeModal(btn) {
       this.generateTrackSizeModalData();
     }
-
+  
     handlePanelTypeModal(btn) {
       this.generatePanelTypeModalData();
     }
-
+  
     generatePanelSizeModalData() {
       let contentUl = `<div class="ccapp-cmc">
         <div class="ccapp-cmc-info">
@@ -1266,10 +1274,10 @@
           </div>
         </div>
       </div>`;
-
+  
       this.loadDrawerData(contentUl);
     }
-
+  
     generateLiningTypeModalData() {
       let contentUl = `<div class="ccapp-cmc">
         <div class="ccapp-cmc-info">
@@ -1279,10 +1287,10 @@
           </div>
         </div>
       </div>`;
-    
+  
       this.loadDrawerData(contentUl);
     }
-
+  
     generateTrackSizeModalData() {
       let contentUl = `<div class="ccapp-cmc">
         <div class="ccapp-cmc-info">
@@ -1292,23 +1300,24 @@
           </div>
         </div>
       </div>`;
-    
+  
       this.loadDrawerData(contentUl);
     }
-
+  
     generatePanelTypeModalData() {
+      console.log('this.panelTypeData in generatePanelTypeModalData:', this.panelTypeData);
       let contentUl = `<div class="ccapp-cmc">
         <div class="ccapp-cmc-info">
           <h3 class="ccapp-cmc-title">Panel Type Information</h3>
           <div class="ccapp-cmc-description">
-            ${this.panelType?.info || 'Loading...'}
+            ${this.panelTypeData?.info || 'Loading...'}
           </div>
         </div>
       </div>`;
-    
+  
       this.loadDrawerData(contentUl);
     }
-
+  
     handlePanelSizeGroupModal(btn) {
       const { type } = btn.dataset;
       const info = type === 'width' ? this.panelSize?.widthInfo : this.panelSize?.lengthInfo;
@@ -1316,7 +1325,7 @@
         this.generatePanelSizeGroupModalData(info, type);
       }
     }
-
+  
     generatePanelSizeGroupModalData(info, type) {
       let contentUl = `<div class="ccapp-cmc">
         <div class="ccapp-cmc-info">
@@ -1326,10 +1335,10 @@
           </div>
         </div>
       </div>`;
-
+  
       this.loadDrawerData(contentUl);
     }
-
+  
     generateSwatchModalData(swatch, list, collection) {
       let contentUl = `<div class="ccapp-smc">
           <div class="ccapp-smc-media">
@@ -1343,38 +1352,38 @@
             <div class="ccapp-smc-description">${swatch?.info}</div>
           </div>
         </div>`;
-
+  
       this.loadModalData(contentUl);
     }
-
+  
     loadModalData(dataUI) {
       if (document.querySelector('.ccapp-modal-data')) {
         document.querySelector('.ccapp-modal-data').innerHTML = dataUI;
       }
-
+  
       this.handleModalOpener();
     }
-
+  
     loadDrawerData(dataUI) {
       if (document.querySelector('.ccapp-drawer-data')) {
         document.querySelector('.ccapp-drawer-data').innerHTML = dataUI;
       }
-
+  
       this.handleDrawerOpener();
     }
-
+  
     handleDrawerOpener() {
       if (document.querySelector('.ccapp-drawer-container')) {
         document.querySelector('.ccapp-drawer-container').classList.toggle('active');
       }
     }
-
+  
     handleModalOpener() {
       if (document.querySelector('.ccapp-modal-container')) {
         document.querySelector('.ccapp-modal-container').classList.toggle('active');
       }
     }
-
+  
     collectionUI() {
       let element = '';
       this.collections?.map((collection, index) => {
@@ -1387,19 +1396,18 @@
                     <svg fill="#000000" width="20px" height="20px" viewBox="-1 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><path d="M16.417 9.583A7.917 7.917 0 1 1 8.5 1.666a7.917 7.917 0 0 1 7.917 7.917zM5.85 3.309a6.833 6.833 0 1 0 2.65-.534 6.787 6.787 0 0 0-2.65.534zm2.654 1.336A1.136 1.136 0 1 1 7.37 5.78a1.136 1.136 0 0 1 1.135-1.136zm.792 9.223V8.665a.792.792 0 1 0-1.583 0v5.203a.792.792 0 0 0 1.583 0z"/></svg>
                   </button>
                 </div>
-                
                 <svg class="ccapp-ctth-svg" data-index="${index}" width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 14a.997.997 0 01-.707-.293l-5-5a.999.999 0 111.414-1.414L10 11.586l4.293-4.293a.999.999 0 111.414 1.414l-5 5A.997.997 0 0110 14z" fill="#5C5F62"/></svg>
                 </div>
                 <div class="ccapp-collection-list-wrapper">${listsEl}</div>
             </div>`;
       });
-
+  
       this.querySelector('.ccapp-collections-wrapper').innerHTML = element;
       this.ccappCollectionsUls = this.querySelectorAll('.ccapp-collection');
       this.handleMITabsOpener('1');
       this.handleCollectionUiTab();
     }
-
+  
     handleCollectionUiTab(_index = 0) {
       if (this.ccappCollectionsUls) {
         this.ccappCollectionsUls.forEach((cui, index) => {
@@ -1418,7 +1426,7 @@
         });
       }
     }
-
+  
     collectionListUI(collection, _index) {
       let el = '';
       collection?.collectionList?.map((list, index) => {
@@ -1434,10 +1442,10 @@
                 <label for="list--${_index}--${index}">${list.title}</label>
             </div>`;
       });
-
+  
       return el;
     }
-
+  
     handleSwatchClickEvent(e) {
       let src = e.target.src || null;
       if (src != null) {
@@ -1446,7 +1454,7 @@
         this.activeSwatchBorder(e);
       }
     }
-
+  
     activeSwatchBorder(e) {
       const swatchImages = this.querySelectorAll('.ccapp-swatch-image');
       if (swatchImages) {
@@ -1459,51 +1467,51 @@
         activeSwatch.classList.add('active');
       }
     }
-
+  
     uploadSwatchToMoc(imageUrl) {
       this.querySelector('.thumb-container').style.backgroundImage = `url("${imageUrl}")`;
     }
-
+  
     handleCollectionInputEvents(e) {
       const { value, name } = e.target;
       const { collectionId, listId } = e.target.dataset;
       this.handleSwatches(collectionId, listId);
     }
-
+  
     async handleSwatches(collectionId, listId) {
       if (this.querySelector('.ccapp-swatch-wrapper')) {
         this.querySelector('.ccapp-swatch-wrapper').innerHTML = 'Loading';
       }
-
+  
       const response = await fetch(`${this.appUrl}/api/swatches/${listId}`);
       const data = await response.json();
       const swatches = data?.swatches || [];
-
+  
       const { collection, list } = this.getSelectedSwatch(collectionId, listId);
-
+  
       if (swatches?.length > 0) {
         if (swatches[0]?.image64) {
           this.uploadSwatchToMoc(swatches[0]?.image64);
         }
       }
-
+  
       this.currentSwatches = {
         collectionId: collection.id,
         listId: list.id,
         swatches: swatches,
       };
-
+  
       this.swatchUI(collection, list, swatches);
       const tab = this.querySelector('.ccapp-msc-tab.active');
       this.handleResizeHeightCollectionTab(tab);
     }
-
+  
     getSelectedSwatch(collectionId, listId) {
       let collection = this.collections?.find((c) => c.id?.toString() === collectionId?.toString());
       let list = collection?.collectionList?.find((l) => l.id?.toString() === listId?.toString());
       return { collection, list };
     }
-
+  
     swatchUI(collection, list, swatches) {
       let swatchEl = '';
       swatches?.map((swatch, index) => {
@@ -1522,40 +1530,40 @@
             </div>`;
         }
       });
-
+  
       if (this.querySelector('.ccapp-swatch-wrapper')) {
         this.querySelector('.ccapp-swatch-wrapper').innerHTML =
           swatchEl?.length < 10 ? `<h4>No Swatches!</h4>` : swatchEl;
       }
     }
-
+  
     singlePanelSizeUI() {
       if (this.panelSize) {
         if (this.querySelector('.ccapp-sps-diagram')) {
           this.querySelector('.ccapp-sps-diagram').innerHTML = `<img src="${this.panelSize?.image64}">`;
         }
-
+  
         let widthGroupEl = '';
         let widthOptionEl = '';
-
+  
         this.config.spsOrderWidth =
           this.panelSize?.widthGroup?.length > 0 ? this.panelSize?.widthGroup[0]?.group[0] : null;
         this.config.spsOrderLength =
           this.panelSize?.lengthGroup?.length > 0 ? this.panelSize?.lengthGroup[0]?.group[0] : null;
-
+  
         this.panelSize?.widthGroup?.map((group, index) => {
           group?.group?.map((g, i) => {
             widthOptionEl += `<option value='${JSON.stringify(g).replace("'", '"')}'>${g.width}</option>`;
           });
         });
-
+  
         let lengthOptionEl = '';
         this.panelSize?.lengthGroup?.map((group, index) => {
           group?.group?.map((g, i) => {
             lengthOptionEl += `<option value='${JSON.stringify(g).replace("'", '"')}'>${g.Length}</option>`;
           });
         });
-
+  
         const widthGroupSelect = `<div class="ccapp-sps-input-wrapper">
           <label class="ccapp-spswgi-label">
             <div class="ccapp-spswgi-ltitle">
@@ -1580,14 +1588,14 @@
           </label>
           <select class="ccapp-ospslg-select" name="ccapp-length-group">${lengthOptionEl}</select>
         </div>`;
-
+  
         this.querySelector('.ccapp-sps-sizes-wrapper').innerHTML = `<div class="ccapp-sps-size-wrapper">
         ${widthGroupSelect}
         ${lengthGroupSelect}
         </div>`;
       }
     }
-
+  
     handleSizeChange(e) {
       const select = e.target.closest('select');
       if (select) {
@@ -1601,10 +1609,10 @@
         }
       }
     }
-
+  
     liningTypeUI() {
       console.log("liningType===", this.liningType);
-
+  
       let liningTypeEl = '';
       this.liningType?.items?.map((item, index) => {
         liningTypeEl += `<div class="ccapp-lining-type-item ${index===0 ? 'active':''}" data-index="${index}">
@@ -1613,29 +1621,29 @@
           <div class="ccapp-lining-type-sr">SR: ${item?.sr}</div>
         </div>`;
       })
-
+  
       if (this.querySelector('.ccapp-lining-type-wrapper')) {
         this.querySelector('.ccapp-lining-type-wrapper').innerHTML = liningTypeEl;
       }
     }
-
+  
     tiebackUI() {
       console.log("tieback===", this.tieback);
       const tieback = this.tieback || {};
-    
+  
       const tiebackItems = [
         {
           image: tieback?.primaryImage,
           title: tieback?.primaryTitle,
-          isActive: tieback?.isTie ?? true, 
+          isActive: tieback?.isTie ?? true,
         },
         {
           image: tieback?.secondaryImage,
           title: tieback?.secondaryTitle,
-          isActive: tieback?.isTie === false, 
+          isActive: tieback?.isTie === false,
         },
       ];
-    
+  
       let uiEL = '';
       tiebackItems.forEach((item, index) => {
         uiEL += `<div class="ccapp-tieback-item ${item.isActive ? 'active' : ''}" data-index="${index}">
@@ -1643,30 +1651,30 @@
           <p class="ccapp-tieback-title">${item.title || ''}</p>
         </div>`;
       });
-    
+  
       const wrapper = this.querySelector('.ccapp-tieback-wrapper');
       if (wrapper) {
         wrapper.innerHTML = uiEL;
       }
     }
-
+  
     memoryShapedUI() {
       console.log("memoryShaped===", this.memoryShaped);
       const memoryShaped = this.memoryShaped || {};
-    
+  
       const memoryShapedItems = [
         {
           image: memoryShaped?.primaryImage,
           title: memoryShaped?.primaryTitle,
-          isActive: memoryShaped?.isTie ?? true, 
+          isActive: memoryShaped?.isTie ?? true,
         },
         {
           image: memoryShaped?.secondaryImage,
           title: memoryShaped?.secondaryTitle,
-          isActive: memoryShaped?.isTie === false, 
+          isActive: memoryShaped?.isTie === false,
         },
       ];
-    
+  
       let uiEL = '';
       memoryShapedItems.forEach((item, index) => {
         uiEL += `<div class="ccapp-memory-shaped-item ${item.isActive ? 'active' : ''}" data-index="${index}">
@@ -1674,22 +1682,22 @@
           <p class="ccapp-memory-shaped-title">${item.title || ''}</p>
         </div>`;
       });
-    
+  
       const wrapper = this.querySelector('.ccapp-bms-wrapper');
       if (wrapper) {
         wrapper.innerHTML = uiEL;
       }
     }
-
+  
     roomLabelUI() {
       const roomLabel = this.roomLabel || null;
-
+  
       const roomLabelOptions = roomLabel?.options || [];
       let optionsEl = '';
       roomLabelOptions?.map((option) => {
         optionsEl += `<option value="${option?.title}">${option?.title}</option>`;
       });
-
+  
       let uiEL = `
         <div>
           <label for="room-label-select">Select Room</label>
@@ -1700,12 +1708,12 @@
           <input type="text" placeholder="Window description" maxlength="${roomLabel?.descriptionMaxLength}" />
         </div>  
       `;
-
+  
       if (this.querySelector('.ccapp-rl-wrapper')) {
         this.querySelector('.ccapp-rl-wrapper').innerHTML = uiEL;
       }
     }
-    
+  
     handleOrderTrackSizeClick(btn) {
       const size = btn.dataset.size;
       const price = btn.dataset.price;
@@ -1717,10 +1725,10 @@
           button.classList.add('active');
         }
       });
-      console.log('Selected Size:', size, 'Selected Price:', price)
+      console.log('Selected Size:', size, 'Selected Price:', price);
       this.updateSelectedTrackSizeDisplay();
     }
-
+  
     updateSelectedTrackSizeDisplay() {
       const header = this.querySelector('.ccapp-order-track-size-header');
       if (header && this.selectedTrackSize && this.selectedTrackPrice) {
@@ -1729,25 +1737,19 @@
         header.textContent = `Track Size: N/A (N/A)`;
       }
     }
-
+  
     orderTrackSizeUI() {
       const trackSize = this.trackSize || null;
-
+  
       const trackSizeOptions = trackSize?.options || [];
-
-      {% comment %} const dummyTrackSizes = [
-        { size: 'Small 3ft-6ft', price: '50' },
-        { size: 'Medium 6ft-9ft', price: '65' },
-        { size: 'Large 9ft-12ft', price: '80' }
-      ]; {% endcomment %}
-
+  
       let buttonsHtml = '';
       trackSizeOptions.forEach((sizeData, index) => {
         buttonsHtml += `<button class="ccapp-ots-button ${index === 0 ? 'active' : ''}" data-size="${sizeData.title}" data-price="${sizeData.price}">
           ${sizeData.title}
         </button>`;
       });
-
+  
       const buttonsContainer = this.querySelector('.ccapp-order-track-size-buttons');
       if (buttonsContainer) {
         buttonsContainer.innerHTML = buttonsHtml;
@@ -1756,118 +1758,152 @@
         this.updateSelectedTrackSizeDisplay();
       }
     }
-
+  
     handlePanelTypeChange(e) {
-      this.panelType = e.target.value;
+      this.selectedPanelType = e.target.value;
       const positionSelect = this.querySelector('.ccapp-spp-position');
-      const showDropdown = this.panelTypes.find(t => t.value === this.panelType)?.showPositionDropdown;
+      const showDropdown = this.panelTypes?.find(t => t.value === this.selectedPanelType)?.showPositionDropdown;
       if (positionSelect) {
         positionSelect.classList.toggle('hide', !showDropdown);
-        const dropdownHeight = showDropdown ? 0 : positionSelect.scrollHeight; // Subtract dropdown height when hidden
+        const dropdownHeight = showDropdown ? 0 : positionSelect.scrollHeight;
         if (showDropdown) {
-          this.updatePositionDropdown();
+          const panelPositions = this.panelTypeData?.panelPosition || ['Left', 'Center', 'Right'];
+          this.updatePositionDropdown(panelPositions);
         }
         this.handleResizeHeightCollectionTab(this.querySelector('.ccapp-msc-tab.active'), dropdownHeight);
       }
     }
-    
-    handleResizeHeightCollectionTab(tab = null, dropdownAdjustment = 0) {
-      if (tab && tab.classList.contains('active')) {
-        const content = tab.querySelector('.ccapp-msc-tab-content');
-        if (content) {
-          content.style.height = `auto`; // Temporarily set to auto to get natural height
-          const naturalHeight = content.scrollHeight;
-          content.style.height = `${naturalHeight - dropdownAdjustment}px`; // Adjust height by dropdown height
-        }
-      }
-    }
-
-    updatePositionDropdown() {
+  
+    updatePositionDropdown(panelPositions) {
       const positionSelect = this.querySelector('.ccapp-spp-position select');
-      if (positionSelect && this.panelPositions.length > 0) {
+      if (positionSelect && panelPositions.length > 0) {
         let optionsHtml = '';
-        this.panelPositions.forEach(position => {
+        panelPositions.forEach(position => {
           optionsHtml += `<option value="${position.toLowerCase().replace(' ', '-')}">${position}</option>`;
         });
         positionSelect.innerHTML = optionsHtml;
-        this.panelPosition = this.panelPositions[0].toLowerCase().replace(' ', '-');
+        this.panelPosition = panelPositions[0].toLowerCase().replace(' ', '-');
         positionSelect.value = this.panelPosition;
       }
     }
-
+  
     singlePanelOrPairUI() {
+      const panelPositions = this.panelTypeData?.panelPosition || ['Left', 'Center', 'Right'];
+      this.panelTypes = [
+        { 
+          value: 'single', 
+          label: this.panelTypeData?.singlePanelTitle || 'Single Panel', 
+          image: this.panelTypeData?.singleImage || '', 
+          showPositionDropdown: true 
+        },
+        { 
+          value: 'pair', 
+          label: this.panelTypeData?.pairPanelTitle || 'Pair Panel', 
+          image: this.panelTypeData?.pairImage || '', 
+          showPositionDropdown: false 
+        }
+      ];
       const panelTypeContainer = this.querySelector('.ccapp-spp-options');
-      const positionSelect = this.querySelector('.ccapp-spp-position select');
+      const positionSelect = this.querySelector('.ccapp-spp-position');
       if (panelTypeContainer && positionSelect && this.panelTypes.length > 0) {
         let radioHtml = '';
         this.panelTypes.forEach((type, index) => {
           radioHtml += `<label class="ccapp-spp-radio">
-            <input type="radio" name="panel-type" value="${type.value}" ${index === 0 ? 'checked' : ''}> ${type.label}
+            <img src="${type.image || ''}" width="100" style="aspect-ratio: 1; object-fit: cover; margin-right: 5px;">
+            <div class="ccapp-spp-radio--inner">
+              <input type="radio" name="panel-type" value="${type.value}" ${index === 0 ? 'checked' : ''}>
+              ${type.label || 'N/A'}
+            </div>
           </label>`;
         });
         panelTypeContainer.innerHTML = radioHtml;
-
+  
+        let typeOptions = '';
+        panelPositions?.forEach(p => {
+          typeOptions += `<option value="${p.toLowerCase().replace(' ', '-')}">${p}</option>`;
+        });
+        positionSelect.querySelector('select').innerHTML = typeOptions;
+  
         const panelTypeRadios = this.querySelectorAll('input[name="panel-type"]');
         panelTypeRadios.forEach(radio => {
           if (radio.checked) {
-            this.panelType = radio.value;
-            const showDropdown = this.panelTypes.find(t => t.value === this.panelType)?.showPositionDropdown;
-            this.querySelector('.ccapp-spp-position').classList.toggle('hide', !showDropdown);
+            this.selectedPanelType = radio.value;
+            const showDropdown = this.panelTypes.find(t => t.value === this.selectedPanelType)?.showPositionDropdown;
+            positionSelect.classList.toggle('hide', !showDropdown);
             if (showDropdown) {
-              this.updatePositionDropdown();
+              this.updatePositionDropdown(panelPositions);
             }
           }
         });
-        positionSelect.value = this.panelPosition || this.panelPositions[0].toLowerCase().replace(' ', '-');
+      } else {
+        panelTypeContainer.innerHTML = '<div>Loading...</div>';
       }
     }
-
-    handleResizeHeightCollectionTab(tab = null) {
+  
+    handleResizeHeightCollectionTab(tab = null, dropdownAdjustment = 0) {
       if (tab && tab.classList.contains('active')) {
         const content = tab.querySelector('.ccapp-msc-tab-content');
         if (content) {
           content.style.height = `auto`;
-          content.style.height = `${content.scrollHeight}px`;
+          const naturalHeight = content.scrollHeight;
+          content.style.height = `${naturalHeight - dropdownAdjustment}px`;
         }
       }
     }
-
+  
     async getData(customizerId = 1) {
-      const response = await fetch(`${this.appUrl}/api/curtain/${customizerId}`);
-      const data = await response.json();
-      this.data.collections = data?.collections || [];
-      this.data.appUrl = data?.appUrl || '';
-      this.collections = data?.collections || [];
-
-      return true;
+      try {
+        const response = await fetch(`${this.appUrl}/api/curtain/${customizerId}`);
+        if (!response.ok) throw new Error(`Failed to fetch curtain data: ${response.status}`);
+        const data = await response.json();
+        this.data.collections = data?.collections || [];
+        this.data.appUrl = data?.appUrl || '';
+        this.collections = data?.collections || [];
+        return true;
+      } catch (error) {
+        console.error('Error fetching curtain data:', error);
+        return false;
+      }
     }
-
+  
     async loadOthersModules(customizerId = 1) {
-      const response = await fetch(`${this.appUrl}/api/others-module/${customizerId}`);
-      const data = await response.json();
-      console.log('others module data==', data);
-
-      this.otherModuleLoaded = true;
-
-      this.panelSize = data?.panelSize || null;
-      this.liningType = data?.liningType || null;
-      this.tieback = data?.tieback || null;
-      this.memoryShaped = data?.memoryShaped || null;
-      this.roomLabel = data?.roomLabel || null;
-      this.trackSize = data?.trackSize || null;
-      this.panelPositions = data?.panelPositions || ['Left', 'Center', 'Right']; 
-      this.panelTypes = data?.panelTypes || [{ value: 'single', label: 'Single', showPositionDropdown: true }, { value: 'pair', label: 'Pair', showPositionDropdown: false }]; 
-
-      this.singlePanelSizeUI();
-      this.liningTypeUI();
-      this.tiebackUI();
-      this.memoryShapedUI();
-      this.roomLabelUI();
-      this.orderTrackSizeUI();
-      this.singlePanelOrPairUI();
+      try {
+        const response = await fetch(`${this.appUrl}/api/others-module/${customizerId}`);
+        if (!response.ok) throw new Error(`Failed to fetch others module: ${response.status}`);
+        const data = await response.json();
+        console.log('others module data==', data);
+  
+        this.otherModuleLoaded = true;
+  
+        this.panelSize = data?.panelSize || null;
+        this.liningType = data?.liningType || null;
+        this.tieback = data?.tieback || null;
+        this.memoryShaped = data?.memoryShaped || null;
+        this.roomLabel = data?.roomLabel || null;
+        this.trackSize = data?.trackSize || null;
+        this.panelTypeData = data?.panelType || null;
+  
+        this.singlePanelSizeUI();
+        this.liningTypeUI();
+        this.tiebackUI();
+        this.memoryShapedUI();
+        this.roomLabelUI();
+        this.orderTrackSizeUI();
+        this.singlePanelOrPairUI();
+      } catch (error) {
+        console.error('Error loading others modules:', error);
+        this.panelTypeData = null;
+        this.singlePanelSizeUI();
+        this.liningTypeUI();
+        this.tiebackUI();
+        this.memoryShapedUI();
+        this.roomLabelUI();
+        this.orderTrackSizeUI();
+        this.singlePanelOrPairUI();
+      }
     }
   }
-
+  
   customElements.define('curtain-customizer-app', CurtainCustomizer);
 </script>
 

@@ -145,6 +145,17 @@ export default function SingleCustomizer() {
                 </Card>
             </Layout.Section>
 
+            <Layout.Section>
+                <Card>
+                    <InlineStack align="space-between" blockAlign="center" gap={400}>
+                        <Text variant="headingMd">Panel Type</Text>
+                        <ButtonGroup>
+                            <Button url={`/app/customizer/${customizer?.id}/${customizer?.handle}/panel-type`}>Explore</Button>
+                        </ButtonGroup>
+                    </InlineStack>
+                </Card>
+            </Layout.Section>
+
             {/* <Layout.Section>
                 <Card>
                     <Text variant="headingMd">Panel Type</Text>
