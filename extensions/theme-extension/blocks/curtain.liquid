@@ -717,6 +717,37 @@
   .ccapp-spp-position.hide {
     display: none; /* Hidden when Pair is selected */
   }
+
+  .ccapp-lift-type-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+    padding: 10px;
+  }
+  
+  .ccapp-lift-type-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .ccapp-lift-type-image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  
+  .ccapp-lift-type-title {
+    font-size: 12px;
+    text-align: center;
+  }
+  
+  .ccapp-lift-type-item.active .ccapp-lift-type-image {
+    box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
+  }  
 </style>
 
 <curtain-customizer-app>
@@ -993,6 +1024,32 @@
             </div>
           </div>
         </div>
+
+        <div class="ccapp-msc-tab" data-index="9">
+          <div class="ccapp-msc-tab-heading">
+            <div class="ccapp-osps-header">
+              <h3 class="ccapp-osps-htitle">Select Lift Type</h3>
+            </div>
+            <svg
+              class="mcct-icon-svg"
+              width="20px"
+              height="20px"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10 14a.997.997 0 01-.707-.293l-5-5a.999.999 0 111.414-1.414L10 11.586l4.293-4.293a.999.999 0 111.414 1.414l-5 5A.997.997 0 0110 14z" fill="#5C5F62"></path>
+            </svg>
+          </div>
+          <div class="ccapp-msc-tab-content">
+            <div class="ccapp-lift-type-container">
+              <div class="ccapp-lift-type-wrapper">
+                <div class="ccapp-lift-type-item">Loading...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+
       </div>
     </div>
   </div>
@@ -1027,6 +1084,7 @@
         this.loadOthersModules().then(() => {
           this.orderTrackSizeUI();
           this.singlePanelOrPairUI();
+          this.liftTypeUI();
         });
       }, 10);
     }
@@ -1155,6 +1213,15 @@
         if (ccapp_otsButton) {
           this.handleOrderTrackSizeClick(ccapp_otsButton);
         }
+
+        const ccapp_liftTypeItems = e.target.classList.contains('ccapp-lift-type-item')
+        ? e.target
+        : e.target.closest('.ccapp-lift-type-item');
+      if (ccapp_liftTypeItems) {
+        this.handleLiftTypeItemSelector(ccapp_liftTypeItems);
+      }
+      
+
       }.bind(this));
     }
   
@@ -1839,6 +1906,46 @@
         panelTypeContainer.innerHTML = '<div>Loading...</div>';
       }
     }
+
+    handleLiftTypeItemSelector(btn) {
+      const activeIndex = parseInt(btn.dataset?.index) || 0;
+      this.querySelectorAll(".ccapp-lift-type-item").forEach((item, index) => {
+        if (index === activeIndex) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+    
+
+    liftTypeUI() {
+      const liftType = this.liftType || {};
+      const liftOptions = [
+        {
+          image: liftType.manualImage,
+          title: liftType.manualPanelTitle,
+          isActive: true
+        },
+        {
+          image: liftType.motorizedImage,
+          title: liftType.motorizedPanelTitle,
+          isActive: false
+        }
+      ];
+    
+      let html = '';
+      liftOptions.forEach((item, index) => {
+        html += `<div class="ccapp-lift-type-item ${item.isActive ? 'active' : ''}" data-index="${index}">
+          <img class="ccapp-lift-type-image" src="${item.image}" />
+          <p class="ccapp-lift-type-title">${item.title}</p>
+        </div>`;
+      });
+    
+      const wrapper = this.querySelector('.ccapp-lift-type-wrapper');
+      if (wrapper) wrapper.innerHTML = html;
+    }
+    
   
     handleResizeHeightCollectionTab(tab = null, dropdownAdjustment = 0) {
       if (tab && tab.classList.contains('active')) {
@@ -1882,6 +1989,14 @@
         this.roomLabel = data?.roomLabel || null;
         this.trackSize = data?.trackSize || null;
         this.panelTypeData = data?.panelType || null;
+
+        this.liftType = {
+          manualImage: 'https://cdn.shopify.com/s/files/1/0689/7749/2107/files/deep-blue-401-18_50x50_bfe21b39-70a0-443f-88ea-39153f0f3d0a.png?v=1752919562',
+          motorizedImage: 'https://cdn.shopify.com/s/files/1/0689/7749/2107/files/deep-blue-401-18_50x50_bfe21b39-70a0-443f-88ea-39153f0f3d0a.png?v=1752919562',
+          manualPanelTitle: 'Manual Lift',
+          motorizedPanelTitle: 'Motorized Lift'
+        };
+        
   
         this.singlePanelSizeUI();
         this.liningTypeUI();
