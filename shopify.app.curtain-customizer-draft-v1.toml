@@ -3,7 +3,7 @@
 client_id = "ff901fdb3a92ae7baacfaf33ece2c2f7"
 name = "Curtain customizer draft v1"
 handle = "curtain-customizer-draft-v1"
-application_url = "https://flu-generate-perspectives-donald.trycloudflare.com"
+application_url = "https://mouth-tgp-park-scheduled.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,30 +17,9 @@ scopes = "read_files,read_inventory,read_orders,read_products,read_publications,
 
 [auth]
 redirect_urls = [
-  "https://seeing-customise-argument-gray.trycloudflare.com/auth/callback",
-  "https://seeing-customise-argument-gray.trycloudflare.com/auth/shopify/callback",
-  "https://seeing-customise-argument-gray.trycloudflare.com/api/auth/callback",
-  "https://motors-contributors-downtown-advisory.trycloudflare.com/auth/callback",
-  "https://motors-contributors-downtown-advisory.trycloudflare.com/auth/shopify/callback",
-  "https://motors-contributors-downtown-advisory.trycloudflare.com/api/auth/callback",
-  "https://spiritual-develops-pentium-tricks.trycloudflare.com/auth/callback",
-  "https://spiritual-develops-pentium-tricks.trycloudflare.com/auth/shopify/callback",
-  "https://spiritual-develops-pentium-tricks.trycloudflare.com/api/auth/callback",
-  "https://personalized-kissing-stylus-intellectual.trycloudflare.com/auth/callback",
-  "https://personalized-kissing-stylus-intellectual.trycloudflare.com/auth/shopify/callback",
-  "https://personalized-kissing-stylus-intellectual.trycloudflare.com/api/auth/callback",
-  "https://manuals-tube-pencil-justice.trycloudflare.com/auth/callback",
-  "https://manuals-tube-pencil-justice.trycloudflare.com/auth/shopify/callback",
-  "https://manuals-tube-pencil-justice.trycloudflare.com/api/auth/callback",
-  "https://white-reporters-democrats-price.trycloudflare.com/auth/callback",
-  "https://white-reporters-democrats-price.trycloudflare.com/auth/shopify/callback",
-  "https://white-reporters-democrats-price.trycloudflare.com/api/auth/callback",
-  "https://knight-conference-intelligent-bernard.trycloudflare.com/auth/callback",
-  "https://knight-conference-intelligent-bernard.trycloudflare.com/auth/shopify/callback",
-  "https://knight-conference-intelligent-bernard.trycloudflare.com/api/auth/callback",
-  "https://flu-generate-perspectives-donald.trycloudflare.com/auth/callback",
-  "https://flu-generate-perspectives-donald.trycloudflare.com/auth/shopify/callback",
-  "https://flu-generate-perspectives-donald.trycloudflare.com/api/auth/callback"
+  "https://mouth-tgp-park-scheduled.trycloudflare.com/auth/callback",
+  "https://mouth-tgp-park-scheduled.trycloudflare.com/auth/shopify/callback",
+  "https://mouth-tgp-park-scheduled.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -55,7 +34,7 @@ api_version = "2025-04"
   uri = "/webhooks/app/uninstalled"
 
 [app_proxy]
-url = "https://flu-generate-perspectives-donald.trycloudflare.com/app/curtain"
+url = "https://mouth-tgp-park-scheduled.trycloudflare.com/app/curtain"
 subpath = "curtain"
 prefix = "apps"
 
