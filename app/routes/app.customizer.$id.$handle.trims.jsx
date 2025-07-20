@@ -172,8 +172,7 @@ export const action = async ({ request, params }) => {
     }
 
     return json({
-        role: 'ok',
-        role: role,
+        role: 'ok'
     })
 }
 

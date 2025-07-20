@@ -3,11 +3,7 @@
 client_id = "ff901fdb3a92ae7baacfaf33ece2c2f7"
 name = "Curtain customizer draft v1"
 handle = "curtain-customizer-draft-v1"
-<<<<<<< HEAD
-application_url = "https://speed-controller-below-shopper.trycloudflare.com"
-=======
 application_url = "https://knight-conference-intelligent-bernard.trycloudflare.com"
->>>>>>> ff41a6d (update 7,8,9 module mackend and others on july 20, v1)
 embedded = true
 
 [build]
@@ -21,11 +17,6 @@ scopes = "read_files,read_inventory,read_orders,read_products,read_publications,
 
 [auth]
 redirect_urls = [
-<<<<<<< HEAD
-  "https://speed-controller-below-shopper.trycloudflare.com/auth/callback",
-  "https://speed-controller-below-shopper.trycloudflare.com/auth/shopify/callback",
-  "https://speed-controller-below-shopper.trycloudflare.com/api/auth/callback"
-=======
   "https://seeing-customise-argument-gray.trycloudflare.com/auth/callback",
   "https://seeing-customise-argument-gray.trycloudflare.com/auth/shopify/callback",
   "https://seeing-customise-argument-gray.trycloudflare.com/api/auth/callback",
@@ -47,7 +38,6 @@ redirect_urls = [
   "https://knight-conference-intelligent-bernard.trycloudflare.com/auth/callback",
   "https://knight-conference-intelligent-bernard.trycloudflare.com/auth/shopify/callback",
   "https://knight-conference-intelligent-bernard.trycloudflare.com/api/auth/callback"
->>>>>>> ff41a6d (update 7,8,9 module mackend and others on july 20, v1)
 ]
 
 [webhooks]
@@ -62,11 +52,7 @@ api_version = "2025-04"
   uri = "/webhooks/app/uninstalled"
 
 [app_proxy]
-<<<<<<< HEAD
-url = "https://speed-controller-below-shopper.trycloudflare.com/app/curtain"
-=======
 url = "https://knight-conference-intelligent-bernard.trycloudflare.com/app/curtain"
->>>>>>> ff41a6d (update 7,8,9 module mackend and others on july 20, v1)
 subpath = "curtain"
 prefix = "apps"
 
