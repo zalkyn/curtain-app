@@ -55,7 +55,7 @@ export const loader = async ({ request, params }) => {
             memoryShaped: true,
             roomLabel: true,
             trackSize: true,
-            LiftType: true
+            liftType: true
         }
     });
 
