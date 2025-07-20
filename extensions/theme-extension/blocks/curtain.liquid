@@ -743,11 +743,36 @@
   .ccapp-lift-type-title {
     font-size: 12px;
     text-align: center;
+    margin: 0;
   }
   
   .ccapp-lift-type-item.active .ccapp-lift-type-image {
     box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
   }  
+
+
+  .ccapp-lift-type-btns-container {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    transition: opacity 0.3s ease;
+  }
+  
+  .ccapp-lift-type-btns-container.hide {
+    display: none;
+  }
+  
+  .ccapp-lift-type-btns-container button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+  }
+  
+  .ccapp-lift-type-btns-container button:hover {
+    background: #f0f0f0;
+  }
 </style>
 
 <curtain-customizer-app>
@@ -1045,6 +1070,7 @@
               <div class="ccapp-lift-type-wrapper">
                 <div class="ccapp-lift-type-item">Loading...</div>
               </div>
+              <div class="ccapp-lift-type-btns-container"></div>
             </div>
           </div>
         </div>
@@ -1071,8 +1097,8 @@
       this.currentSwatches = this.currentSwatches || {};
       this.selectedTrackSize = null;
       this.selectedTrackPrice = null;
-      this.panelTypeData = null; // Store API-provided panelType object
-      this.selectedPanelType = null; // Store selected panel type value (e.g., 'single' or 'pair')
+      this.panelTypeData = null;
+      this.selectedPanelType = null;
       this.panelPosition = null;
       this.initCurtain();
     }
@@ -1907,7 +1933,81 @@
       }
     }
 
-    handleLiftTypeItemSelector(btn) {
+
+    {% comment %} liftTypeUI() {
+      const liftType = this.liftType || {};
+      const liftOptions = [
+        {
+          image: 'https://cdn.shopify.com/s/files/1/0689/7749/2107/files/deep-blue-401-18_50x50_bfe21b39-70a0-443f-88ea-39153f0f3d0a.png?v=1752919562',
+          title: 'Manual Lift',
+          isActive: true
+        },
+        {
+          image: 'https://cdn.shopify.com/s/files/1/0689/7749/2107/files/deep-blue-401-18_50x50_bfe21b39-70a0-443f-88ea-39153f0f3d0a.png?v=1752919562',
+          title: 'Motorized Lift',
+          isActive: false,
+          remoteControlTypes: [
+            {
+              title: "Title 1",
+              price: "$20"
+            },
+            {
+              title: "Title 2",
+              price: "$30"
+            }
+          ]
+        }
+      ];
+    
+      let html = ''; // Initialize html variable
+      liftOptions.forEach((item, index) => {
+        let buttonsHtml = ''; // Reset buttonsHtml for each item
+        if (item.remoteControlTypes) {
+          item.remoteControlTypes.forEach(i => {
+            buttonsHtml += `<button>${i.title}</button>`;
+          });
+        }
+    
+        html += `
+          <div class="ccapp-lift-type-item ${item.isActive ? 'active' : ''}" data-index="${index}">
+            <img class="ccapp-lift-type-image" src="${item.image}" />
+            <p class="ccapp-lift-type-title">${item.title}</p>
+          </div>
+          <div class="ccapp-lift-type-btn-wrapper${item.isActive && !item.remoteControlTypes ? ' hide' : ''}">
+            ${buttonsHtml}
+          </div>
+        `;
+      });
+    
+      const wrapper = this.querySelector('.ccapp-lift-type-wrapper');
+      if (wrapper) {
+        wrapper.innerHTML = html;
+      }
+    } {% endcomment %}
+    
+    {% comment %} handleLiftTypeItemSelector(btn) {
+      const activeIndex = parseInt(btn.dataset?.index) || 0;
+      const liftOptions = [
+        { title: 'Manual Lift', remoteControlTypes: null },
+        { title: 'Motorized Lift', remoteControlTypes: [{ title: "Title 1", price: "$20" }, { title: "Title 2", price: "$30" }] }
+      ];
+      this.querySelectorAll(".ccapp-lift-type-item").forEach((item, index) => {
+        const btnWrapper = item.nextElementSibling;
+        if (index === activeIndex) {
+          item.classList.add('active');
+          if (btnWrapper && liftOptions[index].remoteControlTypes) {
+            btnWrapper.classList.remove('hide');
+          }
+        } else {
+          item.classList.remove('active');
+          if (btnWrapper) {
+            btnWrapper.classList.add('hide');
+          }
+        }
+      });
+    } {% endcomment %}
+
+    {% comment %} handleLiftTypeItemSelector(btn) {
       const activeIndex = parseInt(btn.dataset?.index) || 0;
       this.querySelectorAll(".ccapp-lift-type-item").forEach((item, index) => {
         if (index === activeIndex) {
@@ -1916,10 +2016,10 @@
           item.classList.remove('active');
         }
       });
-    }
+    } {% endcomment %}
     
 
-    liftTypeUI() {
+    {% comment %} liftTypeUI() {
       const liftType = this.liftType || {};
       const liftOptions = [
         {
@@ -1932,18 +2032,103 @@
           title: liftType.motorizedPanelTitle,
           isActive: false
         }
-      ];
+      ]; 
     
       let html = '';
       liftOptions.forEach((item, index) => {
         html += `<div class="ccapp-lift-type-item ${item.isActive ? 'active' : ''}" data-index="${index}">
           <img class="ccapp-lift-type-image" src="${item.image}" />
           <p class="ccapp-lift-type-title">${item.title}</p>
-        </div>`;
+        </div>
+        `;
       });
     
       const wrapper = this.querySelector('.ccapp-lift-type-wrapper');
       if (wrapper) wrapper.innerHTML = html;
+    } {% endcomment %}
+
+    liftTypeUI() {
+      const liftType = this.liftType || {};
+      const liftOptions = [
+        {
+          image: liftType.manualImage,
+          title: liftType.manualPanelTitle || 'Manual Lift',
+          isActive: true
+        },
+        {
+          image: liftType.motorizedImage,
+          title: liftType.motorizedPanelTitle || 'Motorized Lift',
+          isActive: false,
+          remoteControlTypes: [
+            {
+              title: "Title 1",
+              price: "$20"
+            },
+            {
+              title: "Title 2",
+              price: "$30"
+            }
+          ]
+        }
+      ];
+  
+      let itemsHtml = ''; // HTML for lift type items
+      let buttonsHtml = ''; // Centralized buttons HTML
+      liftOptions.forEach((item, index) => {
+        itemsHtml += `
+          <div class="ccapp-lift-type-item ${item.isActive ? 'active' : ''}" data-index="${index}">
+            <img class="ccapp-lift-type-image" src="${item.image}" />
+            <p class="ccapp-lift-type-title">${item.title}</p>
+          </div>
+        `;
+        if (item.remoteControlTypes) {
+          item.remoteControlTypes.forEach((btn, index) => {
+            buttonsHtml += `<button data-index="${index}">${btn.title}</button>`;
+          });
+        }
+      });
+  
+      const wrapper = this.querySelector('.ccapp-lift-type-wrapper');
+      if (wrapper) {
+        wrapper.innerHTML = itemsHtml;
+      }
+      const btnsContainer = this.querySelector('.ccapp-lift-type-btns-container');
+      if (btnsContainer) {
+        btnsContainer.innerHTML = buttonsHtml;
+        if (liftOptions[0].isActive && !liftOptions[0].remoteControlTypes) {
+          btnsContainer.classList.add('hide');
+        }
+      }
+    }
+  
+    handleLiftTypeItemSelector(btn) {
+      const activeIndex = parseInt(btn.dataset?.index) || 0;
+      const liftType = this.liftType || {};
+      const liftOptions = [
+        { title: liftType.manualPanelTitle, remoteControlTypes: null },
+        { title: liftType.motorizedPanelTitle, remoteControlTypes: [
+          { title: "Title 1", price: "$20" },
+          { title: "Title 2", price: "$30" }
+        ]}
+      ];
+      const items = this.querySelectorAll(".ccapp-lift-type-item");
+      const btnsContainer = this.querySelector('.ccapp-lift-type-btns-container');
+      items.forEach((item, index) => {
+        if (index === activeIndex) {
+          item.classList.add('active');
+          if (btnsContainer && liftOptions[index].remoteControlTypes) {
+            btnsContainer.classList.remove('hide');
+          } else if (btnsContainer) {
+            btnsContainer.classList.add('hide');
+          }
+        } else {
+          item.classList.remove('active');
+        }
+      });
+      const activeTab = this.querySelector('.ccapp-msc-tab.active');
+      if (activeTab) {
+        this.handleResizeHeightCollectionTab(activeTab);
+      }
     }
     
   
