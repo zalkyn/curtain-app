@@ -38,7 +38,11 @@ export const loader = async ({ request, params }) => {
             id: customizerId
         },
         include: {
-            trims: true,
+            trims: {
+                include: {
+                    swatches: true
+                }
+            },
             palenSize: true,
             panelType: true,
             liningType: {

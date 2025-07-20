@@ -1,4 +1,4 @@
-import { Layout, Page, Card, Text, Button, ButtonGroup, InlineStack, Badge } from "@shopify/polaris";
+import { Layout, Page, Card, Text, Button, ButtonGroup, InlineStack, Badge, Box } from "@shopify/polaris";
 import { authenticate } from "../shopify.server";
 import { json, redirect } from "@remix-run/node";
 import prisma from "../db.server";
@@ -154,6 +154,32 @@ export default function SingleCustomizer() {
                         </ButtonGroup>
                     </InlineStack>
                 </Card>
+            </Layout.Section>
+
+            <Layout.Section>
+                <Card>
+                    <InlineStack align="space-between" blockAlign="center" gap={400}>
+                        <Text variant="headingMd">Trims</Text>
+                        <ButtonGroup>
+                            <Button url={`/app/customizer/${customizer?.id}/${customizer?.handle}/trims`}>Explore</Button>
+                        </ButtonGroup>
+                    </InlineStack>
+                </Card>
+            </Layout.Section>
+
+            <Layout.Section>
+                <Card>
+                    <InlineStack align="space-between" blockAlign="center" gap={400}>
+                        <Text variant="headingMd">Lift Type</Text>
+                        <ButtonGroup>
+                            <Button url={`/app/customizer/${customizer?.id}/${customizer?.handle}/lift-type`}>Explore</Button>
+                        </ButtonGroup>
+                    </InlineStack>
+                </Card>
+            </Layout.Section>
+
+            <Layout.Section>
+                <Box paddingBlock="400" />
             </Layout.Section>
 
             {/* <Layout.Section>
