@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `Customizer` ADD COLUMN `comparePrice` DOUBLE NOT NULL DEFAULT 0.0,
+    ADD COLUMN `price` DOUBLE NOT NULL DEFAULT 0.0;

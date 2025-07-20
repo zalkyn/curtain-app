@@ -38,7 +38,11 @@ export const loader = async ({ request, params }) => {
             id: customizerId
         },
         include: {
-            trims: true,
+            trims: {
+                include: {
+                    swatches: true
+                }
+            },
             palenSize: true,
             panelType: true,
             liningType: {
@@ -60,7 +64,7 @@ export const loader = async ({ request, params }) => {
     const liningType = customizer?.liningType?.[0] || null;
     const tieback = customizer?.tieback?.[0] || null;
     const memoryShaped = customizer?.memoryShaped?.[0] || null;
-    const trims = customizer?.trims || [];
+    const trims = customizer?.trims[0] || [];
     const roomLabel = customizer?.roomLabel[0] || null;
     const trackSize = customizer?.trackSize?.[0] || null;
 

@@ -33,7 +33,9 @@ export const loader = async ({ request, params }) => {
 
         return json({
             panelSize: panelSize || {},
-            sizes: []
+            sizes: [],
+            customizerId: id,
+            customizerHandle: handle || null,
         });
     } catch (error) {
         console.error("Loader error:", error);
@@ -166,6 +168,8 @@ export default function PanelSize() {
     const actionData = useActionData()
     const [reserve, setReserve] = useState(loaderData?.panelSize)
     const [panelSize, setPanelSize] = useState(loaderData?.panelSize)
+    const [customizerId, setCustomizerId] = useState(loaderData?.customizerId)
+    const [customizerHandle, setCustomizerHandle] = useState(loaderData?.customizerHandle)
 
     const [loadingUpdateBtn, setLoadingUpdateBtn] = useState(false)
     const [diagram, setDiagram] = useState(null)
@@ -201,21 +205,15 @@ export default function PanelSize() {
     }
 
     const handleUpdatePanelSize = async () => {
-
         const formData = new FormData()
 
         if (diagram) {
             const base64Image = await convertToBase64(diagram);
             formData.append("image", base64Image)
-
         }
-
 
         formData.append("role", "update-panel-size")
         formData.append("data", JSON.stringify(panelSize))
-
-
-        // if (diagram) formData.append("file", diagram)
 
         setLoadingUpdateBtn(true)
 
@@ -263,15 +261,15 @@ export default function PanelSize() {
         });
     };
 
-    useEffect(() => {
-        console.log("Panel Size Updated:======", panelSize);
-    }, [panelSize]);
+    // useEffect(() => {
+    //     console.log("Panel Size Updated:======", panelSize);
+    // }, [panelSize]);
 
     return <Page
         title="Order single panel size"
         backAction={{
             content: "Back",
-            onAction: () => history.back()
+            url: `/app/customizer/${customizerId}/${customizerHandle}`
         }}
         primaryAction={{
             content: "Save changes",
@@ -332,6 +330,30 @@ export default function PanelSize() {
                             <TextEditor showImage={true} content={panelSize.info} setContent={(value) => updateInput("info", value)} />
                         </Suspense>
                     </Box>
+                </Card>
+            </Layout.Section>
+
+            <Layout.Section>
+                <Card>
+                    <InlineStack align="start" blockAlign="center">
+                        <Text variant="headingMd">Group Fraction</Text>
+                    </InlineStack>
+                    <Box paddingBlockEnd={200} />
+                    <TextField multiline={2}
+                        label="Width Fraction"
+                        value={panelSize?.widthFraction || ""}
+                        onChange={(value) => updateInput("widthFraction", value)}
+                        autoComplete="off"
+                        helpText="1/2, 1/3, 1/4, 1/5 etc. (separate with comma)"
+                    />
+                    <Box paddingBlockEnd={300} />
+                    <TextField multiline={2}
+                        label="Length Fraction"
+                        value={panelSize?.lengthFraction || ""}
+                        onChange={(value) => updateInput("lengthFraction", value)}
+                        autoComplete="off"
+                        helpText="1/2, 1/3, 1/4, 1/5, 1/6 etc. (separate with comma)"
+                    />
                 </Card>
             </Layout.Section>
 

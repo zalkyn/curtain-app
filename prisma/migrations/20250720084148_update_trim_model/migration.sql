@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `Trim` ADD COLUMN `image` VARCHAR(191) NULL,
+    ADD COLUMN `image64` LONGTEXT NULL;

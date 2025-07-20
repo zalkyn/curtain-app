@@ -58,7 +58,8 @@ export const action = async ({ request }) => {
                     title: updateData?.title,
                     handle: updateData?.handle,
                     shortInfo: updateData?.shortInfo,
-                    activeStatus: updateData?.activeStatus
+                    activeStatus: updateData?.activeStatus,
+                    price: updateData?.price
                 }
             })
 
@@ -119,7 +120,8 @@ export default function Customizer() {
         title: "",
         handle: "",
         shortInfo: "",
-        activeStatus: false
+        activeStatus: false,
+        price: 0
     }
 
     const [newCustomizerInput, setNewCustomizerInputs] = useState(emptyCustomizer)
@@ -324,6 +326,16 @@ export default function Customizer() {
                             </Box>
                             <Box>
                                 <TextField
+                                    label="Price"
+                                    type="number"
+                                    value={selected?.price}
+                                    onChange={(value) => setSelected({ ...selected, price: parseFloat(value) })}
+                                    min={0}
+                                    prefix="$"
+                                />
+                            </Box>
+                            <Box>
+                                <TextField
                                     label="Info"
                                     multiline={2}
                                     value={selected?.shortInfo}
@@ -368,6 +380,16 @@ export default function Customizer() {
                                     value={newCustomizerInput?.handle}
                                 />
                             </FormLayout.Group>
+                            <Box>
+                                <TextField
+                                    label="Price"
+                                    type="number"
+                                    value={newCustomizerInput?.price}
+                                    onChange={(value) => setNewCustomizerInputs({ ...newCustomizerInput, price: parseFloat(value) })}
+                                    min={0}
+                                    prefix="$"
+                                />
+                            </Box>
                             <Box>
                                 <Checkbox
                                     label="Active Status"

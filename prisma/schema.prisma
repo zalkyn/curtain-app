@@ -44,6 +44,8 @@ model Customizer {
   info         String?           @db.LongText
   shortInfo    String?           @db.MediumText
   activeStatus Boolean           @default(false)
+  price        Float             @default(0.0)
+  comparePrice Float             @default(0.0)
   collections  Collection[]
   trims        Trim[]
   palenSize    SinglePanelSize[]
@@ -53,6 +55,7 @@ model Customizer {
   memoryShaped MemoryShaped[]
   roomLabel    RoomLabel[]
   trackSize    TrackSize[]
+  liftType     LiftType[]
   createdAt    DateTime?         @default(now())
   updatedAt    DateTime?         @updatedAt
 }
@@ -141,23 +144,44 @@ model Swatch {
 }
 
 model Trim {
-  id           Int         @id @default(autoincrement())
+  id           Int          @id @default(autoincrement())
   shop         String?
   title        String?
   handle       String?
-  price        Float       @default(0.0)
-  comparePrice Float       @default(0.0)
-  image        String?
-  image64      String?     @db.LongText
+  price        Float        @default(0.0)
+  comparePrice Float        @default(0.0)
   position     Int?
-  info         String?     @db.LongText
-  shortInfo    String?     @db.MediumText
-  activeStatus Boolean     @default(true)
+  info         String?      @db.LongText
+  activeStatus Boolean      @default(true)
   metadata     Json?
-  createdAt    DateTime    @default(now()) // Track creation time
-  updatedAt    DateTime    @updatedAt
-  customizer   Customizer? @relation(fields: [customizerId], references: [id])
+  image        String?
+  image64      String?      @db.LongText
+  createdAt    DateTime     @default(now()) // Track creation time
+  updatedAt    DateTime     @updatedAt
+  swatches     TrimSwatch[]
+  customizer   Customizer?  @relation(fields: [customizerId], references: [id])
   customizerId Int?
+}
+
+model TrimSwatch {
+  id           Int      @id @default(autoincrement())
+  customizerId Int?
+  shop         String?
+  title        String?
+  handle       String?
+  price        Float    @default(0.0)
+  comparePrice Float    @default(0.0)
+  image        String?
+  image64      String?  @db.LongText
+  position     Int?
+  info         String?  @db.LongText
+  shortInfo    String?  @db.MediumText
+  activeStatus Boolean  @default(true)
+  metadata     Json?
+  createdAt    DateTime @default(now()) // Track creation time
+  updatedAt    DateTime @updatedAt
+  trim         Trim?    @relation(fields: [trimId], references: [id])
+  trimId       Int?
 }
 
 model Image {
@@ -177,28 +201,30 @@ model Image {
 }
 
 model SinglePanelSize {
-  id           Int         @id @default(autoincrement())
-  shop         String?
-  title        String?
-  handle       String?
-  price        Float       @default(0.0)
-  comparePrice Float       @default(0.0)
-  group        Json?
-  widthGroup   Json?
-  lengthGroup  Json?
-  image        String?
-  image64      String?     @db.LongText
-  position     Int?
-  info         String?     @db.LongText
-  widthInfo    String?     @db.LongText
-  lengthInfo   String?     @db.LongText
-  shortInfo    String?     @db.MediumText
-  activeStatus Boolean     @default(false)
-  metadata     Json?
-  customizer   Customizer? @relation(fields: [customizerId], references: [id])
-  customizerId Int?
-  createdAt    DateTime    @default(now()) // Track creation time
-  updatedAt    DateTime    @updatedAt
+  id             Int         @id @default(autoincrement())
+  shop           String?
+  title          String?
+  handle         String?
+  price          Float       @default(0.0)
+  comparePrice   Float       @default(0.0)
+  group          Json?
+  widthGroup     Json?
+  lengthGroup    Json?
+  widthFraction  String?     @db.MediumText
+  lengthFraction String?     @db.MediumText
+  image          String?
+  image64        String?     @db.LongText
+  position       Int?
+  info           String?     @db.LongText
+  widthInfo      String?     @db.LongText
+  lengthInfo     String?     @db.LongText
+  shortInfo      String?     @db.MediumText
+  activeStatus   Boolean     @default(false)
+  metadata       Json?
+  customizer     Customizer? @relation(fields: [customizerId], references: [id])
+  customizerId   Int?
+  createdAt      DateTime    @default(now()) // Track creation time
+  updatedAt      DateTime    @updatedAt
 }
 
 model PanelType {
@@ -314,16 +340,37 @@ model RoomLabel {
 }
 
 model TrackSize {
-  id                   Int         @id @default(autoincrement())
-  shop                 String?
-  options              Json?
-  title                String?
-  activeStatus         Boolean     @default(true)
-  metadata             Json?
-  info                 String?     @db.LongText
-  shortInfo            String?     @db.MediumText
-  customizer           Customizer? @relation(fields: [customizerId], references: [id])
-  customizerId         Int?
-  createdAt            DateTime    @default(now())
-  updatedAt            DateTime    @updatedAt
+  id           Int         @id @default(autoincrement())
+  shop         String?
+  options      Json?
+  title        String?
+  activeStatus Boolean     @default(true)
+  metadata     Json?
+  info         String?     @db.LongText
+  shortInfo    String?     @db.MediumText
+  customizer   Customizer? @relation(fields: [customizerId], references: [id])
+  customizerId Int?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model LiftType {
+  id                  Int         @id @default(autoincrement())
+  shop                String?
+  manualImage         String?     @db.LongText
+  motorizedImage      String?     @db.LongText
+  remoteControlTypes  Json?
+  manualPrice         Float       @default(0.0)
+  motorizedPrice      Float       @default(0.0)
+  isManual            Boolean?    @default(true)
+  activeStatus        Boolean     @default(false)
+  manualPanelTitle    String?     @default("Cordless (Manual)")
+  motorizedPanelTitle String?     @default("Motorized (Automated)")
+  metadata            Json?
+  info                String?     @db.LongText
+  shortInfo           String?     @db.MediumText
+  customizer          Customizer? @relation(fields: [customizerId], references: [id])
+  customizerId        Int?
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
 }
