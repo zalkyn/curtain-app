@@ -3,10 +3,12 @@
 client_id = "ed92623a46eb49cd535b2caba0f9509e"
 name = "curtain-customizer-v1"
 handle = "curtain-customizer-v1"
-application_url = "https://curtain-app-private-deae1f46dd84.herokuapp.com"
+application_url = "https://only-observer-poor-illustrated.trycloudflare.com"
 embedded = true
 
 [build]
+automatically_update_urls_on_dev = true
+dev_store_url = "app-development-and-testing.myshopify.com"
 include_config_on_deploy = true
 
 [access_scopes]
@@ -17,7 +19,13 @@ scopes = "read_inventory,read_orders,read_products,read_publications,read_themes
 redirect_urls = [
   "https://curtain-app-private-deae1f46dd84.herokuapp.com/auth/callback",
   "https://curtain-app-private-deae1f46dd84.herokuapp.com/auth/shopify/callback",
-  "https://curtain-app-private-deae1f46dd84.herokuapp.com/api/auth/callback"
+  "https://curtain-app-private-deae1f46dd84.herokuapp.com/api/auth/callback",
+  "https://statements-village-beds-detective.trycloudflare.com/auth/callback",
+  "https://statements-village-beds-detective.trycloudflare.com/auth/shopify/callback",
+  "https://statements-village-beds-detective.trycloudflare.com/api/auth/callback",
+  "https://only-observer-poor-illustrated.trycloudflare.com/auth/callback",
+  "https://only-observer-poor-illustrated.trycloudflare.com/auth/shopify/callback",
+  "https://only-observer-poor-illustrated.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -32,7 +40,7 @@ api_version = "2025-04"
   uri = "/webhooks/app/uninstalled"
 
 [app_proxy]
-url = "https://requiring-cyprus-played-ordinance.trycloudflare.com/app/curtain"
+url = "https://only-observer-poor-illustrated.trycloudflare.com/app/curtain"
 subpath = "curtain"
 prefix = "apps"
 

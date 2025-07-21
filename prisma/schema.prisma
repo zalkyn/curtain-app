@@ -317,6 +317,9 @@ model MemoryShaped {
   metadata       Json?
   info           String?     @db.LongText
   shortInfo      String?     @db.MediumText
+  priceRules     Json?
+  lengthRules    Json?
+  widthRules     Json?
   customizer     Customizer? @relation(fields: [customizerId], references: [id])
   customizerId   Int?
   createdAt      DateTime    @default(now())
