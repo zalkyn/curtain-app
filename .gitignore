@@ -18,6 +18,7 @@ shopify.app.curtain-customizer-draft-v1.toml
 .env
 .env.*
 
+shopify.app.toml
 
 
 

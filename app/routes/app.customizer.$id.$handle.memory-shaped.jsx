@@ -1,4 +1,4 @@
-import { Layout, Page, Card, Box, Text, InlineStack, FormLayout, TextField, Checkbox, DropZone, Button, Icon } from "@shopify/polaris";
+import { Layout, Page, Card, Box, Text, InlineStack, FormLayout, TextField, Checkbox, DropZone, Button, Icon, ButtonGroup, Divider } from "@shopify/polaris";
 import { DeleteIcon, EditIcon, ImageAddIcon } from "@shopify/polaris-icons"
 import { authenticate } from "../shopify.server";
 import { redirect } from "@remix-run/node";
@@ -72,6 +72,8 @@ export const action = async ({ request, params }) => {
             secondaryTitle: data?.secondaryTitle,
             isTie: data?.isTie,
             activeStatus: data?.activeStatus,
+            displayRules: data?.displayRules || [],
+            priceRules: data?.priceRules || []
         }
 
         const primaryFile = formData.get("primaryFile")
@@ -110,6 +112,25 @@ export default function MemoryShaped() {
     const [memoryShaped, setMemoryShaped] = useState(loaderData?.customizer?.memoryShaped[0] || null)
     const [prevMemoryShaped, setPrevMemoryShaped] = useState(loaderData?.customizer?.memoryShaped[0] || null)
 
+
+    // price rules based on length min and max
+    const emptyPriceRules = {
+        lengthMin: "",
+        lengthMax: "",
+        price: ""
+    };
+
+    const emptyDisplayRules = {
+        width: "",
+        length: ""
+    };
+
+
+    // const [priceRange, setPriceRange] = useState(loaderData?.customizer?.memoryShaped[0]?.priceRange || { min: 0, max: 0 })
+
+    const [displayRules, setDisplayRules] = useState(loaderData?.customizer?.memoryShaped[0]?.displayRules || [])
+    const [priceRules, setPriceRules] = useState(loaderData?.customizer?.memoryShaped[0]?.priceRules || [])
+
     const [primaryFile, setPrimaryFile] = useState(null)
     const [secondaryFile, setSecondaryFile] = useState(null)
 
@@ -120,6 +141,9 @@ export default function MemoryShaped() {
             setCustomizer(loaderData?.customizer)
             setPrevMemoryShaped(loaderData?.customizer?.memoryShaped[0] || null)
             setMemoryShaped(loaderData?.customizer?.memoryShaped[0] || null)
+
+            setDisplayRules(loaderData?.customizer?.memoryShaped[0]?.displayRules || [])
+            setPriceRules(loaderData?.customizer?.memoryShaped[0]?.priceRules || [])
         }
     }, [loaderData])
 
@@ -203,6 +227,8 @@ export default function MemoryShaped() {
         setMemoryShaped(prevMemoryShaped)
         setPrimaryFile(null)
         setSecondaryFile(null)
+        setDisplayRules(prevMemoryShaped?.displayRules || [])
+        setPriceRules(prevMemoryShaped?.priceRules || [])
     }
 
     const checkPandSFile = () => {
@@ -211,6 +237,24 @@ export default function MemoryShaped() {
         }
         return false
     }
+
+    const handleDisplayRules = () => {
+        setDisplayRules([...displayRules, emptyDisplayRules])
+    }
+
+    const handleAddNewPriceRange = () => {
+        setPriceRules([...priceRules, emptyPriceRules])
+    }
+
+    useEffect(() => {
+        if (memoryShaped) {
+            setMemoryShaped({
+                ...memoryShaped,
+                displayRules: displayRules,
+                priceRules: priceRules
+            })
+        }
+    }, [displayRules, priceRules])
 
     return <Page
         title="Memory Shaped"
@@ -233,6 +277,157 @@ export default function MemoryShaped() {
         ]}
     >
         <Layout>
+            <Layout.Section variant="fullWidth">
+                <Card>
+                    <InlineStack align="space-between" blockAlign="start">
+                        <Box>
+                            <Text variant="headingMd">Display & Price Rules</Text>
+                            <Text>Body memory shaped will be displayed based on selected length and width ranges</Text>
+                        </Box>
+                    </InlineStack>
+                    <Box paddingBlock={200}><Divider /></Box>
+                    <Card>
+                        <InlineStack align="space-between" blockAlign="center">
+                            <Box>
+                                <Text variant="headingMd">Display Rules</Text>
+                            </Box>
+                            <ButtonGroup>
+                                <Button onClick={() => handleDisplayRules()}>Add New Rule</Button>
+                            </ButtonGroup>
+                        </InlineStack>
+                        <Box paddingBlock={200} />
+                        {displayRules.length < 1 &&
+                            <Text variant="bodyMd" color="subdued">No rules added yet.</Text>
+                        }
+                        <FormLayout>
+                            {displayRules.map((rule, index) => (
+                                <FormLayout.Group key={index} condensed>
+                                    <TextField
+                                        type="number"
+                                        label="Width"
+                                        labelHidden
+                                        prefix="Width:"
+                                        value={rule.width || ""}
+                                        onChange={(value) => {
+                                            const newRules = [...displayRules];
+                                            newRules[index].width = parseFloat(value);
+                                            setDisplayRules(newRules);
+                                        }}
+                                        placeholder="0"
+                                        min={0}
+                                    />
+                                    <TextField
+                                        type="number"
+                                        label="Length"
+                                        labelHidden
+                                        prefix="Length:"
+                                        value={rule.length || ""}
+                                        onChange={(value) => {
+                                            const newRules = [...displayRules];
+                                            newRules[index].length = parseFloat(value);
+                                            setDisplayRules(newRules);
+                                        }}
+                                        placeholder="0"
+                                        min={0}
+                                        connectedRight={<Box paddingInlineStart={200}>
+                                            <Button
+                                                size="large"
+                                                icon={DeleteIcon}
+                                                onClick={() => {
+                                                    const newRules = displayRules.filter((_, i) => i !== index);
+                                                    setDisplayRules(newRules);
+                                                }}
+                                                accessibilityLabel="Delete Rule"
+                                            />
+                                        </Box>}
+                                    />
+
+                                </FormLayout.Group>
+                            ))}
+                        </FormLayout>
+                    </Card>
+
+                    <Box paddingBlock={300}>
+                        <Divider />
+                    </Box>
+
+                    <Card>
+                        <InlineStack align="space-between" blockAlign="center">
+                            <Box>
+                                <Text variant="headingMd">Price Rules</Text>
+                                <Text>The pricing in memory shaped is manually defined based on the length range</Text>
+                            </Box>
+                            <ButtonGroup>
+                                <Button onClick={() => handleAddNewPriceRange()}>Add New Range</Button>
+                            </ButtonGroup>
+                        </InlineStack>
+                        <Box paddingBlock={200} />
+                        {priceRules.length < 1 &&
+                            <Text variant="bodyMd" color="subdued">No price ranges added yet.</Text>
+                        }
+                        <FormLayout>
+                            {priceRules.map((rule, index) => (
+                                <FormLayout.Group key={index} condensed>
+                                    <TextField
+                                        type="number"
+                                        label="Length Min"
+                                        labelHidden
+                                        prefix="Length Min:"
+                                        value={rule.lengthMin || ""}
+                                        onChange={(value) => {
+                                            const newRules = [...priceRules];
+                                            newRules[index].lengthMin = parseFloat(value);
+                                            setPriceRules(newRules);
+                                        }}
+                                        placeholder="0"
+                                        min={0}
+                                    />
+                                    <TextField
+                                        type="number"
+                                        label="Length Max"
+                                        labelHidden
+                                        prefix="Length Max:"
+                                        value={rule.lengthMax || ""}
+                                        onChange={(value) => {
+                                            const newRules = [...priceRules];
+                                            newRules[index].lengthMax = parseFloat(value);
+                                            setPriceRules(newRules);
+                                        }}
+                                        placeholder="0"
+                                        min={0}
+                                    />
+                                    <TextField
+                                        type="number"
+                                        label="Price"
+                                        labelHidden
+                                        prefix="$"
+                                        value={rule.price || ""}
+                                        onChange={(value) => {
+                                            const newRules = [...priceRules];
+                                            newRules[index].price = parseFloat(value);
+                                            setPriceRules(newRules);
+                                        }}
+                                        placeholder="0"
+                                        min={0}
+                                        connectedRight={<Box paddingInlineStart={200}>
+                                            <Button
+                                                size="large"
+                                                icon={DeleteIcon}
+                                                onClick={() => {
+                                                    const newRules = priceRules.filter((_, i) => i !== index);
+                                                    setPriceRules(newRules);
+                                                }}
+                                                accessibilityLabel="Delete Price Range"
+                                            />
+                                        </Box>}
+                                    />
+
+                                </FormLayout.Group>
+                            ))}
+                        </FormLayout>
+                    </Card>
+                </Card>
+            </Layout.Section>
             <Layout.Section variant="oneThird">
                 <Card>
                     <InlineStack>
@@ -279,7 +474,7 @@ export default function MemoryShaped() {
                                     placeholder="Title"
                                 />
                             </FormLayout.Group>
-                            <TextField
+                            {/* <TextField
                                 type="number"
                                 label="Price"
                                 value={memoryShaped?.primaryPrice ? memoryShaped.primaryPrice : ""}
@@ -287,7 +482,7 @@ export default function MemoryShaped() {
                                 prefix="$"
                                 placeholder="10"
                                 min={0}
-                            />
+                            /> */}
                             <Checkbox
                                 label="Default selected"
                                 checked={memoryShaped?.isTie}
@@ -343,7 +538,7 @@ export default function MemoryShaped() {
                                     placeholder="Title"
                                 />
                             </FormLayout.Group>
-                            <TextField
+                            {/* <TextField
                                 type="number"
                                 label="Price"
                                 value={memoryShaped?.secondaryPrice ? memoryShaped.secondaryPrice : ""}
@@ -351,7 +546,7 @@ export default function MemoryShaped() {
                                 prefix="$"
                                 placeholder="0"
                                 min={0}
-                            />
+                            /> */}
                             <Checkbox
                                 label="Default selected"
                                 checked={!memoryShaped?.isTie}

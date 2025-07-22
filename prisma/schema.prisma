@@ -56,6 +56,7 @@ model Customizer {
   roomLabel    RoomLabel[]
   trackSize    TrackSize[]
   liftType     LiftType[]
+  border       Border[]
   createdAt    DateTime?         @default(now())
   updatedAt    DateTime?         @updatedAt
 }
@@ -182,6 +183,45 @@ model TrimSwatch {
   updatedAt    DateTime @updatedAt
   trim         Trim?    @relation(fields: [trimId], references: [id])
   trimId       Int?
+}
+
+model Border {
+  id           Int            @id @default(autoincrement())
+  shop         String?
+  title        String?
+  handle       String?
+  price        Float          @default(0.0)
+  comparePrice Float          @default(0.0)
+  position     Int?
+  info         String?        @db.LongText
+  activeStatus Boolean        @default(true)
+  metadata     Json?
+  createdAt    DateTime       @default(now()) // Track creation time
+  updatedAt    DateTime       @updatedAt
+  swatches     BorderSwatch[]
+  customizer   Customizer?    @relation(fields: [customizerId], references: [id])
+  customizerId Int?
+}
+
+model BorderSwatch {
+  id           Int      @id @default(autoincrement())
+  customizerId Int?
+  shop         String?
+  title        String?
+  handle       String?
+  price        Json?
+  comparePrice Json?
+  image        String?
+  image64      String?  @db.LongText
+  position     Int?
+  info         String?  @db.LongText
+  shortInfo    String?  @db.MediumText
+  activeStatus Boolean  @default(true)
+  metadata     Json?
+  createdAt    DateTime @default(now()) // Track creation time
+  updatedAt    DateTime @updatedAt
+  border       Border?  @relation(fields: [borderId], references: [id])
+  borderId     Int?
 }
 
 model Image {
@@ -317,6 +357,8 @@ model MemoryShaped {
   metadata       Json?
   info           String?     @db.LongText
   shortInfo      String?     @db.MediumText
+  priceRules     Json?
+  displayRules   Json?
   customizer     Customizer? @relation(fields: [customizerId], references: [id])
   customizerId   Int?
   createdAt      DateTime    @default(now())
