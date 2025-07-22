@@ -1873,19 +1873,26 @@
           ${widthGroupSelect}
           ${lengthGroupSelect}
         </div>`;
+
+
+        // Set initial visibility
+        this.updateMemoryShapedVisibility();
       }
     }
   
     handleSizeChange(e) {
       const select = e.target.closest('select');
       if (select) {
-        const value = JSON.parse(select.value);
         if (select.classList.contains('ccapp-ospswg-select')) {
+          const value = JSON.parse(select.value);
           this.config.spsOrderWidth = value;
           this.querySelector('.ccapp-width-display').textContent = `${value.width || 'N/A'} Inches`;
+          this.updateMemoryShapedVisibility();
         } else if (select.classList.contains('ccapp-ospslg-select')) {
+          const value = JSON.parse(select.value);
           this.config.spsOrderLength = value;
           this.querySelector('.ccapp-length-display').textContent = `${value.Length || 'N/A'} Inches`;
+          this.updateMemoryShapedVisibility();
         }
       }
     }
@@ -1937,9 +1944,35 @@
         wrapper.innerHTML = uiEL;
       }
     }
-  
+
+    updateMemoryShapedVisibility() {
+      if (!this.config.spsOrderWidth || !this.config.spsOrderLength || !this.memoryShaped?.displayRules) {
+        return;
+      }
+    
+      const selectedWidth = this.config.spsOrderWidth.width;
+      const selectedLength = this.config.spsOrderLength.Length;
+      const displayRules = this.memoryShaped.displayRules;
+    
+      // Check if the selected size is within the ranges of any display rule
+      const shouldShow = displayRules.some(rule => 
+        selectedWidth >= 1 && selectedWidth <= rule.width && 
+        selectedLength >= 1 && selectedLength <= rule.length
+      );
+    
+      const memoryShapedTab = this.querySelector('.ccapp-msc-tab[data-index="5"]');
+      if (memoryShapedTab) {
+        if (shouldShow) {
+          memoryShapedTab.style.display = 'block';
+        } else {
+          memoryShapedTab.style.display = 'none';
+        }
+      }
+    }
+
     memoryShapedUI() {
       console.log("memoryShaped===", this.memoryShaped);
+      console.log(this.memoryShaped.displayRules);
       const memoryShaped = this.memoryShaped || {};
   
       const memoryShapedItems = [
