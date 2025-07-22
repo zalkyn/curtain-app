@@ -72,8 +72,7 @@ export const action = async ({ request, params }) => {
             secondaryTitle: data?.secondaryTitle,
             isTie: data?.isTie,
             activeStatus: data?.activeStatus,
-            lengthRules: data?.lengthRules || [],
-            widthRules: data?.widthRules || [],
+            displayRules: data?.displayRules || [],
             priceRules: data?.priceRules || []
         }
 
@@ -121,19 +120,15 @@ export default function MemoryShaped() {
         price: ""
     };
 
-    const emptyLengthRules = {
-        min: "",
-        max: ""
+    const emptyDisplayRules = {
+        width: "",
+        length: ""
     };
 
-    const emptyWidthRules = {
-        min: "",
-        max: ""
-    };
 
     // const [priceRange, setPriceRange] = useState(loaderData?.customizer?.memoryShaped[0]?.priceRange || { min: 0, max: 0 })
-    const [legnthRules, setLengthRules] = useState(loaderData?.customizer?.memoryShaped[0]?.lengthRules || [])
-    const [widthRules, setWidthRules] = useState(loaderData?.customizer?.memoryShaped[0]?.widthRules || [])
+
+    const [displayRules, setDisplayRules] = useState(loaderData?.customizer?.memoryShaped[0]?.displayRules || [])
     const [priceRules, setPriceRules] = useState(loaderData?.customizer?.memoryShaped[0]?.priceRules || [])
 
     const [primaryFile, setPrimaryFile] = useState(null)
@@ -146,8 +141,8 @@ export default function MemoryShaped() {
             setCustomizer(loaderData?.customizer)
             setPrevMemoryShaped(loaderData?.customizer?.memoryShaped[0] || null)
             setMemoryShaped(loaderData?.customizer?.memoryShaped[0] || null)
-            setLengthRules(loaderData?.customizer?.memoryShaped[0]?.lengthRules || [])
-            setWidthRules(loaderData?.customizer?.memoryShaped[0]?.widthRules || [])
+
+            setDisplayRules(loaderData?.customizer?.memoryShaped[0]?.displayRules || [])
             setPriceRules(loaderData?.customizer?.memoryShaped[0]?.priceRules || [])
         }
     }, [loaderData])
@@ -232,8 +227,7 @@ export default function MemoryShaped() {
         setMemoryShaped(prevMemoryShaped)
         setPrimaryFile(null)
         setSecondaryFile(null)
-        setLengthRules(prevMemoryShaped?.lengthRules || [])
-        setWidthRules(prevMemoryShaped?.widthRules || [])
+        setDisplayRules(prevMemoryShaped?.displayRules || [])
         setPriceRules(prevMemoryShaped?.priceRules || [])
     }
 
@@ -244,12 +238,8 @@ export default function MemoryShaped() {
         return false
     }
 
-    const handleAddNewLengthRange = () => {
-        setLengthRules([...legnthRules, emptyLengthRules])
-    }
-
-    const handleAddNewWidthRange = () => {
-        setWidthRules([...widthRules, emptyWidthRules])
+    const handleDisplayRules = () => {
+        setDisplayRules([...displayRules, emptyDisplayRules])
     }
 
     const handleAddNewPriceRange = () => {
@@ -260,12 +250,11 @@ export default function MemoryShaped() {
         if (memoryShaped) {
             setMemoryShaped({
                 ...memoryShaped,
-                lengthRules: legnthRules,
-                widthRules: widthRules,
+                displayRules: displayRules,
                 priceRules: priceRules
             })
         }
-    }, [legnthRules, widthRules, priceRules])
+    }, [displayRules, priceRules])
 
     return <Page
         title="Memory Shaped"
@@ -292,7 +281,7 @@ export default function MemoryShaped() {
                 <Card>
                     <InlineStack align="space-between" blockAlign="start">
                         <Box>
-                            <Text variant="headingMd">Length, Width & Price Rules</Text>
+                            <Text variant="headingMd">Display & Price Rules</Text>
                             <Text>Body memory shaped will be displayed based on selected length and width ranges</Text>
                         </Box>
                     </InlineStack>
@@ -300,43 +289,43 @@ export default function MemoryShaped() {
                     <Card>
                         <InlineStack align="space-between" blockAlign="center">
                             <Box>
-                                <Text variant="headingMd">Length Range</Text>
+                                <Text variant="headingMd">Display Rules</Text>
                             </Box>
                             <ButtonGroup>
-                                <Button onClick={() => handleAddNewLengthRange()}>Add New Range</Button>
+                                <Button onClick={() => handleDisplayRules()}>Add New Rule</Button>
                             </ButtonGroup>
                         </InlineStack>
                         <Box paddingBlock={200} />
-                        {legnthRules.length < 1 &&
-                            <Text variant="bodyMd" color="subdued">No length ranges added yet.</Text>
+                        {displayRules.length < 1 &&
+                            <Text variant="bodyMd" color="subdued">No rules added yet.</Text>
                         }
                         <FormLayout>
-                            {legnthRules.map((rule, index) => (
+                            {displayRules.map((rule, index) => (
                                 <FormLayout.Group key={index} condensed>
                                     <TextField
                                         type="number"
-                                        label="Min"
+                                        label="Width"
                                         labelHidden
-                                        prefix="Min:"
-                                        value={rule.min || ""}
+                                        prefix="Width:"
+                                        value={rule.width || ""}
                                         onChange={(value) => {
-                                            const newRules = [...legnthRules];
-                                            newRules[index].min = parseFloat(value);
-                                            setLengthRules(newRules);
+                                            const newRules = [...displayRules];
+                                            newRules[index].width = parseFloat(value);
+                                            setDisplayRules(newRules);
                                         }}
                                         placeholder="0"
                                         min={0}
                                     />
                                     <TextField
                                         type="number"
-                                        label="Max"
+                                        label="Length"
                                         labelHidden
-                                        prefix="Max:"
-                                        value={rule.max || ""}
+                                        prefix="Length:"
+                                        value={rule.length || ""}
                                         onChange={(value) => {
-                                            const newRules = [...legnthRules];
-                                            newRules[index].max = parseFloat(value);
-                                            setLengthRules(newRules);
+                                            const newRules = [...displayRules];
+                                            newRules[index].length = parseFloat(value);
+                                            setDisplayRules(newRules);
                                         }}
                                         placeholder="0"
                                         min={0}
@@ -345,75 +334,10 @@ export default function MemoryShaped() {
                                                 size="large"
                                                 icon={DeleteIcon}
                                                 onClick={() => {
-                                                    const newRules = legnthRules.filter((_, i) => i !== index);
-                                                    setLengthRules(newRules);
+                                                    const newRules = displayRules.filter((_, i) => i !== index);
+                                                    setDisplayRules(newRules);
                                                 }}
-                                                accessibilityLabel="Delete Length Range"
-                                            />
-                                        </Box>}
-                                    />
-
-                                </FormLayout.Group>
-                            ))}
-                        </FormLayout>
-                    </Card>
-
-                    <Box paddingBlock={300}>
-                        <Divider />
-                    </Box>
-
-                    <Card>
-                        <InlineStack align="space-between" blockAlign="center">
-                            <Box>
-                                <Text variant="headingMd">Width Range</Text>
-                            </Box>
-                            <ButtonGroup>
-                                <Button onClick={() => handleAddNewWidthRange()}>Add New Range</Button>
-                            </ButtonGroup>
-                        </InlineStack>
-                        <Box paddingBlock={200} />
-                        {widthRules.length < 1 &&
-                            <Text variant="bodyMd" color="subdued">No width ranges added yet.</Text>
-                        }
-                        <FormLayout>
-                            {widthRules.map((rule, index) => (
-                                <FormLayout.Group key={index} condensed>
-                                    <TextField
-                                        type="number"
-                                        label="Min"
-                                        labelHidden
-                                        prefix="Min:"
-                                        value={rule.min || ""}
-                                        onChange={(value) => {
-                                            const newRules = [...widthRules];
-                                            newRules[index].min = parseFloat(value);
-                                            setWidthRules(newRules);
-                                        }}
-                                        placeholder="0"
-                                        min={0}
-                                    />
-                                    <TextField
-                                        type="number"
-                                        label="Max"
-                                        labelHidden
-                                        prefix="Max:"
-                                        value={rule.max || ""}
-                                        onChange={(value) => {
-                                            const newRules = [...widthRules];
-                                            newRules[index].max = parseFloat(value);
-                                            setWidthRules(newRules);
-                                        }}
-                                        placeholder="0"
-                                        min={0}
-                                        connectedRight={<Box paddingInlineStart={200}>
-                                            <Button
-                                                size="large"
-                                                icon={DeleteIcon}
-                                                onClick={() => {
-                                                    const newRules = widthRules.filter((_, i) => i !== index);
-                                                    setWidthRules(newRules);
-                                                }}
-                                                accessibilityLabel="Delete Width Range"
+                                                accessibilityLabel="Delete Rule"
                                             />
                                         </Box>}
                                     />

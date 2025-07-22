@@ -3,7 +3,7 @@
 client_id = "ed92623a46eb49cd535b2caba0f9509e"
 name = "curtain-customizer-v1"
 handle = "curtain-customizer-v1"
-application_url = "https://only-observer-poor-illustrated.trycloudflare.com"
+application_url = "https://stating-newcastle-treated-muscle.trycloudflare.com"
 embedded = true
 
 [build]
@@ -25,7 +25,10 @@ redirect_urls = [
   "https://statements-village-beds-detective.trycloudflare.com/api/auth/callback",
   "https://only-observer-poor-illustrated.trycloudflare.com/auth/callback",
   "https://only-observer-poor-illustrated.trycloudflare.com/auth/shopify/callback",
-  "https://only-observer-poor-illustrated.trycloudflare.com/api/auth/callback"
+  "https://only-observer-poor-illustrated.trycloudflare.com/api/auth/callback",
+  "https://stating-newcastle-treated-muscle.trycloudflare.com/auth/callback",
+  "https://stating-newcastle-treated-muscle.trycloudflare.com/auth/shopify/callback",
+  "https://stating-newcastle-treated-muscle.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -40,7 +43,7 @@ api_version = "2025-04"
   uri = "/webhooks/app/uninstalled"
 
 [app_proxy]
-url = "https://only-observer-poor-illustrated.trycloudflare.com/app/curtain"
+url = "https://stating-newcastle-treated-muscle.trycloudflare.com/app/curtain"
 subpath = "curtain"
 prefix = "apps"
 
