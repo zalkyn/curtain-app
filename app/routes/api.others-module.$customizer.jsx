@@ -44,7 +44,7 @@ export const loader = async ({ request, params }) => {
                     swatches: true
                 }
             },
-            borders: {
+            border: {
                 include: {
                     swatches: true
                 }
@@ -74,7 +74,7 @@ export const loader = async ({ request, params }) => {
     const roomLabel = customizer?.roomLabel[0] || null;
     const trackSize = customizer?.trackSize?.[0] || null;
     const liftType = customizer?.liftType?.[0] || null;
-    const border = customizer?.borders?.[0] || null;
+    const border = customizer?.border?.[0] || null;
 
     // wait 20 seconds 
     // await new Promise(resolve => setTimeout(resolve, 20000));
