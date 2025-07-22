@@ -354,7 +354,7 @@ export default function MemoryShaped() {
                     <Card>
                         <InlineStack align="space-between" blockAlign="center">
                             <Box>
-                                <Text variant="headingMd">Price Range</Text>
+                                <Text variant="headingMd">Price Rules</Text>
                                 <Text>The pricing in memory shaped is manually defined based on the length range</Text>
                             </Box>
                             <ButtonGroup>

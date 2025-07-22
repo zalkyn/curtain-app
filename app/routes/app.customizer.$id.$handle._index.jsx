@@ -170,6 +170,17 @@ export default function SingleCustomizer() {
             <Layout.Section>
                 <Card>
                     <InlineStack align="space-between" blockAlign="center" gap={400}>
+                        <Text variant="headingMd">Border</Text>
+                        <ButtonGroup>
+                            <Button url={`/app/customizer/${customizer?.id}/${customizer?.handle}/border`}>Explore</Button>
+                        </ButtonGroup>
+                    </InlineStack>
+                </Card>
+            </Layout.Section>
+
+            <Layout.Section>
+                <Card>
+                    <InlineStack align="space-between" blockAlign="center" gap={400}>
                         <Text variant="headingMd">Lift Type</Text>
                         <ButtonGroup>
                             <Button url={`/app/customizer/${customizer?.id}/${customizer?.handle}/lift-type`}>Explore</Button>
