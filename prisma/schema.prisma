@@ -186,21 +186,24 @@ model TrimSwatch {
 }
 
 model Border {
-  id           Int            @id @default(autoincrement())
-  shop         String?
-  title        String?
-  handle       String?
-  price        Float          @default(0.0)
-  comparePrice Float          @default(0.0)
-  position     Int?
-  info         String?        @db.LongText
-  activeStatus Boolean        @default(true)
-  metadata     Json?
-  createdAt    DateTime       @default(now()) // Track creation time
-  updatedAt    DateTime       @updatedAt
-  swatches     BorderSwatch[]
-  customizer   Customizer?    @relation(fields: [customizerId], references: [id])
-  customizerId Int?
+  id                     Int            @id @default(autoincrement())
+  shop                   String?
+  title                  String?
+  handle                 String?
+  price                  Float          @default(0.0)
+  comparePrice           Float          @default(0.0)
+  position               Int?
+  info                   String?        @db.LongText
+  activeStatus           Boolean        @default(true)
+  metadata               Json?
+  leadingEdgeTitle       String?        @default("Leading Edge")
+  bottomTitle            String?        @default("Bottom")
+  leadingEdgeBottomTitle String?        @default("Leading Edge Bottom")
+  createdAt              DateTime       @default(now()) // Track creation time
+  updatedAt              DateTime       @updatedAt
+  swatches               BorderSwatch[]
+  customizer             Customizer?    @relation(fields: [customizerId], references: [id])
+  customizerId           Int?
 }
 
 model BorderSwatch {
