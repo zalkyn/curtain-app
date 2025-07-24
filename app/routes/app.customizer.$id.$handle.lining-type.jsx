@@ -5,7 +5,7 @@ import prisma from "../db.server";
 import { json, useActionData, useLoaderData, useSubmit } from "@remix-run/react";
 import { useEffect, useState, Suspense } from "react";
 import { useAppBridge } from "@shopify/app-bridge-react";
-import TextEditor from "../component/textEditor"; 
+import TextEditor from "../component/textEditor";
 
 export const loader = async ({ request, params }) => {
     const { session } = await authenticate.admin(request);
@@ -120,7 +120,7 @@ export const action = async ({ request }) => {
 
             await prisma.liningType.update({
                 where: { id: liningTypeId },
-                data: { info: data.info }
+                data: { info: data.info, activeStatus: data.activeStatus }
             });
 
             return json({ role, success: true });
@@ -241,7 +241,7 @@ export default function CustomizerLiningType() {
             title: newItem?.title,
             sr: newItem?.sr,
             price: parseFloat(newItem?.price) || 0,
-            liningTypeId: liningType?.id || null,
+            liningTypeId: liningType?.id || null
         };
         if (imageBase64) data.image64 = imageBase64;
         const formData = new FormData();
@@ -277,7 +277,7 @@ export default function CustomizerLiningType() {
     const handleUpdateInfo = async () => {
         setLoading({ ...loading, infoBtn: true });
         const formData = new FormData();
-        formData.append("data", JSON.stringify({ liningTypeId: liningType?.id, info: liningType?.info || "" }));
+        formData.append("data", JSON.stringify({ liningTypeId: liningType?.id, info: liningType?.info || "", activeStatus: liningType?.activeStatus }));
         formData.append("role", "update-lining-info");
         submit(formData, { method: "POST", encType: "multipart/form-data" });
     };
@@ -350,6 +350,14 @@ export default function CustomizerLiningType() {
                 <Layout.Section>
                     <Card>
                         <Box paddingBlockEnd={100}>
+                            {/* activeStatus  */}
+                            <Checkbox
+                                label="Active Status"
+                                checked={liningType?.activeStatus}
+                                onChange={(value) => updateInput("activeStatus", value)}
+                                disabled={loading?.infoBtn}
+                            />
+                            <Box paddingBlockEnd={300}></Box>
                             <Text variant="headingMd">Info</Text>
                             <Box paddingBlock={100} />
                             <Suspense fallback={<Text>Loading...</Text>}>
@@ -364,9 +372,9 @@ export default function CustomizerLiningType() {
                                     variant="primary"
                                     onClick={handleUpdateInfo}
                                     loading={loading.infoBtn}
-                                    disabled={!liningType?.info || (loaderData?.customizer?.liningType[0]?.info === liningType?.info)}
+                                    // disabled={!liningType?.info || (loaderData?.customizer?.liningType[0]?.info === liningType?.info)}
                                 >
-                                    Save Info
+                                    Update
                                 </Button>
                             </Box>
                         </Box>

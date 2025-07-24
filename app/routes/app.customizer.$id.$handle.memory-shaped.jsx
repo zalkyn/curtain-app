@@ -279,6 +279,14 @@ export default function MemoryShaped() {
         <Layout>
             <Layout.Section variant="fullWidth">
                 <Card>
+                    {/* activeStatus  */}
+                    <Checkbox
+                        label="Active Status"
+                        checked={memoryShaped?.activeStatus || false}
+                        onChange={(value) => setMemoryShaped({ ...memoryShaped, activeStatus: value })}
+                    />
+                    <Box paddingBlockStart={300} />
+
                     <InlineStack align="space-between" blockAlign="start">
                         <Box>
                             <Text variant="headingMd">Display & Price Rules</Text>
