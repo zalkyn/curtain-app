@@ -1,0 +1,1133 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap');
+
+.ccapp-wrapper {
+    /* max-width: 1200px; */
+    /* height: 100%; */
+    /* display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-gap: 20px; */
+    margin-block: 28px 14px;
+  }
+
+  .ccapp-media {
+    height: max-content;
+    /* position: sticky;
+    top: 100px; */
+    position: relative;
+    overflow: hidden;
+  }
+
+  .thumb-container {
+    font-size: 0;
+    line-height: 0;
+    display: flex;
+    flex-direction: column;
+    background-repeat: repeat;
+    background-size: 120px;
+    /* max-height: 540px; */
+  }
+
+  .thumb-container img {
+    width: 100%;
+    height: auto;
+  }
+
+  .ccapp-collections-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .ccapp-collection {
+    background-color: #FFFFFF;
+    border-radius: 6px;
+    padding: 6px;
+    box-sizing: border-box;
+  }
+
+  .ccapp-collection-list {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .ccapp-collection-list-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 14px;
+    row-gap: 5px;
+    height: 0;
+    transition: 0.5s;
+    overflow: hidden;
+  }
+
+  .ccapp-collection-title {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+
+    .ccapp-ctth-svg {
+      transform-origin: center;
+      transition: 0.4s;
+    }
+  }
+
+  .ccapp-ct-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  p.ccapp-ct-p {
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    color: #414141;
+  }
+
+  .ccapp-cti-btn {
+    background: transparent;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    svg {
+      width: 12px;
+      height: 12px;
+      fill: #000000bf;
+    }
+  }
+
+  .ccapp-collection.active {
+    .ccapp-collection-title {
+      .ccapp-ctth-svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .cf-icon-svg{
+    width: 12px;
+    height: 12px;
+    fill: #000000bf;    
+  }
+
+  .ccapp-swatch-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    box-sizing: border-box;
+    padding: 15px 10px 15px 10px;
+    min-height: 100px;
+  }
+
+  .ccapp-swatch-wrapper h4 {
+    margin: 0;
+    font-size: 13px;
+    min-width: max-content;
+    margin-left: 3px;
+    line-height: 1;
+  }
+
+  .ccapp-swatch img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    cursor: pointer;
+  }
+
+  .ccapp-swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .ccapp-swatch-infos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ccapp-swatch-title {
+    margin: 0;
+    line-height: 1;
+    font-size: 10px;
+  }
+
+  .ccapp-swatch-btn {
+    border: none;
+    background: transparent;
+    width: 15px;
+    height: max-content;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    svg {
+      width: 16px;
+    }
+  }
+
+  .ccapp-sps-wrapper {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    grid-gap: 10px;
+  }
+
+  .ccapp-sps-size-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .ccapp-sps-diagram img {
+    width: 100%;
+    height: auto;
+  }
+
+  .ccapp-sps-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ccapp-modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 50%);
+    z-index: -999900;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .ccapp-modal-container.active {
+    z-index: 999900;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .ccapp-modal-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ccapp-modal-content {
+    width: 600px;
+    background: white;
+    box-sizing: border-box;
+    padding: 10px 10px;
+    position: relative;
+  }
+
+  .ccapp-smc {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-gap: 10px;
+  }
+
+  .ccapp-smc-media {
+    display: flex;
+    img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
+      object-fit: cover;
+    }
+  }
+
+  .ccapp-smc-info {
+    font-size: 12px;
+  }
+
+  .ccapp-smc-title {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 5px 0 8px 0;
+    border-bottom: .5px solid #cdc4c4;
+    padding-bottom: 8px;
+  }
+
+  .ccapp-smc-description {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    * {
+      margin: 0;
+      line-height: 1.4;
+    }
+    br {
+      display: block;
+      height: 5px;
+      padding: 0;
+      margin: 0;
+    }
+    h1 {
+      font-size: 22px;
+    }
+    h2 {
+      font-size: 20px;
+    }
+    p {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+  }
+
+  .ccapp-modal-close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: transparent;
+    border: none;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .ccapp-cmc {
+    box-sizing: border-box;
+    padding: 5px 20px 20px 20px;
+  }
+
+  .ccapp-cmc-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    line-height: 1.5;
+    border-bottom: .5px solid #aba2a2;
+    padding-bottom: 10px;
+  }
+
+  .ccapp-cmc-description {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    * {
+      margin: 0;
+      line-height: 1.4;
+    }
+    br {
+      display: block;
+      height: 5px;
+      padding: 0;
+      margin: 0;
+    }
+    h1 {
+      font-size: 22px;
+    }
+    h2 {
+      font-size: 20px;
+    }
+    p {
+      font-size: 16px;
+    }
+  }
+
+  .ccapp-spswgi-label,
+  .ccapp-spslgi-label {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+  }
+
+  .ccapp-spsgi-btn {
+    background: transparent;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    svg {
+      width: 16px;
+    }
+  }
+
+  .ccapp-ospswg-select,
+  .ccapp-ospslg-select,
+  .ccapp-spp-select,
+  .ccapp-border-select {
+    box-sizing: border-box;
+    padding: 7px 6px;
+    margin: 0;
+    border-radius: 0px;
+    font-size: 15px;
+    color: black;
+  }
+
+  .ccapp-ospswg-select:focus-visible,
+  .ccapp-ospslg-select:focus-visible,
+  .ccapp-spp-select:focus-visible,
+  .ccapp-border-select:focus-visible {
+    outline: none;
+    box-shadow: unset;
+    outline-offset: unset;
+  }
+
+  .ccapp-osps-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ccapp-osps-htitle {
+    margin: 0 0 0 0;
+    font-family: "Archivo", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0px;
+    text-transform: uppercase;
+    color: #414141;
+  }
+
+  .ccapp-ospshti-btn,
+  .ccapp-lthti-btn,
+  .ccapp-ots-btn,
+  .ccapp-pt-btn,
+  .ccapp-lt-btn,
+  .ccapp-trim-modal-opener,
+  .ccapp-border-modal-opener {
+    background: transparent;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+  }
+
+  .ccapp-drawer-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 50%);
+    z-index: -999900;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .ccapp-drawer-container.active {
+    z-index: 999900;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .ccapp-drawer-wrapper {
+    position: absolute;
+    width: 450px;
+    height: 100%;
+    background: white;
+    right: 0;
+    top: 0;
+    transform: translateX(100%);
+    transition: .4s;
+    overflow: auto;
+    height: calc(100vh - 0px);
+  }
+
+  .ccapp-drawer-container.active .ccapp-drawer-wrapper {
+    transform: translateX(0);
+  }
+
+  .ccapp-drawer-content {
+    position: relative;
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  .ccapp-drawer-close-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: transparent;
+    padding: 0px;
+    margin: 0;
+    display: flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+  }
+
+  .ccapp-msc-tab-heading {
+    display: grid;
+    grid-template-columns: 1fr 30px;
+    grid-gap: 15px;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 8px 12px;
+    background-color: #FFFFFF;
+    border: 1px solid #F0F0F0;
+    border-radius: 8px;
+  }
+
+  .mcct-icon-svg {
+    transform-origin: center;
+    transition: .5s;
+    justify-self: end;
+  }
+
+  .ccapp-collection-heading {
+    margin: 0 0 0 0;
+    font-family: "Archivo", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0px;
+    text-transform: uppercase;
+    color: #414141;
+  }
+
+  .ccapp-msc-tab-content {
+    height: 0px;
+    overflow: hidden;
+    visibility: hidden;
+    transition: all .5s;
+    box-sizing: border-box;
+    /* border-top: 1px solid #ede7e7; */
+  }
+
+  .ccapp-msc-tab {
+    box-sizing: border-box;
+    /* border: 1px solid #ede7e7; */
+    background-color: #FAF9F6;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 8px 20px;
+  }
+  /* .ccapp-msc-tab {
+    display: none;
+  }
+  .ccapp-msc-tab[data-index="1"] {
+    display: block;
+  } */
+  .ccapp-msc-tab.active .ccapp-msc-tab-content {
+    visibility: visible;
+  }
+
+  .ccapp-msc-tab.active .mcct-icon-svg {
+    transform: rotate(180deg);
+  }
+
+  .ccapp-collection-container {
+    box-sizing: border-box;
+    padding: 10px 10px 25px 10px;
+  }
+
+  .ccapp-swatch-container {
+
+  }
+
+  .ccapp-single-panel-size-container {
+    box-sizing: border-box;
+    padding: 10px 10px 25px 10px;
+  }
+
+  .ccapp-swatch-image.active {
+    box-sizing: border-box;
+    box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
+  }
+
+  .ccapp-sc-heading {
+    background-color: #ffffff;
+    box-sizing: border-box;
+    padding: 10px 10px 10px 10px;
+    border-radius: 8px;
+
+    h3 {
+      margin: 0 0 0 0;
+      font-family: "Archivo", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0px;
+      text-transform: uppercase;
+      color: #414141;
+    }
+  }
+
+  .ccapp-lining-type-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+    box-sizing: border-box;
+    padding: 10px 10px 25px 10px;
+  }
+
+  .ccapp-lining-type-item,
+  .ccapp-tieback-item,
+  .ccapp-memory-shaped-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .ccapp-lining-type-image,
+  .ccapp-tieback-image,
+  .ccapp-memory-shaped-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .ccapp-lining-type-item.active .ccapp-lining-type-image {
+    box-sizing: border-box;
+    box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
+  }
+
+  .ccapp-tieback-item.active .ccapp-tieback-image {
+    box-sizing: border-box;
+    box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
+  }
+
+  .ccapp-memory-shaped-item.active .ccapp-memory-shaped-image {
+    box-sizing: border-box;
+    box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
+  }
+  
+  .ccapp-border-swatch.active .ccapp-border-swatch-image {
+    box-sizing: border-box;
+    box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
+  }
+
+  .ccapp-lining-type-title,
+  .ccapp-tieback-title,
+  .ccapp-memory-shaped-title {
+    margin: 0;
+    font-size: 12px;
+    text-align: center;
+    line-height: 1;
+    color: black;
+  }
+
+  .ccapp-lining-type-sr {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    color: white;
+  }
+
+  .ccapp-tieback-wrapper,
+  .ccapp-bms-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+    box-sizing: border-box;
+    padding: 10px 10px 25px 10px;
+  }
+
+  .ccapp-rl-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-column-gap: 15px;
+    row-gap: 15px;
+    box-sizing: border-box;
+    padding: 10px 10px 25px 10px;
+
+    select, input {
+      width: 100%;
+      height: 33px;
+      box-sizing: border-box;
+      padding: 7px 2px;
+      outline: none;
+      box-shadow: unset;
+      outline-offset: unset;
+    }
+  }
+
+  .ccapp-order-track-size-container {
+    box-sizing: border-box;
+    padding: 10px 10px 25px 10px;
+  }
+
+  .ccapp-order-track-size-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .ccapp-order-track-size-buttons {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .ccapp-ots-button {
+    padding: 5px 10px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ccapp-ots-button.active,
+  .ccapp-lift-type-button.active {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+    &:hover {
+      background: #000;
+      color: #fff;
+      border-color: #000;
+    }
+  }
+
+  .ccapp-ots-button:hover {
+    background: #f0f0f0;
+  }
+
+  .ccapp-spp-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ccapp-single-panel-pair-container {
+    box-sizing: border-box;
+    padding: 10px 10px 25px 10px;
+  }
+
+  .ccapp-spp-options {
+    display: flex;
+    gap: 20px;
+  }
+
+  .ccapp-spp-radio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .ccapp-spp-radio--inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ccapp-spp-position {
+    display: block; /* Changed to block by default */
+  }
+
+  .ccapp-spp-position.hide {
+    display: none; /* Hidden when Pair is selected */
+  }
+
+  .ccapp-lift-type-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+    padding: 10px;
+  }
+
+  .ccapp-lift-type-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .ccapp-lift-type-image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .ccapp-lift-type-title {
+    font-size: 12px;
+    text-align: center;
+    margin: 0;
+  }
+
+  .ccapp-lift-type-item.active .ccapp-lift-type-image {
+    box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
+  }
+
+
+  .ccapp-lift-type-btns-container {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    transition: opacity 0.3s ease;
+  }
+
+  .ccapp-lift-type-btns-container.hide {
+    display: none;
+  }
+
+  .ccapp-lift-type-btns-container button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+  }
+
+  .ccapp-lift-type-btns-container button:hover {
+    background: #f0f0f0;
+  }
+
+
+.ccapp-trim-wrapper {
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  box-sizing: border-box;
+  padding: 10px 10px 25px 10px;
+}
+
+.ccapp-trim-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.ccapp-trim-image {
+  width: auto;
+  height: 100%;
+  max-height: 140px;
+}
+
+.ccapp-trim-item.active .ccapp-trim-image {
+  box-sizing: border-box;
+  box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black;
+}
+
+.ccapp-trim-title {
+  margin: 0;
+  font-size: 12px;
+  text-align: center;
+  line-height: 1;
+  color: black;
+}
+
+
+.ccapp-border-ui {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+  margin-top: 20px;
+}
+.ccapp-border-swatch-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+}
+.ccapp-border-swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+}
+.ccapp-border-swatch img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    cursor: pointer;
+}
+.ccapp-border-swatch-title {
+    margin: 0;
+    font-size: 12px;
+    text-align: center;
+}
+.ccapp-border-dropdowns {
+    display: flex;
+    gap: 10px;
+}
+.ccapp-border-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.ccapp-border-select {
+    padding: 5px;
+    font-size: 14px;
+}
+
+.curtain-fill {
+    display: block;
+    /* background-image: url("//trial-again-test.myshopify.com/cdn/shop/files/Group_1_1.png?v=1724333516&width=500"); */
+    background-repeat: repeat;
+    background-size: 10px;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+
+    font-size: 0;
+    line-height: 0;
+    display: flex;
+    flex-direction: column;
+    background-repeat: repeat;
+    background-size: 50px 50px;
+    /* max-height: 540px; */
+}
+
+.trim-fill, .border-fill {
+    display: block;
+    background-repeat: repeat;
+    background-size: 7px;
+    position: absolute;
+    top: 50%;
+    left: 35%;
+    width: 11%;
+    height: 94%;
+    transform: translate(-53%, -43%);
+    z-index: -1;
+    /* border-radius: 20px; */
+    clip-path: polygon(  /* Top edge */  -6% -3%,       /* top-left wave bump */  1% 8%,          -1% 17%,  0% 34%,  2% 38%,  3% 50%,  4% 60%,  4% 70%,  6% 80%,  8% 87%,  /* Bottom-left to bottom-right */  14% 102%,     /* bottom-left inward curve */  86% 102%,     /* bottom-right inward curve */  /* Right side waves (mirroring left) */  94% 93%,94% 93%,  95% 89%,  94% 80%,  96% 70%,  96% 60%,  97% 50%,  98% 39%,  99% 34%,  100% 20%,  98% -1%      /* top-right wave bump */);
+
+}
+
+.border-bottom-fill {
+    display: block;
+    background-repeat: repeat;
+    background-size: 10px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 28%;
+    /* transform: translate(-52%, -50%); */
+    z-index: -1;
+    border-radius: 20px;
+    /* clip-path: polygon(0% 100%, 20% 0%, 21% 1px, 22% 0%, 23% 3px, 24% 1px, 25% 2px, 26% 2px, 27% -6px, 28% 0%, 29% 3px, 30% 1px, 31% 3px, 32% 4px, 33% 2px, 34% 3px, 35% 2px, 36% 2px, 37% 2px, 38% 3px, 39% 2px, 40% 1px, 41% 3px, 42% 2px, 43% 1px, 44% 0%, 45% 1%, 46% 0%, 47% 1%, 48% 0%, 49% 1%, 50% 0%, 51% 1%, 52% 0%, 53% 1%, 54% 5%, 55% 5%, 56% 5px, 57% 2px, 58% 3px, 59% 3px, 60% 2px, 61% 4px, 62% 2px, 63% 3px, 64% 1px, 65% 2px, 66% 3px, 67% 4px, 68% 3px, 69% 2px, 70% 1px, 71% 4px, 72% 1px, 73% 4px, 74% 2px, 75% 5px, 76% 2px, 77% 4px, 78% 1px, 79% 4px, 80% 4px, 100% 100%); */
+}
+
+
+
+
+.ccapp-collection-list-button {
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  background: #ffffff;
+  border: 1px solid #414141;
+  color: #414141;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin: 2px;
+  text-align: center;
+  display: inline-block;
+  opacity: 1;
+  padding: 8px 12px;
+}
+.ccapp-collection-list-button.active {
+  color: #fff;
+  border-color: #414141;
+  background: #414141;
+  &:hover {
+    background: #414141;
+    color: #fff;
+  }
+}
+.ccapp-collection-list-button:hover {
+  background: #f5f3f3;
+}
+
+
+
+
+.ccapp-info{
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #ffffff;
+  max-width: 35%;
+  min-width: 35%;
+  margin: 37px 66px 0 0;
+  max-height: 80%;
+  overflow-y: scroll;
+  box-shadow: 0 0 10px rgb(0 0 0 / 25%);
+}
+
+.ccapp-info {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox, Safari 18.2+, Chromium 121+ */
+}
+.ccapp-info::-webkit-scrollbar { 
+  display: none;  /* Older Safari and Chromium */
+}
+
+
+
+.ccapp--text-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 18px;
+}
+.ccapp--title{
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 28px;
+  line-height: 36px;
+  letter-spacing: 0px;
+  margin: 0;
+  color: #414141;
+}
+.ccapp--subtitle{
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 18px;
+  margin: 0;
+  color: #414141;
+  line-height: 27px;
+  letter-spacing: 0px;
+  
+}
+
+.ccapp--price--container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 100%;
+  /* max-width: 600px; */
+  padding: 15px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 14px;
+  .left-section {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .link-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    color: #666;
+    font-size: 14px;
+  }
+  .ccapp-price--wrapper{
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;    
+  }
+  .total {
+    color: #d4a373;
+    font-size: 16px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+  .add-to-cart {
+    background-color: #4a4a4a;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+    font-family: "Archivo", sans-serif;
+    margin: 0;
+  }
+  .add-to-cart:hover {
+    background-color: #333;
+  }
+  svg {
+    width: 14px;
+    height: 14px;
+    fill: #666;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .ccapp--price--container {
+      flex-direction: column;
+      text-align: center;
+      padding: 10px;
+    .left-section {
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    .link-item {
+        font-size: 12px;
+    }
+    .total {
+        font-size: 14px;
+        margin: 10px 0;
+    }
+    .add-to-cart {
+        width: 100%;
+        padding: 10px;
+        font-size: 12px;
+    }
+    svg {
+        width: 12px;
+        height: 12px;
+    }
+  }
+}
