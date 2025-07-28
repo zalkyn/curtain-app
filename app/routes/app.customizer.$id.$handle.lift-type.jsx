@@ -1,4 +1,4 @@
-import { Layout, Page, Card, Box, Text, InlineStack, FormLayout, TextField, DropZone, Button, Icon, Modal, Divider, Badge } from "@shopify/polaris";
+import { Layout, Page, Card, Box, Text, InlineStack, FormLayout, TextField, DropZone, Button, Icon, Modal, Divider, Badge, Checkbox } from "@shopify/polaris";
 import { EditIcon, ImageAddIcon } from "@shopify/polaris-icons";
 import { authenticate } from "../shopify.server";
 import prisma from "../db.server";
@@ -72,7 +72,7 @@ export const action = async ({ request }) => {
             manualPanelTitle: data.manualPanelTitle,
             motorizedImage: data.motorizedImage || undefined,
             motorizedPanelTitle: data.motorizedPanelTitle,
-            activeStatus: true,
+            activeStatus: data?.activeStatus,
             remoteControlTypes: data.remoteControlTypes || [],
             manualPrice: data.manualPrice ? parseFloat(data.manualPrice) : 0,
             motorizedPrice: data.motorizedPrice ? parseFloat(data.motorizedPrice) : 0
@@ -98,7 +98,7 @@ export const action = async ({ request }) => {
 
             await prisma.liftType.update({
                 where: { id: liftTypeId },
-                data: { info: data.info, remoteControlTypes: remoteControlTypes }
+                data: { info: data.info, activeStatus: data?.activeStatus, remoteControlTypes: remoteControlTypes }
             });
 
             return json({ role, success: true });
@@ -225,7 +225,7 @@ export default function LiftType() {
     const handleUpdateInfo = async () => {
         setLoading({ ...loading, infoBtn: true });
         const formData = new FormData();
-        formData.append("data", JSON.stringify({ liftTypeId: liftType?.id, info: liftType?.info || "" }));
+        formData.append("data", JSON.stringify({ liftTypeId: liftType?.id, info: liftType?.info || "", activeStatus: liftType?.activeStatus }));
         formData.append("remoteControlTypes", JSON.stringify(editData?.remoteControlTypes || []));
         formData.append("role", "update-lift-info");
         submit(formData, { method: "POST", encType: "multipart/form-data" });
@@ -379,8 +379,21 @@ export default function LiftType() {
                                     <Text variant="bodyMd" tone="subdued">No remote control types added yet.</Text>
                                 )}
                             </Box>
-
                         </Box>
+
+                        <Box paddingBlockStart={300}>
+                            {/* activeStatus  */}
+                            <Checkbox
+                                label="Active Status"
+                                checked={liftType?.activeStatus || false}
+                                onChange={(checked) => {
+                                    updateInput("activeStatus", checked);
+                                    setLiftType({ ...liftType, activeStatus: checked });
+                                }}
+                                disabled={loading?.panelBtn}
+                            />
+                        </Box>
+
                         <Box paddingBlock={400}>
                             <Text variant="headingMd">Cordless Info</Text>
                             <Box paddingBlock={300}>

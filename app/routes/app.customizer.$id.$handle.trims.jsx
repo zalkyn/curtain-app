@@ -151,6 +151,7 @@ export const action = async ({ request, params }) => {
     if (role === "updateTrimInfo") {
         const id = formData.get("id") || null;
         const info = formData.get("info") || "";
+        const activeStatus = formData.get("activeStatus") === "true" ? true : false;
 
         if (!id) {
             return json({
@@ -161,7 +162,8 @@ export const action = async ({ request, params }) => {
         const trim = await prisma.trim.update({
             where: { id: parseInt(id) },
             data: {
-                info: info
+                info: info,
+                activeStatus: activeStatus
             }
         });
 
@@ -319,6 +321,7 @@ export default function Trims() {
         formData.append("role", "updateTrimInfo");
         formData.append("id", trim.id);
         formData.append("info", trim.info);
+        formData.append("activeStatus", trim.activeStatus ? "true" : "false");
         submit(formData, { method: "POST" });
     }
 
@@ -391,6 +394,7 @@ export default function Trims() {
             <Layout.Section variant="fullWidth">
                 {/* trim info  */}
                 <Card>
+                    {/* activeStatus  */}
                     <InlineStack align="space-between" blockAlign="center">
                         <Text variant="headingMd">Trim Info</Text>
                         <Button
@@ -400,6 +404,14 @@ export default function Trims() {
                             icon={EditIcon}
                         >Update Info</Button>
                     </InlineStack>
+
+                    <Box paddingBlockEnd={300} />
+                    <Checkbox
+                        label="Active Status"
+                        checked={trim?.activeStatus || false}
+                        onChange={(value) => setTirm({ ...trim, activeStatus: value })}
+                    />
+
                     <Box paddingBlockEnd={300} />
                     <Suspense fallback={<Text>Loading...</Text>}>
                         <TextEditor

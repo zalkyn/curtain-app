@@ -126,9 +126,9 @@ export default function Tieback() {
     useEffect(() => {
         if (actionData && actionData?.role === "update") {
             setLoading(false)
-            setPrevTieback(tieback)
+            // setPrevTieback(tieback)
+            // setTieback(prevTieback)
 
-            setTieback(prevTieback)
             if (primaryFile) {
                 const newPrimaryImage = URL.createObjectURL(primaryFile);
                 setTieback(prev => ({ ...prev, primaryImage: newPrimaryImage }))
@@ -233,6 +233,16 @@ export default function Tieback() {
         ]}
     >
         <Layout>
+            <Layout.Section variant="fullWidth">
+                <Card>
+                    {/* activeStatus  */}
+                    <Checkbox
+                        label="Active Status"
+                        checked={tieback?.activeStatus || false}
+                        onChange={(value) => setTieback({ ...tieback, activeStatus: value })}
+                    />
+                </Card>
+            </Layout.Section>
             <Layout.Section variant="oneThird">
                 <Card>
                     <InlineStack>

@@ -9,6 +9,10 @@ import { useAppBridge } from "@shopify/app-bridge-react";
 import TextEditor from "../component/textEditor";
 import slugify from "react-slugify";
 
+// leadingEdgeTitle       String?        @default("Leading Edge")
+// bottomTitle            String?        @default("Bottom")
+// leadingEdgeBottomTitle String?        @default("Leading Edge Bottom")
+
 export const loader = async ({ request, params }) => {
     const { session } = await authenticate.admin(request)
     const url = new URL(request.url);
@@ -152,6 +156,9 @@ export const action = async ({ request, params }) => {
         const id = formData.get("id") || null;
         const info = formData.get("info") || "";
         const activeStatus = formData.get("activeStatus") === "true" ? true : false;
+        const leadingEdgeTitle = formData.get("leadingEdgeTitle")
+        const bottomTitle = formData.get("bottomTitle")
+        const leadingEdgeBottomTitle = formData.get("leadingEdgeBottomTitle")
         if (!id) {
             return json({
                 error: "Border ID is required"
@@ -162,7 +169,10 @@ export const action = async ({ request, params }) => {
             where: { id: parseInt(id) },
             data: {
                 info: info,
-                activeStatus: activeStatus
+                activeStatus: activeStatus,
+                leadingEdgeTitle: leadingEdgeTitle,
+                bottomTitle: bottomTitle,
+                leadingEdgeBottomTitle: leadingEdgeBottomTitle
             }
         });
 
@@ -327,6 +337,9 @@ export default function Border() {
         formData.append("role", "updateBorderInfo");
         formData.append("id", border.id);
         formData.append("info", border.info);
+        formData.append("leadingEdgeTitle", border.leadingEdgeTitle);
+        formData.append("bottomTitle", border.bottomTitle);
+        formData.append("leadingEdgeBottomTitle", border.leadingEdgeBottomTitle);
         formData.append("activeStatus", border.activeStatus);
         submit(formData, { method: "POST" });
     }
@@ -407,13 +420,34 @@ export default function Border() {
                     <InlineStack align="space-between" blockAlign="center">
                         <Text variant="headingMd">Border Info</Text>
                         <Button
+                            variant="primary"
                             onClick={() => handleUpdateBorderInfo()}
                             loading={loading.updateBorderInfo}
-                            variant={loading.updateBorderInfo ? "primary" : "secondary"}
                             icon={EditIcon}
                         >Update Info</Button>
                     </InlineStack>
                     <Box paddingBlockEnd={300} />
+
+                    {/* leadingEdgeTitle, bottomTitle, leadingEdgeBottomTitle */}
+                    <TextField
+                        label="Leading Edge Title"
+                        value={border?.leadingEdgeTitle || ""}
+                        onChange={(value) => setBorder({ ...border, leadingEdgeTitle: value })}
+                    />
+                    <Box paddingBlockEnd={300} />
+                    <TextField
+                        label="Bottom Title"
+                        value={border?.bottomTitle || ""}
+                        onChange={(value) => setBorder({ ...border, bottomTitle: value })}
+                    />
+                    <Box paddingBlockEnd={300} />
+                    <TextField
+                        label="Leading Edge & Bottom Title"
+                        value={border?.leadingEdgeBottomTitle || ""}
+                        onChange={(value) => setBorder({ ...border, leadingEdgeBottomTitle: value })}
+                    />
+                    <Box paddingBlockEnd={500} />
+
 
                     {/* active status  */}
                     <Checkbox

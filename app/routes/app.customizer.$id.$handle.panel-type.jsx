@@ -1,4 +1,4 @@
-import { Layout, Page, Card, Box, Text, InlineStack, FormLayout, TextField, DropZone, Button, Icon, Modal, Divider, Badge } from "@shopify/polaris";
+import { Layout, Page, Card, Box, Text, InlineStack, FormLayout, TextField, DropZone, Button, Icon, Modal, Divider, Badge, Checkbox } from "@shopify/polaris";
 import { EditIcon, ImageAddIcon } from "@shopify/polaris-icons";
 import { authenticate } from "../shopify.server";
 import prisma from "../db.server";
@@ -95,7 +95,7 @@ export const action = async ({ request }) => {
 
             await prisma.panelType.update({
                 where: { id: panelTypeId },
-                data: { info: data.info }
+                data: { info: data.info, activeStatus: data.activeStatus }
             });
 
             return json({ role, success: true });
@@ -177,7 +177,7 @@ export default function PanelType() {
             const newFileName = `${fileNameWithoutExtension}-${timestamp}.${fileExtension}`;
             file = new File([file], newFileName, { type: file.type });
         }
-        
+
         if (type === "single") {
             setEditData({ ...editData, singleImage: file });
         } else {
@@ -219,7 +219,7 @@ export default function PanelType() {
     const handleUpdateInfo = async () => {
         setLoading({ ...loading, infoBtn: true });
         const formData = new FormData();
-        formData.append("data", JSON.stringify({ panelTypeId: panelType?.id, info: panelType?.info || "" }));
+        formData.append("data", JSON.stringify({ panelTypeId: panelType?.id, info: panelType?.info || "", activeStatus: panelType?.activeStatus }));
         formData.append("role", "update-panel-info");
         submit(formData, { method: "POST", encType: "multipart/form-data" });
     };
@@ -329,6 +329,13 @@ export default function PanelType() {
 
                 <Layout.Section>
                     <Card>
+                        {/* activeStatus  */}
+                        <Checkbox
+                            label="Active Status"
+                            checked={panelType?.activeStatus || false}
+                            onChange={(checked) => updateInput("activeStatus", checked)}
+                            disabled={loading?.panelBtn}
+                        />
                         <Box paddingBlock={400}>
                             <Text variant="headingMd">Panel Information</Text>
                             <Box paddingBlock={300}>
@@ -344,9 +351,9 @@ export default function PanelType() {
                                 variant="primary"
                                 onClick={handleUpdateInfo}
                                 loading={loading.infoBtn}
-                                disabled={!panelType?.info || (loaderData?.customizer?.panelType[0]?.info === panelType?.info)}
+                                // disabled={!panelType?.info || (loaderData?.customizer?.panelType[0]?.info === panelType?.info)}
                             >
-                                Save Info
+                                Update
                             </Button>
                         </Box>
                     </Card>

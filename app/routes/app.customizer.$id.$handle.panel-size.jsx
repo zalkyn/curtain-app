@@ -290,6 +290,17 @@ export default function PanelSize() {
                 <Card>
                     <Text variant="headingMd">Size Diagram Image</Text>
                     <Box paddingBlockStart={300}>
+                        {/* activeStatus  */}
+                        <Box>
+                            <Checkbox
+                                label="Active Status"
+                                checked={panelSize?.activeStatus}
+                                onChange={(value) => updateInput("activeStatus", value)}
+                            />
+                        </Box>
+                        <Box paddingBlockEnd={300} paddingBlockStart={200}>
+                            <Divider />
+                        </Box>
                         <InlineStack blockAlign="end" gap={600} align="space-between">
                             <Box>
                                 <img style={{ width: '300px', height: 'auto' }} src={panelSize?.image64 ? panelSize.image64 : '/config-image/no-image.jpg'} />
