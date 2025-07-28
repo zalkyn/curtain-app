@@ -14,18 +14,42 @@ export const loader = async ({ request, params }) => {
   }
 
   const appUrl = process.env.SHOPIFY_APP_URL || "";
-  const collections = await prisma.collection.findMany({
+
+  const customizer = await prisma.customizer.findUnique({
     where: {
-      customizerId: customizerId
+      id: customizerId,
     },
     include: {
-      collectionList: true,
+      collections: {
+        include: {
+          collectionList: true,
+        },
+      },
     },
   });
+
+  // const collections = await prisma.collection.findMany({
+  //   where: {
+  //     customizerId: customizerId
+  //   },
+  //   include: {
+  //     collectionList: true,
+  //   },
+  // });
+
+  const collections = customizer?.collections || [];
+
+  // remove collections from customizer
+  const customizerExceptCollections = {
+    ...customizer,
+    collections: undefined,
+  };
+
 
   // return collections
   return cors(request, json({
     collections: collections || [],
+    customizer: customizerExceptCollections || {},
     appUrl: appUrl,
   }, { status: 200 }));
 };

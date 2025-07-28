@@ -57,6 +57,7 @@ model Customizer {
   trackSize    TrackSize[]
   liftType     LiftType[]
   border       Border[]
+  stepOrders   Json?
   createdAt    DateTime?         @default(now())
   updatedAt    DateTime?         @updatedAt
 }
