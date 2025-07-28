@@ -82,7 +82,7 @@ export const action = async ({ request }) => {
         try {
             const updateData = JSON.parse(formData.get("data"))
 
-            console.log("data======>", JSON.stringify(updateData, null, 2))
+            console.log("updateData?.stepOrders===", updateData?.stepOrders)
 
             const updateNewResponse = await prisma.customizer.updateMany({
                 where: { id: updateData?.id },
@@ -95,7 +95,6 @@ export const action = async ({ request }) => {
                     stepOrders: updateData?.stepOrders
                 }
             })
-
 
 
             return json({
@@ -207,6 +206,11 @@ export default function Customizer() {
     useEffect(() => {
         if (loaderData && loaderData?.customizers) {
             setCustomizers(loaderData?.customizers)
+            if (loaderData?.customizers.length > 0) {
+                setStepOrders(loaderData?.customizers[0]?.stepOrders || stepOrderData);
+            } else {
+                setStepOrders(stepOrderData);
+            }
         }
     }, [loaderData])
 
@@ -301,15 +305,17 @@ export default function Customizer() {
             const oldIndex = stepOrders.findIndex(item => item.id === active.id);
             const newIndex = stepOrders.findIndex(item => item.id === over?.id);
             setStepOrders(arrayMove(stepOrders, oldIndex, newIndex));
-            setSelected({
-                ...selected,
-                stepOrders: stepOrders.map((step, index) => ({
-                    ...step,
-                    index: index
-                }))
-            });
         }
     };
+
+    useEffect(() => {
+        setSelected(prev => {
+            if (prev && prev.id === loaderData?.customizers[0]?.id) {
+                return { ...prev, stepOrders: stepOrders }
+            }
+            return prev;
+        });
+    }, [stepOrders]);
 
     return <Page
         title="Customizers"
