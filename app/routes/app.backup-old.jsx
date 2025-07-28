@@ -2,39 +2,26 @@ import { json, useActionData, useLoaderData, useSubmit } from "@remix-run/react"
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { Badge, Box, Button, ButtonGroup, Card, Checkbox, FormLayout, Icon, InlineStack, Layout, Modal, Page, Text, TextField } from "@shopify/polaris";
 import { DeleteIcon, EditIcon, LayoutSectionIcon, ReplaceIcon, ViewIcon } from "@shopify/polaris-icons"
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState } from "react";
 import slugify from "react-slugify";
 import { authenticate } from "../shopify.server";
 import prisma from "../db.server";
 
-import {
-    DndContext,
-    closestCenter,
-    useSensor,
-    useSensors,
-    PointerSensor,
-} from '@dnd-kit/core';
-import {
-    SortableContext,
-    useSortable,
-    arrayMove,
-    verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-
-const stepOrderData = [
-    { id: "collections", title: "Collections", index: 0, status: true },
-    { id: "palenSize", title: "Panel Size", index: 1, status: true },
-    { id: "panelType", title: "Panel Type", index: 2, status: true },
-    { id: "liningType", title: "Lining Type", index: 3, status: true },
-    { id: "tieback", title: "Tieback", index: 4, status: true },
-    { id: "memoryShaped", title: "Memory Shaped", index: 5, status: true },
-    { id: "roomLabel", title: "Room Label", index: 6, status: true },
-    { id: "trackSize", title: "Track Size", index: 7, status: true },
-    { id: "liftType", title: "Lift Type", index: 8, status: true },
-    { id: "trims", title: "Trims", index: 9, status: true },
-    { id: "border", title: "Border", index: 10, status: true }
-];
+// customizer steps =====>
+// collections  Collection[]
+// trims        Trim[]
+// palenSize    SinglePanelSize[]
+// panelType    PanelType[]
+// liningType   LiningType[]
+// tieback      Tieback[]
+// memoryShaped MemoryShaped[]
+// roomLabel    RoomLabel[]
+// trackSize    TrackSize[]
+// liftType     LiftType[]
+// border       Border[]
+// stepOrders   Json?
+// createdAt    DateTime?         @default(now())
+// updatedAt    DateTime?         @updatedAt
 
 export const loader = async ({ request }) => {
     const { session } = await authenticate.admin(request)
@@ -81,9 +68,6 @@ export const action = async ({ request }) => {
     if (role === "update") {
         try {
             const updateData = JSON.parse(formData.get("data"))
-
-            console.log("data======>", JSON.stringify(updateData, null, 2))
-
             const updateNewResponse = await prisma.customizer.updateMany({
                 where: { id: updateData?.id },
                 data: {
@@ -91,12 +75,9 @@ export const action = async ({ request }) => {
                     handle: updateData?.handle,
                     shortInfo: updateData?.shortInfo,
                     activeStatus: updateData?.activeStatus,
-                    price: updateData?.price,
-                    stepOrders: updateData?.stepOrders
+                    price: updateData?.price
                 }
             })
-
-
 
             return json({
                 role: role,
@@ -139,35 +120,6 @@ export const action = async ({ request }) => {
     });
 }
 
-
-// Sortable Item component for drag-and-drop
-const SortableItem = ({ id, title }) => {
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-    } = useSortable({ id });
-
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-        cursor: 'grab',
-    };
-
-    return (
-        <Box ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            <Card>
-                <InlineStack blockAlign="center" align="start" gap={300}>
-                    <Button icon={LayoutSectionIcon} />
-                    <Text variant="bodyMd">{title}</Text>
-                </InlineStack>
-            </Card>
-        </Box>
-    );
-};
-
 export default function Customizer() {
 
     const shopify = useAppBridge()
@@ -186,8 +138,7 @@ export default function Customizer() {
         handle: "",
         shortInfo: "",
         activeStatus: false,
-        price: 0,
-        stepOrders: stepOrderData || []
+        price: 0
     }
 
     const [newCustomizerInput, setNewCustomizerInputs] = useState(emptyCustomizer)
@@ -198,11 +149,38 @@ export default function Customizer() {
     const [loadingEditBtn, setLoadingEditBtn] = useState(false)
     const [loadingDeleteBtn, setLoadingDeleteBtn] = useState(false)
     const [loadingViewBtn, setLoadingViewBtn] = useState(false)
-    const [loadingStepOrdersBtn, setLoadingStepOrdersBtn] = useState(false)
 
     const [selected, setSelected] = useState(null)
 
-    const [stepOrders, setStepOrders] = useState(loaderData?.customizers[0]?.stepOrders || stepOrderData);
+    // customer has many steps like collections, panelSize, panelType, liningType, tieback, memoryShaped, roomLabel, trackSize, liftType, trims, border
+
+    // const [stepOrders, setStepOrders] = useState([
+    //     { id: "collections", title: "Collections", index: 0, status: true },
+    //     { id: "palenSize", title: "Panel Size", index: 1, status: true },
+    //     { id: "panelType", title: "Panel Type", index: 2, status: true },
+    //     { id: "liningType", title: "Lining Type", index: 3, status: true },
+    //     { id: "tieback", title: "Tieback", index: 4, status: true },
+    //     { id: "memoryShaped", title: "Memory Shaped", index: 5, status: true },
+    //     { id: "roomLabel", title: "Room Label", index: 6, status: true },
+    //     { id: "trackSize", title: "Track Size", index: 7, status: true },
+    //     { id: "liftType", title: "Lift Type", index: 8, status: true },
+    //     { id: "trims", title: "Trims", index: 9, status: true },
+    //     { id: "border", title: "Border", index: 10, status: true }
+    // ]);
+
+    const [stepOrders, setStepOrders] = useState(loaderData?.customizers[0]?.stepOrders || [
+        { id: "collections", title: "Collections", index: 0, status: true },
+        { id: "palenSize", title: "Panel Size", index: 1, status: true },
+        { id: "panelType", title: "Panel Type", index: 2, status: true },
+        { id: "liningType", title: "Lining Type", index: 3, status: true },
+        { id: "tieback", title: "Tieback", index: 4, status: true },
+        { id: "memoryShaped", title: "Memory Shaped", index: 5, status: true },
+        { id: "roomLabel", title: "Room Label", index: 6, status: true },
+        { id: "trackSize", title: "Track Size", index: 7, status: true },
+        { id: "liftType", title: "Lift Type", index: 8, status: true },
+        { id: "trims", title: "Trims", index: 9, status: true },
+        { id: "border", title: "Border", index: 10, status: true }
+    ]);
 
     useEffect(() => {
         if (loaderData && loaderData?.customizers) {
@@ -222,8 +200,7 @@ export default function Customizer() {
             shopify.toast.show("Customizer Successfully Updated")
             setSelected(null)
             setLoadingEditBtn(false)
-            setLoadingStepOrdersBtn(false)
-            setModal({ ...modal, edit: false, stepOrders: false })
+            setModal({ ...modal, edit: false })
         }
         if (actionData && actionData?.role === "delete") {
             shopify.toast.show("Customizer Successfully Deleted")
@@ -274,10 +251,8 @@ export default function Customizer() {
 
     const handleUpdateNewCustomizer = () => {
         setLoadingEditBtn(true)
-        setLoadingStepOrdersBtn(true)
         const formData = new FormData()
         formData.append("role", "update")
-
         formData.append("data", JSON.stringify(selected))
 
         submit(formData, { method: "POST" })
@@ -291,25 +266,6 @@ export default function Customizer() {
 
         submit(formData, { method: "POST" })
     }
-
-    // Handle drag-and-drop functionality
-    const sensors = useSensors(useSensor(PointerSensor));
-
-    const handleDragEnd = (event) => {
-        const { active, over } = event;
-        if (active.id !== over?.id) {
-            const oldIndex = stepOrders.findIndex(item => item.id === active.id);
-            const newIndex = stepOrders.findIndex(item => item.id === over?.id);
-            setStepOrders(arrayMove(stepOrders, oldIndex, newIndex));
-            setSelected({
-                ...selected,
-                stepOrders: stepOrders.map((step, index) => ({
-                    ...step,
-                    index: index
-                }))
-            });
-        }
-    };
 
     return <Page
         title="Customizers"
@@ -512,42 +468,29 @@ export default function Customizer() {
                     open={modal.stepOrders}
                     onClose={() => setModal({ ...modal, stepOrders: false })}
                     primaryAction={{
-                        content: "Update Order",
-                        onAction: () => {
-                            handleUpdateNewCustomizer();
-                        },
-                        loading: loadingStepOrdersBtn,
-                        disabled: loadingStepOrdersBtn
+                        content: "Save Order",
+                        onAction: () => { }
                     }}
                     secondaryActions={[
                         {
                             content: "Cancel",
-                            onAction: () => setModal({ ...modal, stepOrders: false }),
-                            disabled: loadingStepOrdersBtn
+                            onAction: () => setModal({ ...modal, stepOrders: false })
                         }
                     ]}
                 >
                     <Modal.Section>
                         <FormLayout>
                             <Text variant="headingSm">Drag and drop to change the order of steps</Text>
-                            <DndContext
-                                sensors={sensors}
-                                collisionDetection={closestCenter}
-                                onDragEnd={handleDragEnd}
-                            >
-                                <SortableContext
-                                    items={stepOrders.map(step => step.id)}
-                                    strategy={verticalListSortingStrategy}
-                                >
-                                    {stepOrders.map((step) => (
-                                        <Box paddingBlockEnd={200}>
-                                            <Suspense fallback={<div>Loading...</div>}>
-                                                <SortableItem key={step.id} id={step.id} title={step.title} />
-                                            </Suspense>
-                                        </Box>
-                                    ))}
-                                </SortableContext>
-                            </DndContext>
+                            {stepOrders?.map((step, index) => {
+                                return <Box key={`step-${index}`}>
+                                    <Card>
+                                        <InlineStack blockAlign="center" align="start" gap={300}>
+                                            <Button icon={LayoutSectionIcon} />
+                                            <Text variant="bodyMd">{step?.title}</Text>
+                                        </InlineStack>
+                                    </Card>
+                                </Box>
+                            })}
                         </FormLayout>
                     </Modal.Section>
                 </Modal>
