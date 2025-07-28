@@ -538,12 +538,12 @@
     border-radius: 8px;
     margin: 8px 20px;
   }
-  /* .ccapp-msc-tab {
+  .ccapp-msc-tab {
     display: none;
   }
   .ccapp-msc-tab[data-index="1"] {
     display: block;
-  } */
+  }
   .ccapp-msc-tab.active .ccapp-msc-tab-content {
     visibility: visible;
   }

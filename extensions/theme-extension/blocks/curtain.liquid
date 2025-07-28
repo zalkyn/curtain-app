@@ -458,6 +458,7 @@
     }
 
     connectedCallback() {
+      this.updateTabVisibility(); // Set initial tab visibility
       this.handleEvents();
       setTimeout(() => {
         console.log('Curtain Customizer App Loaded==========');
@@ -669,11 +670,13 @@
           image: tieback?.primaryImage,
           title: tieback?.primaryTitle,
           isActive: tieback?.isTie ?? true,
+          price: tieback?.primaryPrice || 0, // Use primaryPrice
         },
         {
           image: tieback?.secondaryImage,
           title: tieback?.secondaryTitle,
           isActive: tieback?.isTie === false,
+          price: tieback?.secondaryPrice || 0, // Use secondaryPrice
         },
       ];
     
@@ -682,8 +685,8 @@
           item.classList.add('active');
           this.selected.tieback.data = tiebackItems[activeIndex];
           this.selected.tieback.activeStatus = true;
-          this.selected.tieback.basePrice = tiebackItems[activeIndex]?.price || 0;
-          console.log('Updated selected tieback:', this.selected);
+          this.selected.tieback.basePrice = tiebackItems[activeIndex].price; // Set price based on selection
+          console.log('Updated selected tieback:', this.selected.tieback);
         } else {
           item.classList.remove('active');
         }
@@ -706,13 +709,23 @@
         },
       ];
     
+      // Calculate price: 0 for secondary item, otherwise use priceRules
+      let basePrice = 0;
+      if (activeIndex === 0 && this.config.spsOrderLength && memoryShaped?.priceRules) {
+        const selectedLength = this.config.spsOrderLength.Length;
+        const rule = memoryShaped.priceRules.find(
+          (rule) => selectedLength >= rule.lengthMin && selectedLength <= rule.lengthMax
+        );
+        basePrice = rule ? rule.price || 0 : 0;
+      }
+    
       this.querySelectorAll('.ccapp-memory-shaped-item').forEach((item, index) => {
         if (index === activeIndex) {
           item.classList.add('active');
           this.selected.memoryShaped.data = memoryShapedItems[activeIndex];
           this.selected.memoryShaped.activeStatus = true;
-          this.selected.memoryShaped.basePrice = memoryShapedItems[activeIndex]?.price || 0;
-          console.log('Updated selected memoryShaped:', this.selected);
+          this.selected.memoryShaped.basePrice = basePrice;
+          console.log('Updated selected memoryShaped:', this.selected.memoryShaped);
         } else {
           item.classList.remove('active');
         }
@@ -1151,6 +1164,13 @@
     }
 
     singlePanelSizeUI() {
+      if (!this.panelSize || !this.panelSize.activeStatus) {
+        this.selected.panelSize = { data: null, activeStatus: false, basePrice: 0 };
+        console.log('Reset selected.panelSize for hidden tab:', this.selected.panelSize);
+        this.querySelector('.ccapp-sps-sizes-wrapper').innerHTML = '<div>Loading...</div>';
+        return;
+      }
+
       if (this.panelSize) {
         if (this.querySelector('.ccapp-sps-diagram')) {
           this.querySelector('.ccapp-sps-diagram').innerHTML = `<img src="${this.panelSize?.image64}">`;
@@ -1300,6 +1320,12 @@
 
     liningTypeUI() {
       console.log('liningType===', this.liningType);
+      if (!this.liningType || !this.liningType.activeStatus) {
+        this.selected.liningType = { data: null, activeStatus: false, basePrice: 0 };
+        console.log('Reset selected.liningType for hidden tab:', this.selected.liningType);
+        this.querySelector('.ccapp-lining-type-wrapper').innerHTML = '<div>Loading...</div>';
+        return;
+      }
     
       let liningTypeEl = '';
       this.liningType?.items?.map((item, index) => {
@@ -1324,22 +1350,27 @@
     }
 
     tiebackUI() {
-      console.log('tieback===', this.tieback);
+      if (!this.tieback || !this.tieback.activeStatus) {
+        this.selected.tieback = { data: null, activeStatus: false, basePrice: 0 };
+        console.log('Reset selected.tieback for hidden tab:', this.selected.tieback);
+        this.querySelector('.ccapp-tieback-wrapper').innerHTML = '<div>Loading...</div>';
+        return;
+      }
       const tieback = this.tieback || {};
-    
       const tiebackItems = [
         {
           image: tieback?.primaryImage,
           title: tieback?.primaryTitle,
           isActive: tieback?.isTie ?? true,
+          price: tieback?.primaryPrice || 0,
         },
         {
           image: tieback?.secondaryImage,
           title: tieback?.secondaryTitle,
           isActive: tieback?.isTie === false,
+          price: tieback?.secondaryPrice || 0,
         },
       ];
-    
       let uiEL = '';
       tiebackItems.forEach((item, index) => {
         uiEL += `<div class="ccapp-tieback-item ${item.isActive ? 'active' : ''}" data-index="${index}">
@@ -1347,52 +1378,68 @@
           <p class="ccapp-tieback-title">${item.title || ''}</p>
         </div>`;
       });
-    
       const wrapper = this.querySelector('.ccapp-tieback-wrapper');
       if (wrapper) {
         wrapper.innerHTML = uiEL;
       }
-    
-      // Set initial tieback data
       if (tiebackItems.length > 0) {
         const initialTieback = tiebackItems.find(item => item.isActive) || tiebackItems[0];
         this.selected.tieback.data = initialTieback;
         this.selected.tieback.activeStatus = true;
-        this.selected.tieback.basePrice = initialTieback?.price || 0;
-        console.log('Initial selected tieback:', this.selected);
+        this.selected.tieback.basePrice = initialTieback.price;
+        console.log('Initial selected tieback:', this.selected.tieback);
       }
     }
 
     updateMemoryShapedVisibility() {
       if (!this.config.spsOrderWidth || !this.config.spsOrderLength || !this.memoryShaped?.displayRules) {
+        if (this.memoryShaped) {
+          this.memoryShaped.activeStatus = false;
+          this.selected.memoryShaped = { data: null, activeStatus: false, basePrice: 0 };
+          console.log('Reset selected.memoryShaped due to missing data or rules:', this.selected.memoryShaped);
+        }
+        this.updateTabVisibility();
         return;
       }
-
+    
       const selectedWidth = this.config.spsOrderWidth.width;
       const selectedLength = this.config.spsOrderLength.Length;
       const displayRules = this.memoryShaped.displayRules;
-
-      // Check if the selected size is within the ranges of any display rule
+    
       const shouldShow = displayRules.some(
         (rule) =>
           selectedWidth >= 1 && selectedWidth <= rule.width && selectedLength >= 1 && selectedLength <= rule.length
       );
-
-      const memoryShapedTab = this.querySelector('.ccapp-msc-tab[data-index="5"]');
-      if (memoryShapedTab) {
-        if (shouldShow) {
-          memoryShapedTab.style.display = 'block';
-        } else {
-          memoryShapedTab.style.display = 'none';
+    
+      if (this.memoryShaped) {
+        this.memoryShaped.activeStatus = shouldShow;
+        if (!shouldShow) {
+          this.selected.memoryShaped = { data: null, activeStatus: false, basePrice: 0 };
+          console.log('Reset selected.memoryShaped due to display rules:', this.selected.memoryShaped);
+        } else if (this.selected.memoryShaped.data) {
+          // Update price: 0 for secondary item, otherwise use priceRules
+          let basePrice = 0;
+          if (this.selected.memoryShaped.data.title === this.memoryShaped.primaryTitle && this.config.spsOrderLength && this.memoryShaped?.priceRules) {
+            const rule = this.memoryShaped.priceRules.find(
+              (rule) => selectedLength >= rule.lengthMin && selectedLength <= rule.lengthMax
+            );
+            basePrice = rule ? rule.price || 0 : 0;
+          }
+          this.selected.memoryShaped.basePrice = basePrice;
+          console.log('Updated selected.memoryShaped price:', this.selected.memoryShaped);
         }
       }
+      this.updateTabVisibility();
     }
 
     memoryShapedUI() {
-      console.log('memoryShaped===', this.memoryShaped);
-      console.log(this.memoryShaped.displayRules);
+      if (!this.memoryShaped || !this.memoryShaped.activeStatus) {
+        this.selected.memoryShaped = { data: null, activeStatus: false, basePrice: 0 };
+        console.log('Reset selected.memoryShaped for hidden tab:', this.selected.memoryShaped);
+        this.querySelector('.ccapp-bms-wrapper').innerHTML = '<div>Loading...</div>';
+        return;
+      }
       const memoryShaped = this.memoryShaped || {};
-    
       const memoryShapedItems = [
         {
           image: memoryShaped?.primaryImage,
@@ -1406,6 +1453,16 @@
         },
       ];
     
+      // Calculate initial price: 0 for secondary item, otherwise use priceRules
+      let basePrice = 0;
+      if ((memoryShaped?.isTie ?? true) && this.config.spsOrderLength && memoryShaped?.priceRules) {
+        const selectedLength = this.config.spsOrderLength.Length;
+        const rule = memoryShaped.priceRules.find(
+          (rule) => selectedLength >= rule.lengthMin && selectedLength <= rule.lengthMax
+        );
+        basePrice = rule ? rule.price || 0 : 0;
+      }
+    
       let uiEL = '';
       memoryShapedItems.forEach((item, index) => {
         uiEL += `<div class="ccapp-memory-shaped-item ${item.isActive ? 'active' : ''}" data-index="${index}">
@@ -1413,23 +1470,27 @@
           <p class="ccapp-memory-shaped-title">${item.title || ''}</p>
         </div>`;
       });
-    
       const wrapper = this.querySelector('.ccapp-bms-wrapper');
       if (wrapper) {
         wrapper.innerHTML = uiEL;
       }
-    
-      // Set initial memoryShaped data
       if (memoryShapedItems.length > 0) {
         const initialMemoryShaped = memoryShapedItems.find(item => item.isActive) || memoryShapedItems[0];
         this.selected.memoryShaped.data = initialMemoryShaped;
         this.selected.memoryShaped.activeStatus = true;
-        this.selected.memoryShaped.basePrice = initialMemoryShaped?.price || 0;
-        console.log('Initial selected memoryShaped:', this.selected);
+        this.selected.memoryShaped.basePrice = basePrice;
+        console.log('Initial selected memoryShaped:', this.selected.memoryShaped);
       }
     }
 
     roomLabelUI() {
+      if (!this.roomLabel || !this.roomLabel.activeStatus) {
+        this.selected.roomLabel = { data: null, activeStatus: false, basePrice: 0 };
+        console.log('Reset selected.roomLabel for hidden tab:', this.selected.roomLabel);
+        this.querySelector('.ccapp-rl-wrapper').innerHTML = '<div>Loading...</div>';
+        return;
+      }
+
       const roomLabel = this.roomLabel || null;
     
       const roomLabelOptions = roomLabel?.options || [];
@@ -1514,6 +1575,13 @@
     }
 
     orderTrackSizeUI() {
+      if (!this.trackSize || !this.trackSize.activeStatus) {
+        this.selected.trackSize = { data: null, activeStatus: false, basePrice: 0 };
+        console.log('Reset selected.trackSize for hidden tab:', this.selected.trackSize);
+        this.querySelector('.ccapp-order-track-size-buttons').innerHTML = '<div>Loading...</div>';
+        return;
+      }
+
       const trackSize = this.trackSize || null;
     
       const trackSizeOptions = trackSize?.options || [];
@@ -1605,6 +1673,13 @@
     }
 
     singlePanelOrPairUI() {
+      if (!this.panelTypeData || !this.panelTypeData.activeStatus) {
+        this.selected.panelType = { data: null, activeStatus: false, basePrice: 0 };
+        console.log('Reset selected.panelType for hidden tab:', this.selected.panelType);
+        this.querySelector('.ccapp-spp-options').innerHTML = '<div>Loading...</div>';
+        return;
+      }
+
       const panelPositions = this.panelTypeData?.panelPosition || ['Left', 'Center', 'Right'];
       this.panelTypes = [
         {
@@ -1708,6 +1783,13 @@
     }
 
     liftTypeUI() {
+      if (!this.liftType || !this.liftType.activeStatus) {
+        this.selected.liftType = { data: null, activeStatus: false, basePrice: 0 };
+        console.log('Reset selected.liftType for hidden tab:', this.selected.liftType);
+        this.querySelector('.ccapp-lift-type-wrapper').innerHTML = '<div>Loading...</div>';
+        return;
+      }
+
       const liftType = this.liftType || {};
       const liftOptions = [
         {
@@ -1824,6 +1906,12 @@
 
     trimUI() {
       console.log('trim===', this.trim);
+      if (!this.trim || !this.trim.activeStatus) {
+        this.selected.trim = { data: null, activeStatus: false, basePrice: 0 };
+        console.log('Reset selected.trim for hidden tab:', this.selected.trim);
+        this.querySelector('.ccapp-trim-wrapper').innerHTML = '<div>Loading...</div>';
+        return;
+      }
       
       let trimEl = '';
       this.trim?.swatches?.map((item, index) => {
@@ -1936,6 +2024,13 @@
     }
 
     borderUI() {
+      if (!this.border || !this.border.activeStatus) {
+        this.selected.border = { data: null, activeStatus: false, basePrice: 0 };
+        console.log('Reset selected.border for hidden tab:', this.selected.border);
+        this.querySelector('#borderSwatchWrapper').innerHTML = '<div>Loading...</div>';
+        return;
+      }
+
       if (!this.border || !this.border.swatches || this.border.swatches.length === 0) {
         console.log('No border data available yet. Waiting for data...', this.border);
         return;
@@ -2065,6 +2160,40 @@
       }
     }
 
+    updateTabVisibility() {
+      const tabs = [
+        { key: 'panelSize', index: '2' },
+        { key: 'liningType', index: '3' },
+        { key: 'tieback', index: '4' },
+        { key: 'memoryShaped', index: '5' },
+        { key: 'roomLabel', index: '6' },
+        { key: 'trackSize', index: '7' },
+        { key: 'panelTypeData', index: '8' },
+        { key: 'liftType', index: '9' },
+        { key: 'trim', index: '10' },
+        { key: 'border', index: '11' },
+      ];
+    
+      tabs.forEach(({ key, index }) => {
+        const tab = this.querySelector(`.ccapp-msc-tab[data-index="${index}"]`);
+        if (tab) {
+          const isVisible = this[key] && this[key].activeStatus;
+          tab.style.display = isVisible ? 'block' : 'none';
+          if (!isVisible) {
+            const selectedKey = key === 'panelTypeData' ? 'panelType' : key; // Map panelTypeData to panelType
+            this.selected[selectedKey] = { data: null, activeStatus: false, basePrice: 0 };
+            console.log(`Reset selected.${selectedKey} for hidden tab:`, this.selected[selectedKey]);
+          }
+        }
+      });
+    
+      // Ensure collections tab is always visible
+      const collectionsTab = this.querySelector('.ccapp-msc-tab[data-index="1"]');
+      if (collectionsTab) {
+        collectionsTab.style.display = 'block';
+      }
+    }
+
     handleResizeHeightCollectionTab(tab = null, dropdownAdjustment = 0) {
       if (tab && tab.classList.contains('active')) {
         const content = tab.querySelector('.ccapp-msc-tab-content');
@@ -2122,6 +2251,7 @@
         this.liftTypeUI();
         this.trimUI();
         this.borderUI();
+        this.updateTabVisibility(); // Update visibility after loading data
       } catch (error) {
         console.error('Error loading others modules:==========', error);
         this.panelTypeData = null;
@@ -2136,6 +2266,7 @@
         this.liftTypeUI();
         this.trimUI();
         this.borderUI();
+        this.updateTabVisibility(); // Update visibility even on error
       }
     }
   }
