@@ -3,7 +3,7 @@
 client_id = "ed92623a46eb49cd535b2caba0f9509e"
 name = "curtain-customizer-v1"
 handle = "curtain-customizer-v1"
-application_url = "https://showcase-excited-enabling-magnificent.trycloudflare.com"
+application_url = "https://venice-depot-automobile-prayers.trycloudflare.com"
 embedded = true
 
 [build]
@@ -46,7 +46,13 @@ redirect_urls = [
   "https://wherever-directory-surrounding-bracelets.trycloudflare.com/api/auth/callback",
   "https://showcase-excited-enabling-magnificent.trycloudflare.com/auth/callback",
   "https://showcase-excited-enabling-magnificent.trycloudflare.com/auth/shopify/callback",
-  "https://showcase-excited-enabling-magnificent.trycloudflare.com/api/auth/callback"
+  "https://showcase-excited-enabling-magnificent.trycloudflare.com/api/auth/callback",
+  "https://travels-hampton-flush-depends.trycloudflare.com/auth/callback",
+  "https://travels-hampton-flush-depends.trycloudflare.com/auth/shopify/callback",
+  "https://travels-hampton-flush-depends.trycloudflare.com/api/auth/callback",
+  "https://venice-depot-automobile-prayers.trycloudflare.com/auth/callback",
+  "https://venice-depot-automobile-prayers.trycloudflare.com/auth/shopify/callback",
+  "https://venice-depot-automobile-prayers.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -61,7 +67,7 @@ api_version = "2025-04"
   uri = "/webhooks/app/uninstalled"
 
 [app_proxy]
-url = "https://showcase-excited-enabling-magnificent.trycloudflare.com/app/curtain"
+url = "https://venice-depot-automobile-prayers.trycloudflare.com/app/curtain"
 subpath = "curtain"
 prefix = "apps"
 

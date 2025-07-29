@@ -159,6 +159,39 @@ export const action = async ({ request }) => {
             return json({ error: "Failed to process update group", role: role }, { status: 400 });
         }
     }
+
+    // delete-group
+    if (role === "delete-group") {
+        try {
+            const groupId = parseInt(formDataRaw.get("id"))
+            const key = formDataRaw.get("key")
+
+            if (groupId) {
+                // Find the panelSize for the current shop
+                let panelSize = await prisma.singlePanelSize.findFirst({
+                    where: { shop: session.shop }
+                });
+
+                // Filter out the group with the given id
+                let updatedGroup = panelSize[key].filter(item => item.id !== groupId);
+
+                // Update the panelSize record
+                await prisma.singlePanelSize.update({
+                    where: { id: panelSize.id },
+                    data: {
+                        [key]: updatedGroup
+                    }
+                });
+            }
+
+            return json({
+                role: role,
+            })
+        } catch (error) {
+            console.error("Error processing delete-group:", error);
+            return json({ error: "Failed to process delete group", role: role }, { status: 400 });
+        }
+    }
 }
 
 export default function PanelSize() {
