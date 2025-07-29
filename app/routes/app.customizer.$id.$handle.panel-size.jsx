@@ -106,6 +106,9 @@ export const action = async ({ request }) => {
             // Append sng_data to sizeGroup
             sizeGroup.push(sng_data);
 
+            console.log("sizeGroup after push:", sizeGroup);
+            console.log("ngc key:", ngc_key);
+
             // Update or create panelSize record
             if (panelSize) {
                 // Update existing panelSize with new sizeGroup
