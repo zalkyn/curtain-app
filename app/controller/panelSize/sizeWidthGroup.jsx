@@ -122,10 +122,18 @@ export default function SizeWidthGroup() {
         let data = newGroup;
         data.group = sizes
 
+
+        let widthGroup = panelSize?.widthGroup || [];
+        widthGroup.push(data);
+
+        console.log("data====", data)
+        console.log("widthGroup====", widthGroup)
+
         const formData = new FormData();
         formData.append("role", "create-new-group")
-        formData.append("data", JSON.stringify(data))
+        formData.append("data", JSON.stringify(widthGroup))
         formData.append("key", "widthGroup")
+        formData.append("panelSizeId", panelSize?.id)
 
         submit(formData, {
             method: "POST",
@@ -231,7 +239,7 @@ export default function SizeWidthGroup() {
         formData.append("role", "update-group")
         formData.append("key", "widthGroup")
         formData.append("group", JSON.stringify(group))
-        formData.append("id", panelSize.id)
+        formData.append("panelSizeId", panelSize?.id)
 
         submit(formData, { method: "POST" })
     }
@@ -242,7 +250,7 @@ export default function SizeWidthGroup() {
         const formData = new FormData()
         formData.append("role", "delete-group")
         formData.append("key", "widthGroup")
-        formData.append("id", selectedGroup.id)
+        formData.append("groupId", selectedGroup.id)
         formData.append("panelSizeId", panelSize.id)
 
         submit(formData, { method: "POST" })

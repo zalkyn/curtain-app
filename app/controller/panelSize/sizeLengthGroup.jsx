@@ -12,6 +12,7 @@ export default function SizeLengthGroup() {
 
     const [reserve, setReserve] = useState(loaderData?.panelSize)
     const [panelSize, setPanelSize] = useState(loaderData?.panelSize)
+    const [customizerId, setCustomizerId] = useState(loaderData?.customizerId)
 
     const [reserveGroup, setReserveGroup] = useState(loaderData?.panelSize?.lengthGroup)
     const [group, setGroup] = useState(loaderData?.panelSize?.lengthGroup)
@@ -46,6 +47,7 @@ export default function SizeLengthGroup() {
             setReserve(loaderData?.panelSize)
             setGroup(loaderData?.panelSize?.lengthGroup)
             setReserveGroup(loaderData?.panelSize?.lengthGroup)
+            setCustomizerId(loaderData?.customizerId)
         }
     }, [loaderData])
 
@@ -122,10 +124,14 @@ export default function SizeLengthGroup() {
         let data = newGroup;
         data.group = sizes
 
+        let lengthGroup = panelSize?.lengthGroup || [];
+        lengthGroup.push(data);
+
         const formData = new FormData();
         formData.append("role", "create-new-group")
-        formData.append("data", JSON.stringify(data))
+        formData.append("data", JSON.stringify(lengthGroup))
         formData.append("key", "lengthGroup")
+        formData.append("panelSizeId", panelSize?.id)
 
         submit(formData, {
             method: "POST",
@@ -231,7 +237,7 @@ export default function SizeLengthGroup() {
         formData.append("role", "update-group")
         formData.append("key", "lengthGroup")
         formData.append("group", JSON.stringify(group))
-        formData.append("id", panelSize.id)
+        formData.append("panelSizeId", panelSize?.id)
 
         submit(formData, { method: "POST" })
     }
@@ -242,8 +248,8 @@ export default function SizeLengthGroup() {
         const formData = new FormData()
         formData.append("role", "delete-group")
         formData.append("key", "lengthGroup")
-        formData.append("id", selectedGroup.id)
-        formData.append("panelSizeId", panelSize.id)
+        formData.append("groupId", selectedGroup?.id)
+        formData.append("panelSizeId", panelSize?.id)
 
         submit(formData, { method: "POST" })
     }
@@ -517,7 +523,10 @@ export default function SizeLengthGroup() {
             secondaryActions={[
                 {
                     content: "Cancel",
-                    onAction: () => setDeleteModal(false),
+                    onAction: () => {
+                        setDeleteModal(false)
+                        setSelectedGroup(null)
+                    },
                     disabled: loadingDeleteBtn
                 }
             ]}

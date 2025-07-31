@@ -1,6 +1,6 @@
 import { json } from "@remix-run/node";
-import { Box, Button, ButtonGroup, Card, Checkbox, Divider, FormLayout, InlineStack, Layout, Icon, Page, Text, TextField, Thumbnail, DropZone } from "@shopify/polaris";
-import { AlertTriangleIcon, DeleteIcon, InfoIcon, PlusCircleIcon, ResetIcon, ImageAddIcon } from '@shopify/polaris-icons';
+import { Box, Button, ButtonGroup, Card, Checkbox, Divider, InlineStack, Layout, Icon, Page, Text, TextField, DropZone } from "@shopify/polaris";
+import { ImageAddIcon } from '@shopify/polaris-icons';
 import { authenticate } from "../shopify.server"
 import prisma from "../db.server";
 import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
@@ -22,21 +22,29 @@ export const loader = async ({ request, params }) => {
         const id = parseInt(params.id) || 0;
         const handle = params.handle || null
 
-        let panelSizes = await prisma.singlePanelSize.findMany();
-        let panelSize = panelSizes[0] || null;
+        console.log("===============id", id);
+
+        let customizer = await prisma.customizer.findUnique({
+            where: { id: id },
+            include: {
+                palenSize: true
+            }
+        });
+
+        let panelSize = customizer?.palenSize[0] || null;
+
         if (!panelSize) {
             panelSize = await prisma.singlePanelSize.create({
                 data: { shop: session.shop, customizerId: id }
             });
         }
 
-
         return json({
             panelSize: panelSize || {},
-            sizes: [],
             customizerId: id,
             customizerHandle: handle || null,
         });
+        // return null;
     } catch (error) {
         console.error("Loader error:", error);
         return json({ error: "Failed to load or create panelSize" }, { status: 500 });
@@ -94,46 +102,21 @@ export const action = async ({ request }) => {
         try {
             const sng_data = JSON.parse(formDataRaw.get("data"));
             const ngc_key = formDataRaw.get("key")
+            const panelSizeId = parseInt(formDataRaw.get("panelSizeId"));
 
-            // Find the panelSize for the current shop
-            let panelSize = await prisma.singlePanelSize.findFirst({
-                where: { shop: session.shop }
+            const panelSize = await prisma.singlePanelSize.update({
+                where: { id: panelSizeId },
+                data: {
+                    [ngc_key]: sng_data
+                }
             });
-
-            // Initialize sizeGroup as an array (from JSON field or empty array)
-            let sizeGroup = panelSize[ngc_key] ? [...panelSize[ngc_key]] : [];
-
-            // Append sng_data to sizeGroup
-            sizeGroup.push(sng_data);
-
-            console.log("sizeGroup after push:", sizeGroup);
-            console.log("ngc key:", ngc_key);
-
-            // Update or create panelSize record
-            if (panelSize) {
-                // Update existing panelSize with new sizeGroup
-                await prisma.singlePanelSize.update({
-                    where: { id: panelSize.id }, // Assuming id is the primary key
-                    data: {
-                        [ngc_key]: sizeGroup
-                    } // Prisma serializes the array to JSON automatically
-                });
-            } else {
-                // Create new panelSize with sizeGroup containing sng_data
-                panelSize = await prisma.singlePanelSize.create({
-                    data: {
-                        shop: session.shop,
-                        sizeGroup: [sng_data]
-                    }
-                });
-            }
 
             return json({
                 data: sng_data,
-                sizeGroup,
                 panelSize,
                 role: role
             });
+            // return null;
         } catch (error) {
             console.error("Error processing create-new-group:", error);
             return json({ error: "Failed to process new group", role: role }, { status: 400 });
@@ -144,7 +127,7 @@ export const action = async ({ request }) => {
         try {
             const groupData = JSON.parse(formDataRaw.get("group"))
             const key = formDataRaw.get("key")
-            const ug_id = parseInt(formDataRaw.get("id"))
+            const ug_id = parseInt(formDataRaw.get("panelSizeId"))
 
             if (groupData) {
                 await prisma.singlePanelSize.updateMany({
@@ -166,13 +149,14 @@ export const action = async ({ request }) => {
     // delete-group
     if (role === "delete-group") {
         try {
-            const groupId = parseInt(formDataRaw.get("id"))
+            const groupId = parseInt(formDataRaw.get("groupId"))
+            const panelSizeId = parseInt(formDataRaw.get("panelSizeId"))
             const key = formDataRaw.get("key")
 
             if (groupId) {
                 // Find the panelSize for the current shop
                 let panelSize = await prisma.singlePanelSize.findFirst({
-                    where: { shop: session.shop }
+                    where: { id: panelSizeId }
                 });
 
                 // Filter out the group with the given id
@@ -374,7 +358,7 @@ export default function PanelSize() {
                         <Text variant="headingMd">Info</Text>
                         <Box paddingBlock={100} />
                         <Suspense fallback={<Text>Loding...</Text>}>
-                            <TextEditor showImage={true} content={panelSize.info} setContent={(value) => updateInput("info", value)} />
+                            <TextEditor showImage={true} content={panelSize?.info} setContent={(value) => updateInput("info", value)} />
                         </Suspense>
                     </Box>
                 </Card>
@@ -416,7 +400,7 @@ export default function PanelSize() {
                     <Text variant="headingMd">With group info</Text>
                     <Box paddingBlockEnd={400} />
                     <Suspense fallback={<Text>Loding...</Text>}>
-                        <TextEditor showImage={false} content={panelSize.widthInfo} setContent={(value) => updateInput("widthInfo", value)} />
+                        <TextEditor showImage={false} content={panelSize?.widthInfo} setContent={(value) => updateInput("widthInfo", value)} />
                     </Suspense>
                 </Card>
             </Layout.Section>
@@ -426,7 +410,7 @@ export default function PanelSize() {
                     <Text variant="headingMd">Length group info</Text>
                     <Box paddingBlockEnd={400} />
                     <Suspense fallback={<Text>Loding...</Text>}>
-                        <TextEditor showImage={false} content={panelSize.lengthInfo} setContent={(value) => updateInput("lengthInfo", value)} />
+                        <TextEditor showImage={false} content={panelSize?.lengthInfo} setContent={(value) => updateInput("lengthInfo", value)} />
                     </Suspense>
                 </Card>
             </Layout.Section>
