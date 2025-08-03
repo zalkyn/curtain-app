@@ -3,7 +3,7 @@
 client_id = "ed92623a46eb49cd535b2caba0f9509e"
 name = "curtain-customizer-v1"
 handle = "curtain-customizer-v1"
-application_url = "https://norm-between-thinkpad-senator.trycloudflare.com"
+application_url = "https://kate-greeting-conservation-table.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,51 +17,19 @@ scopes = "read_inventory,read_orders,read_products,read_publications,read_themes
 
 [auth]
 redirect_urls = [
-  "https://curtain-app-private-deae1f46dd84.herokuapp.com/auth/callback",
-  "https://curtain-app-private-deae1f46dd84.herokuapp.com/auth/shopify/callback",
-  "https://curtain-app-private-deae1f46dd84.herokuapp.com/api/auth/callback",
-  "https://statements-village-beds-detective.trycloudflare.com/auth/callback",
-  "https://statements-village-beds-detective.trycloudflare.com/auth/shopify/callback",
-  "https://statements-village-beds-detective.trycloudflare.com/api/auth/callback",
-  "https://only-observer-poor-illustrated.trycloudflare.com/auth/callback",
-  "https://only-observer-poor-illustrated.trycloudflare.com/auth/shopify/callback",
-  "https://only-observer-poor-illustrated.trycloudflare.com/api/auth/callback",
-  "https://stating-newcastle-treated-muscle.trycloudflare.com/auth/callback",
-  "https://stating-newcastle-treated-muscle.trycloudflare.com/auth/shopify/callback",
-  "https://stating-newcastle-treated-muscle.trycloudflare.com/api/auth/callback",
-  "https://schema-motorola-cad-zone.trycloudflare.com/auth/callback",
-  "https://schema-motorola-cad-zone.trycloudflare.com/auth/shopify/callback",
-  "https://schema-motorola-cad-zone.trycloudflare.com/api/auth/callback",
-  "https://feature-quebec-ampland-mia.trycloudflare.com/auth/callback",
-  "https://feature-quebec-ampland-mia.trycloudflare.com/auth/shopify/callback",
-  "https://feature-quebec-ampland-mia.trycloudflare.com/api/auth/callback",
-  "https://partial-fairy-bb-seeks.trycloudflare.com/auth/callback",
-  "https://partial-fairy-bb-seeks.trycloudflare.com/auth/shopify/callback",
-  "https://partial-fairy-bb-seeks.trycloudflare.com/api/auth/callback",
-  "https://casa-reporting-rw-beads.trycloudflare.com/auth/callback",
-  "https://casa-reporting-rw-beads.trycloudflare.com/auth/shopify/callback",
-  "https://casa-reporting-rw-beads.trycloudflare.com/api/auth/callback",
-  "https://wherever-directory-surrounding-bracelets.trycloudflare.com/auth/callback",
-  "https://wherever-directory-surrounding-bracelets.trycloudflare.com/auth/shopify/callback",
-  "https://wherever-directory-surrounding-bracelets.trycloudflare.com/api/auth/callback",
-  "https://showcase-excited-enabling-magnificent.trycloudflare.com/auth/callback",
-  "https://showcase-excited-enabling-magnificent.trycloudflare.com/auth/shopify/callback",
-  "https://showcase-excited-enabling-magnificent.trycloudflare.com/api/auth/callback",
-  "https://travels-hampton-flush-depends.trycloudflare.com/auth/callback",
-  "https://travels-hampton-flush-depends.trycloudflare.com/auth/shopify/callback",
-  "https://travels-hampton-flush-depends.trycloudflare.com/api/auth/callback",
-  "https://venice-depot-automobile-prayers.trycloudflare.com/auth/callback",
-  "https://venice-depot-automobile-prayers.trycloudflare.com/auth/shopify/callback",
-  "https://venice-depot-automobile-prayers.trycloudflare.com/api/auth/callback",
-  "https://features-nothing-hurt-evaluating.trycloudflare.com/auth/callback",
-  "https://features-nothing-hurt-evaluating.trycloudflare.com/auth/shopify/callback",
-  "https://features-nothing-hurt-evaluating.trycloudflare.com/api/auth/callback",
-  "https://glasgow-especially-excessive-loans.trycloudflare.com/auth/callback",
-  "https://glasgow-especially-excessive-loans.trycloudflare.com/auth/shopify/callback",
-  "https://glasgow-especially-excessive-loans.trycloudflare.com/api/auth/callback",
-  "https://norm-between-thinkpad-senator.trycloudflare.com/auth/callback",
-  "https://norm-between-thinkpad-senator.trycloudflare.com/auth/shopify/callback",
-  "https://norm-between-thinkpad-senator.trycloudflare.com/api/auth/callback"
+  "https://files-cole-agencies-excellent.trycloudflare.com/api/auth/callback",
+  "https://bathrooms-housewares-announcements-argument.trycloudflare.com/auth/callback",
+  "https://bathrooms-housewares-announcements-argument.trycloudflare.com/auth/shopify/callback",
+  "https://bathrooms-housewares-announcements-argument.trycloudflare.com/api/auth/callback",
+  "https://explain-tomatoes-within-nurses.trycloudflare.com/auth/callback",
+  "https://explain-tomatoes-within-nurses.trycloudflare.com/auth/shopify/callback",
+  "https://explain-tomatoes-within-nurses.trycloudflare.com/api/auth/callback",
+  "https://ferry-garage-father-pottery.trycloudflare.com/auth/callback",
+  "https://ferry-garage-father-pottery.trycloudflare.com/auth/shopify/callback",
+  "https://ferry-garage-father-pottery.trycloudflare.com/api/auth/callback",
+  "https://kate-greeting-conservation-table.trycloudflare.com/auth/callback",
+  "https://kate-greeting-conservation-table.trycloudflare.com/auth/shopify/callback",
+  "https://kate-greeting-conservation-table.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -76,7 +44,7 @@ api_version = "2025-04"
   uri = "/webhooks/app/uninstalled"
 
 [app_proxy]
-url = "https://norm-between-thinkpad-senator.trycloudflare.com/app/curtain"
+url = "https://kate-greeting-conservation-table.trycloudflare.com/app/curtain"
 subpath = "curtain"
 prefix = "apps"
 

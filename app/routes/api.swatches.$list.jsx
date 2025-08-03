@@ -6,8 +6,6 @@ import prisma from "../db.server";
 
 export const loader = async ({ request, params }) => {
 
-    console.log("params==========", params)
-
     const listId = parseInt(params.list) || null;
 
     if (!listId) {

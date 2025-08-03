@@ -420,3 +420,26 @@ model LiftType {
   createdAt           DateTime    @default(now())
   updatedAt           DateTime    @updatedAt
 }
+
+model GeneratedProducts {
+  id        Int      @id @default(autoincrement())
+  shop      String?
+  title     String?
+  handle    String?
+  pid       String?
+  gid       String?
+  price     Float?   @default(0.0)
+  type      String?  @default("curtain-app")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Orders {
+  id        Int      @id @default(autoincrement())
+  shop      String?
+  orderId   String?
+  price     Float?   @default(0.0)
+  data      Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

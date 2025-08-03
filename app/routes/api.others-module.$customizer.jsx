@@ -1,27 +1,6 @@
 import { json, redirect } from "@remix-run/node";
 import { cors } from "remix-utils/cors";
 import prisma from "../db.server";
-import { list } from "isbot";
-import LiftType from "./app.customizer.$id.$handle.lift-type";
-
-// model Customizer {
-//     id           Int               @id @default(autoincrement())
-//     title        String?
-//     handle       String?
-//     info         String?           //@db.LongText
-//     shortInfo    String?           //@db.MediumText
-//     activeStatus Boolean           @default(false)
-//     collections  Collection[]
-//     trims        Trim[]
-//     palenSize    SinglePanelSize[]
-//     panelType    PanelType[]
-//     liningType   LiningType[]
-//     tieback      Tieback[]
-//     memoryShaped MemoryShaped[]
-//     createdAt    DateTime?         @default(now())
-//     updatedAt    DateTime?         @updatedAt
-//   }
-
 
 export const loader = async ({ request, params }) => {
     const customizerId = parseInt(params.customizer) || null;
@@ -31,8 +10,6 @@ export const loader = async ({ request, params }) => {
             error: "customizer ID is required."
         }, { status: 400 }));
     }
-
-    console.log("customizerId==========", customizerId);
 
     const customizer = await prisma.customizer.findUnique({
         where: {
