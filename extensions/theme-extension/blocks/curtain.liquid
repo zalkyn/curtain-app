@@ -15,7 +15,13 @@
             {% if block.settings.moc_image == blank %}
               <img src="https://cdn.shopify.com/s/files/1/0717/7958/2207/files/cartaidasdm.png?v=1746704642" alt="">
             {% else %}
-              {{ block.settings.moc_image | image_url: width: block.settings.moc_image.width | image_tag }}
+              {{ block.settings.moc_image | image_url: width: block.settings.moc_image.width | image_tag: class: 'ccapp--desktop-moc' }}
+            {% endif %}
+
+            {% if block.settings.moc_image_mbl == blank %}
+              <img src="https://cdn.shopify.com/s/files/1/0717/7958/2207/files/cartaidasdm.png?v=1746704642" alt="">
+            {% else %}
+              {{ block.settings.moc_image_mbl | image_url: width: block.settings.moc_image_mbl.width | image_tag: class: 'ccapp--mbl-moc' }}
             {% endif %}
           </div>
           <div class="ccapp-premade"></div>
@@ -25,6 +31,8 @@
         <div class="ccapp--text-wrapper">
           <h4 class="ccapp--title">{{ block.settings.title }}</h4>
           <p class="ccapp--subtitle">{{ block.settings.subtitle }}</p>
+        </div>
+        <div class="ccapp--content-wrapper">
         </div>
         {% comment %} collection and swatch tab  {% endcomment %}
         {% comment %} <div class="ccapp-msc-tab" data-index="1">
@@ -413,7 +421,7 @@
           </a>
       </div>
       <div class="ccapp-price--wrapper">
-        <div class="total">TOTAL: $177.96</div>
+        <div class="ccapp--total--price">TOTAL: Loading...</div>
         <button class="add-to-cart">ADD TO CART</button>
       </div>
   </div>
@@ -432,6 +440,11 @@
       "type": "image_picker",
       "id": "moc_image",
       "label": "Select Moc Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "moc_image_mbl",
+      "label": "Select Moc Image (Mobile)"
     },
     {
       "type": "text",

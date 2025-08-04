@@ -3,7 +3,7 @@
 client_id = "ff901fdb3a92ae7baacfaf33ece2c2f7"
 name = "Curtain customizer draft v1"
 handle = "curtain-customizer-draft-v1"
-application_url = "https://expertise-link-gene-greece.trycloudflare.com"
+application_url = "https://def-serbia-rug-reasoning.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_files,read_inventory,read_orders,read_products,read_publications,
 
 [auth]
 redirect_urls = [
-  "https://expertise-link-gene-greece.trycloudflare.com/auth/callback",
-  "https://expertise-link-gene-greece.trycloudflare.com/auth/shopify/callback",
-  "https://expertise-link-gene-greece.trycloudflare.com/api/auth/callback"
+  "https://def-serbia-rug-reasoning.trycloudflare.com/auth/callback",
+  "https://def-serbia-rug-reasoning.trycloudflare.com/auth/shopify/callback",
+  "https://def-serbia-rug-reasoning.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -34,7 +34,7 @@ api_version = "2025-04"
   uri = "/webhooks/app/uninstalled"
 
 [app_proxy]
-url = "https://expertise-link-gene-greece.trycloudflare.com/app/curtain"
+url = "https://def-serbia-rug-reasoning.trycloudflare.com/app/curtain"
 subpath = "curtain"
 prefix = "apps"
 
