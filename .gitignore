@@ -18,7 +18,8 @@ shopify.app.curtain-customizer-draft-v1.toml
 .env
 .env.*
 
-shopify.app.toml
+shopify.app.*
+shopify.web.*
 
 
 
@@ -28,7 +29,3 @@ shopify.app.toml
 # Ignore shopify files created during app dev
 .shopify/*
 .shopify.lock
-
-
-# Ignoore .toml file
-shopify.app.curtain-customizer-draft-v1.toml

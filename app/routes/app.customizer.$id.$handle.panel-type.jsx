@@ -22,7 +22,7 @@ export const loader = async ({ request, params }) => {
             }
         });
 
-        if (!customizer) throw new Error("Customizer not found");
+        // if (!customizer) throw new Error("Customizer not found");
 
         if (customizer?.panelType?.length < 1) {
             await prisma.panelType.create({

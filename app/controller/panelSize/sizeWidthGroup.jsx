@@ -18,9 +18,12 @@ export default function SizeWidthGroup() {
 
     const [createModal, setCreateModal] = useState(false)
     const [viewModal, setViewModal] = useState(false)
+    const [deleteModal, setDeleteModal] = useState(false)
 
     const [loadingSaveBtn, setLoadingSaveBtn] = useState(false)
     const [loadingUpdateBtn, setLoadingUpdateBtn] = useState(false)
+    const [loadingDeleteBtn, setLoadingDeleteBtn] = useState(false)
+
     const [selectedGroup, setSelectedGroup] = useState(null)
 
     const emptyGroup = {
@@ -61,6 +64,14 @@ export default function SizeWidthGroup() {
                 setLoadingUpdateBtn(false)
                 setViewModal(false)
             }
+
+            if (actionData?.role === "delete-group") {
+                setLoadingDeleteBtn(false)
+                setDeleteModal(false)
+                setGroup((prev) => prev.filter(g => g?.id !== selectedGroup?.id))
+                setSelectedGroup(null)
+                shopify.toast.show("Group Successfully Deleted")
+            }
         }
     }, [actionData])
 
@@ -71,7 +82,7 @@ export default function SizeWidthGroup() {
                 collapsible: false
             }
         })
-        console.log("group", group_)
+        // console.log("group", group_)
     }, [])
 
     const handleNewGroupInput = () => {
@@ -111,10 +122,18 @@ export default function SizeWidthGroup() {
         let data = newGroup;
         data.group = sizes
 
+
+        let widthGroup = panelSize?.widthGroup || [];
+        widthGroup.push(data);
+
+        console.log("data====", data)
+        console.log("widthGroup====", widthGroup)
+
         const formData = new FormData();
         formData.append("role", "create-new-group")
-        formData.append("data", JSON.stringify(data))
+        formData.append("data", JSON.stringify(widthGroup))
         formData.append("key", "widthGroup")
+        formData.append("panelSizeId", panelSize?.id)
 
         submit(formData, {
             method: "POST",
@@ -220,7 +239,19 @@ export default function SizeWidthGroup() {
         formData.append("role", "update-group")
         formData.append("key", "widthGroup")
         formData.append("group", JSON.stringify(group))
-        formData.append("id", panelSize.id)
+        formData.append("panelSizeId", panelSize?.id)
+
+        submit(formData, { method: "POST" })
+    }
+
+    const handleDeleteGroup = () => {
+        setLoadingDeleteBtn(true)
+
+        const formData = new FormData()
+        formData.append("role", "delete-group")
+        formData.append("key", "widthGroup")
+        formData.append("groupId", selectedGroup.id)
+        formData.append("panelSizeId", panelSize.id)
 
         submit(formData, { method: "POST" })
     }
@@ -250,7 +281,10 @@ export default function SizeWidthGroup() {
                                 <ButtonGroup variant="segmented">
                                     {/* <Button onClick={() => handleGroupCollapsible(g)} size="micro" variant="primary" icon={g.collapsible ? ChevronUpIcon : ChevronDownIcon} /> */}
                                     <Button onClick={() => { setViewModal(true); setSelectedGroup(g) }} icon={ViewIcon} />
-                                    <Button icon={DeleteIcon} />
+                                    <Button onClick={() => {
+                                        setSelectedGroup(g);
+                                        setDeleteModal(true);
+                                    }} icon={DeleteIcon} />
                                 </ButtonGroup>
                             </InlineStack>
                         </Card>
@@ -365,15 +399,15 @@ export default function SizeWidthGroup() {
             secondaryActions={[
                 {
                     content: "Cancel",
-                    onAction: () => { setViewModal(false) },
+                    onAction: () => { setViewModal(false), setSelectedGroup(null) },
                     disabled: loadingUpdateBtn
                 },
-                {
-                    content: "Reset",
-                    // disabled: JSON.stringify(group) === JSON.stringify(reserveGroup) || loadingUpdateBtn,
-                    disabled: loadingUpdateBtn,
-                    onAction: () => { setGroup(reserveGroup) }
-                }
+                // {
+                //     content: "Reset",
+                //     // disabled: JSON.stringify(group) === JSON.stringify(reserveGroup) || loadingUpdateBtn,
+                //     disabled: loadingUpdateBtn,
+                //     onAction: () => { setGroup(reserveGroup) }
+                // }
             ]}
             primaryAction={{
                 content: "Update",
@@ -474,6 +508,32 @@ export default function SizeWidthGroup() {
             </Modal.Section>
         </Modal>
         {/* end view group modal  */}
+
+        {/* delete group modal  */}
+        <Modal
+            title={`Delete Width Group [${selectedGroup?.minWidth} - ${selectedGroup?.maxWidth}] inch`}
+            open={deleteModal}
+            onClose={() => setDeleteModal(false)}
+            primaryAction={{
+                content: "Delete",
+                destructive: true,
+                onAction: () => handleDeleteGroup(),
+                loading: loadingDeleteBtn,
+                disabled: loadingDeleteBtn || !selectedGroup
+            }}
+            secondaryActions={[
+                {
+                    content: "Cancel",
+                    onAction: () => setDeleteModal(false),
+                    disabled: loadingDeleteBtn || !selectedGroup
+                }
+            ]}
+        >
+            <Modal.Section>
+                <Text variant="bodyMd">Are you sure you want to delete this group? This action cannot be undone.</Text>
+            </Modal.Section>
+        </Modal>
+
 
 
         {/* <Card>
